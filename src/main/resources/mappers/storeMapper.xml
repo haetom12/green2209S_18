@@ -3,4 +3,19 @@
 
 <mapper namespace="com.spring.green2209S_18.dao.StoreDAO">
 	
+	<select id="getStoreIdCheck" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from store where storeMid = #{storeMid};
+	</select>
+
+	<select id="getStoreCategory" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from categoryStore order by categoryStoreCode;
+	</select>
+	
+	
+	
+	<insert id="setStoreJoinOk">
+		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default);
+	</insert>
+	
+	
 </mapper>

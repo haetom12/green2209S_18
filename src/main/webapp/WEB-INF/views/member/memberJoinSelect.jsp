@@ -92,9 +92,11 @@
 	          </div>
 	          <div class="col-md-4 text-center d-flex align-self-stretch ftco-animate choose3" style="padding-top: 16%;">
 	            <div class="media block-6 services mb-md-0 mb-4">
-	              <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
-	            		<span class="flaticon-award"></span>
-	              </div>
+	            	<a href="${ctp}/store/storeJoin">
+		              <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
+		            		<span class="flaticon-award"></span>
+		              </div>
+	              </a>
 	              <div class="media-body">
 	              	<font size="6pt" color="#00a5cf">가게 등록</font>
 	                <!-- <h3 class="heading text-white">가게 등록</h3>

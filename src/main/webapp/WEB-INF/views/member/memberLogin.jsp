@@ -234,6 +234,30 @@
 	                <div class="or-line"></div>
 	                <div class="or">OR</div>
 	            </div>
+	            
+	            <div class="loginbox-textbox">
+		            <div class="form-check-inline ml-4">
+						      <label class="form-check-label" for="radio1">
+						        <input type="radio" class="form-check-input" name="part" value="member" checked> 일반회원
+						      </label>
+						    </div>
+						    <div class="form-check-inline">
+						      <label class="form-check-label" for="radio2">
+						        <input type="radio" class="form-check-input" name="part" value="rider"> 라이더
+						      </label>
+						    </div>
+						    <div class="form-check-inline">
+						      <label class="form-check-label" for="radio3">
+						        <input type="radio" class="form-check-input" name="part" value="store"> 가게
+						      </label>
+						    </div>
+						    <div class="form-check-inline">
+						      <label class="form-check-label" for="radio4">
+						        <input type="radio" class="form-check-input" name="part" value="admin"> 관리자
+						      </label>
+						    </div>
+	            </div>
+	            
 	            <div class="loginbox-textbox">
 	                <input type="text" class="form-control" id="mid" name="mid" placeholder="아이디를 입력하세요" style="width: 85%; margin: 0 auto;">
 	            </div>

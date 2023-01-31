@@ -28,18 +28,6 @@ public class MessageController {
 			model.addAttribute("msg", "로그인 실패~~~");
 			model.addAttribute("url", "member/memberLogin");
 		}
-		else if(msgFlag.equals("guestInputOk")) {
-			model.addAttribute("msg", "방명록이 입력되었습니다!");
-			model.addAttribute("url", "guest/guestList");
-		}
-		else if(msgFlag.equals("guestDeleteOk")) {
-			model.addAttribute("msg", "방명록이 삭제되었습니다!");
-			model.addAttribute("url", "guest/guestList");
-		}
-		else if(msgFlag.equals("guestUpdateOk")) {
-			model.addAttribute("msg", "방명록이 수정되었습니다!");
-			model.addAttribute("url", "guest/guestList");
-		}
 		else if(msgFlag.equals("memberJoinOk")) {
 			model.addAttribute("msg", "회원가입 완료되었습니다!");
 			model.addAttribute("url", "member/memberLogin");
@@ -92,14 +80,6 @@ public class MessageController {
 			model.addAttribute("msg", "아이디와 이메일 주소를 확인해주세요!");
 			model.addAttribute("url", "member/memberPwdSearch");
 		}
-		else if(msgFlag.equals("fileUploadOk")) {
-			model.addAttribute("msg", "파일이 업로드 되었습니다!!");
-			model.addAttribute("url", "study/fileUpload/fileUploadForm");
-		}
-		else if(msgFlag.equals("fileUploadNo")) {
-			model.addAttribute("msg", "파일 업로드 실패!!");
-			model.addAttribute("url", "study/fileUpload/fileUploadForm");
-		}
 		else if(msgFlag.equals("memberUpdatePwdOk")) {
 			model.addAttribute("msg", "비밀번호 변경이 성공하였습니다");
 			model.addAttribute("url", "member/memberMain");
@@ -128,26 +108,16 @@ public class MessageController {
 			model.addAttribute("msg", "회원수정 실패!!");
 			model.addAttribute("url", "member/memberUpdate");
 		}
-		else if(msgFlag.equals("boardInputOk")) {
-			model.addAttribute("msg", "게시글이 등록되었습니다!");
-			model.addAttribute("url", "board/boardList");
+		else if(msgFlag.equals("storeJoinOk")) {
+			model.addAttribute("msg", "가게가 등록되었습니다!");
+			model.addAttribute("url", "member/memberLogin");
 		}
-		else if(msgFlag.equals("boardInputNo")) {
-			model.addAttribute("msg", "게시글이 등록실패!");
-			model.addAttribute("url", "board/boardList");
+		else if(msgFlag.equals("storeJoinNo")) {
+			model.addAttribute("msg", "가게 등록이 실패하였습니다! 다시 시도해주세요.");
+			model.addAttribute("url", "store/storeJoin");
 		}
-		else if(msgFlag.equals("boardDeleteOk")) {
-			model.addAttribute("msg", "게시글이 삭제되었습니다!!");
-			model.addAttribute("url", "board/boardList"+flag);
-		}
-		else if(msgFlag.equals("boardUpdateOk")) {
-			model.addAttribute("msg", "게시글이 수정되었습니다!!");
-			model.addAttribute("url", "board/boardList"+flag);
-		}
-		else if(msgFlag.equals("pdsInputOk")) {
-			model.addAttribute("msg", "자료실에 파일이 등록되었습니다!!");
-			model.addAttribute("url", "pds/pdsList");
-		}
+		
+		
 		
 		return "include/message";
 	}

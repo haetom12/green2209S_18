@@ -31,28 +31,6 @@
     <link rel="stylesheet" href="${ctp}/css/style.css">
   </head>
   <body class="goto-here">
-		<div class="py-1 bg-primary">
-    	<div class="container">
-    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-	    		<div class="col-lg-12 d-block">
-		    		<div class="row d-flex">
-		    			<div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-						    <span class="text">+ 010 5718 5014</span>
-					    </div>
-					    <div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">haetom12@gmail.com</span>
-					    </div>
-					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
-						    <span class="text">3-5 Business days delivery &amp; Free Returns</span>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-		  </div>
-    </div>
-    
    	<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
 
     <section id="home-section" class="hero">
@@ -63,7 +41,7 @@
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-md-12 ftco-animate text-center">
-	              <h2 class="mb-2"><font size="15pt" color="white">근처에 있는 맛집들을  검색해보세요!</font></h2>
+	              <h2 class="mb-2"><font size="15pt" color="white">근처에 있는 맛집들을 검색해보세요!</font></h2>
 	              <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
 	              <p><a href="#" class="btn btn-primary">View Details</a></p>
 	            </div>
@@ -78,8 +56,8 @@
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-sm-12 ftco-animate text-center">
-	              <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
-	              <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
+	              <h2 class="mb-2"><font size="15pt" color="white">근처에 있는 맛집들을 검색해보세요!</font></h2>
+	              <h2 class="subheading mb-4">신속하고 빠르게 음식을 &amp; 배달합니다</h2>
 	              <p><a href="#" class="btn btn-primary">View Details</a></p>
 	            </div>
 
@@ -158,24 +136,24 @@
 							<div class="col-md-6">
 								<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(${ctp}/images/category-1.jpg);">
 									<div class="text px-3 py-1">
-										<h2 class="mb-0"><a href="#">Fruits</a></h2>
+										<h2 class="mb-0"><a href="#">치킨</a></h2>
 									</div>
 								</div>
 								<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(${ctp}/images/category-2.jpg);">
 									<div class="text px-3 py-1">
-										<h2 class="mb-0"><a href="#">Vegetables</a></h2>
+										<h2 class="mb-0"><a href="#">피자</a></h2>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(${ctp}/images/category-1.jpg);">
 									<div class="text px-3 py-1">
-										<h2 class="mb-0"><a href="#">Fruits</a></h2>
+										<h2 class="mb-0"><a href="#">햄버거</a></h2>
 									</div>
 								</div>
 								<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(${ctp}/images/category-2.jpg);">
 									<div class="text px-3 py-1">
-										<h2 class="mb-0"><a href="#">Vegetables</a></h2>
+										<h2 class="mb-0"><a href="#">일식</a></h2>
 									</div>
 								</div>
 							</div>
@@ -202,9 +180,9 @@
     	<div class="container">
 				<div class="row justify-content-center mb-3 pb-3">
           <div class="col-md-12 heading-section text-center ftco-animate">
-          	<span class="subheading">Featured Products</span>
-            <h2 class="mb-4">Our Products</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+          	<span class="subheading">특가 세일</span>
+            <h2 class="mb-4">현재 세일중인 상품들</h2>
+            <p>할인된 가격으로 저렴하게 즐겨보세요~</p>
           </div>
         </div>   		
     	</div>
@@ -242,6 +220,7 @@
     			<div class="col-md-6 col-lg-3 ftco-animate">
     				<div class="product">
     					<a href="#" class="img-prod"><img class="img-fluid" src="${ctp}/images/product-2.jpg" alt="Colorlib Template">
+    						<span class="status">60%</span>
     						<div class="overlay"></div>
     					</a>
     					<div class="text py-3 pb-4 px-3 text-center">
@@ -270,6 +249,7 @@
     			<div class="col-md-6 col-lg-3 ftco-animate">
     				<div class="product">
     					<a href="#" class="img-prod"><img class="img-fluid" src="${ctp}/images/product-3.jpg" alt="Colorlib Template">
+	    					<span class="status">40%</span>
 	    					<div class="overlay"></div>
 	    				</a>
     					<div class="text py-3 pb-4 px-3 text-center">

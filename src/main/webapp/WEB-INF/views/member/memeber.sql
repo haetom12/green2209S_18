@@ -10,9 +10,12 @@ create table member (
 	address varchar(100),							  	/* 회원주소 (상품 배달시 기본주소로 사용) */
 	email varchar(50) not null,				  	/* 이메일(아이디/비밀번호 분실시 사용) - 형식체크필수 */
 	userDel  char(2)  default 'NO',   		/* 회원 탈퇴 신청 여부(OK:탈퇴신청한회원, NO:현재가입중인회원) */
-	point int default 0, 								/* 회원누적포인트(가입시는 기본 100증정, 방문시마다 1회 10포인트증가, 최대 1일 50포인트까지) */
+	point int default 0, 								/* 결제포인트 */
+	report int default 0, 								/* 신고누적 */
 	orderCnt int default 0,								/* 오늘 방문한 횟수 */
 	level int default 3,									/* 0: 관리자, 1: 우수회원 2: 정회원 3: 준회원 */
+	memberLatitude double not null, 				/* 위도 */
+	memberLongitude double not null,				/* 경도 */
 	primary key(idx,mid)           		  	/* 주키: idx(고유번호), mid(아이디) */
 );
 

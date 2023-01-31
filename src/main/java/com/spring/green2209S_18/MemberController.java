@@ -5,18 +5,24 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.green2209S_18.service.MemberService;
+import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.StoreVO;
 @Controller
 @RequestMapping("/member")
 public class MemberController {
 	
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	StoreService storeService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -28,19 +34,82 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "memberLogin", method = RequestMethod.POST)
-	public String memberLoginPost(HttpSession session,String mid, String pwd) {
+	public String memberLoginPost(HttpSession session,String mid, String pwd, String part, Model model) {
 		
-		MemberVO vo = memberService.getMemberIdCheck(mid);
-		if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
-			// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
-			
-			session.setAttribute("sMid", mid);
-
-			return "redirect:/member/memberLoginOk";
+		// 일반회원 로그인
+		if(part.equals("member")) {
+			MemberVO vo = memberService.getMemberIdCheck(mid);
+			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
+				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
+				
+				session.setAttribute("sMid", mid);
+				session.setAttribute("sPart", "member");
+				session.setAttribute("sAddress", vo.getAddress());
+				session.setAttribute("sNumber", vo.getTel());
+				session.setAttribute("sEmail", vo.getEmail());
+				model.addAttribute("vo",vo);
+				
+				return "redirect:/member/memberLoginOk";
+			}
+			// 로그인 실패
+			else {
+				return "redirect:/msg/memberLoginNo";
+			}
 		}
-		// 로그인 실패
+		// 라이더 로그인
+		else if(part.equals("rider")) {
+			MemberVO vo = memberService.getMemberIdCheck(mid);
+			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
+				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
+				
+				session.setAttribute("sMid", mid);
+				session.setAttribute("sPart", "rider");
+				session.setAttribute("sAddress", vo.getAddress());
+				model.addAttribute("vo",vo);
+				
+				return "redirect:/member/memberLoginOk";
+			}
+			// 로그인 실패
+			else {
+				return "redirect:/msg/memberLoginNo";
+			}
+		}
+		// 점주 로그인
+		else if(part.equals("store")) {
+			StoreVO vo = storeService.getStoreIdCheck(mid);
+			if(vo != null && passwordEncoder.matches(pwd, vo.getStorePwd()) && vo.getStoreDel().equals("NO")) {
+				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
+				
+				session.setAttribute("sMid", mid);
+				session.setAttribute("sPart", "store");
+				session.setAttribute("sAddress", vo.getStoreAddress());
+				session.setAttribute("sNumber", vo.getStoreNumber());
+				session.setAttribute("sEmail", vo.getStoreEmail());
+				model.addAttribute("vo",vo);
+				
+				return "redirect:/member/memberLoginOk";
+			}
+			// 로그인 실패
+			else {
+				return "redirect:/msg/memberLoginNo";
+			}
+		}
+		
+		// 어드민 로그인
 		else {
-			return "redirect:/msg/memberLoginNo";
+			MemberVO vo = memberService.getMemberIdCheck(mid);
+			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
+				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
+				
+				session.setAttribute("sMid", mid);
+				model.addAttribute("vo",vo);
+				
+				return "redirect:/member/memberLoginOk";
+			}
+			// 로그인 실패
+			else {
+				return "redirect:/msg/memberLoginNo";
+			}
 		}
 	}
 	

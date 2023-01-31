@@ -6,25 +6,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.spring.green2209S_18.service.AdminService;
 import com.spring.green2209S_18.service.StoreService;
 @Controller
-@RequestMapping("/order")
-public class OrderController {
+@RequestMapping("/admin")
+public class AdminController {
 	
 	@Autowired
-	StoreService storeService;
+	AdminService adminService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 	
-	@RequestMapping(value = "orderCart", method = RequestMethod.GET)
-	public String orderCartGet() {
+	@RequestMapping(value = "adminMain", method = RequestMethod.GET)
+	public String adminMain() {
 		
-		return "order/orderCart";
-	}
-	@RequestMapping(value = "orderCheckout", method = RequestMethod.GET)
-	public String OrderCheckoutGet() {
-		
-		return "order/orderCheckout";
+		return "admin/adminMain";
 	}
 }
