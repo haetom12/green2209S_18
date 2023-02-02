@@ -19,6 +19,7 @@
 
     <link href="${ctp}/assets/css/theme.css" rel="stylesheet" />
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 		
 		<style>
 			.login-container {
@@ -29,7 +30,7 @@
 			.login-container .loginbox {
 			    position: relative;
 			    width: 800px !important;
-			    height: 200% !important;
+			    height: 220% !important;
 			    padding: 20px 0 20px 0;
 			    -webkit-box-shadow: 0 0 14px rgba(0,0,0,.1);
 			    -moz-box-shadow: 0 0 14px rgba(0,0,0,.1);
@@ -211,11 +212,14 @@
 		    	let HostName = JoinForm.HostName.value;
 		    	let email1 = JoinForm.email1.value;
 		    	let email2 = JoinForm.email2.value;
+		    	let storeTime1 = JoinForm.storeTime1.value;
+		    	let storeTime2 = JoinForm.storeTime2.value;
 		      let storeEmail = email1 + '@' + email2;
 		      let tel1 = JoinForm.tel1.value;
 		      let tel2 = JoinForm.tel2.value;
 		      let tel3 = JoinForm.tel3.value;
 		    	let storeNumber = tel1 + "-" + tel2 + "-" + tel3;
+		    	JoinForm.storeTime.value = storeTime1 + "" + "~" + "" + storeTime2;
 		    	
 		    	// 사진 업로드 체크를 위한 준비
 		    	let maxSize = 1024 * 1024 * 2; 	// 업로드할 회원사진의 용량은 1MByte까지로 제한한다.
@@ -360,19 +364,20 @@
 	             	<div class="input-group mb-3">
 								  <div class="input-group-append">
 								    <select name="storePart" class="form-control">
-									    <option value="치킨" selected>치킨</option>
-									    <option value="피자">피자</option>
-									    <option value="중식">중식</option>
-									    <option value="패스트푸드">패스트푸드</option>
-									    <option value="족발/보쌈">족발/보쌈</option>
-									    <option value="양식">양식</option>
-									    <option value="일식">일식</option>
-									    <option value="분식">분식</option>
-									    <option value="카페">카페</option>
+								    	<c:forEach var="vo" items="${vos}">
+									    	<option value="${vo.storePart}" selected>${vo.storePart}</option>
+									    </c:forEach>
 									  </select>
 								  </div>
 								</div>
 	            </div>
+	            
+	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">영업시간</div>
+	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+							  OPEN &nbsp; <input type="time" name="storeTime1" id="storeTime1" value="09:00" class="form-control" />&nbsp;&nbsp;
+								CLOSE &nbsp; <input type="time" name="storeTime2" id="storeTime2" value="00:00" class="form-control"/>
+	            </div>
+	            
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">등록자 아이디</div>
 	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
 	                <input type="text" class="form-control" id="storeMid" name="storeMid" placeholder="아이디를 입력하세요" style="width: 100px;" required>&nbsp;
@@ -457,9 +462,13 @@
     			<input type="hidden" name="storeLongitude"/>
     			<input type="hidden" name="storeAddress"/>
     			<input type="hidden" name="logoPhoto"/>
+    			<input type="hidden" name="storeTime"/>
         </form>
     </div>
 		</section>
+		
+		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+		
     </main>
    
    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

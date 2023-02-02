@@ -137,6 +137,8 @@ public class MemberController {
 		// 비밀번호 암호화
 		vo.setPwd(passwordEncoder.encode(vo.getPwd())); 
 		
+		System.out.println("vo : " + vo);
+		
 		int res = memberService.setMemberJoinOk(vo);
 		
 		if(res == 1) return "redirect:/msg/memberJoinOk"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
@@ -149,6 +151,17 @@ public class MemberController {
 	public String memIdCheckPost(String mid) {
 		String res = "1";
 		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		if(vo == null) res = "0";
+		return res;
+	}
+	
+	// 닉네임 중복검사
+	@ResponseBody
+	@RequestMapping(value = "/memNickCheck", method = RequestMethod.POST)
+	public String memNickCheckPost(String memberNickName) {
+		String res = "1";
+		MemberVO vo = memberService.getMemberNickCheck(memberNickName);
 		
 		if(vo == null) res = "0";
 		return res;

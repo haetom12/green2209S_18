@@ -6,9 +6,13 @@
 	<select id="getMemberIdCheck" resultType="com.spring.green2209S_18.vo.MemberVO">
 		select * from member where mid = #{mid};
 	</select>
+	
+	<select id="getMemberNickCheck" resultType="com.spring.green2209S_18.vo.MemberVO">
+		select * from member where memberNickName = #{memberNickName};
+	</select>
 
 	<insert id="setMemberJoinOk">
-		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.memberName},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},default,default,default);
+		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.memberName},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},default,default,default,default,#{vo.memberLatitude},#{vo.memberLongitude},#{vo.memberNickName});
 	</insert>
 
 </mapper>

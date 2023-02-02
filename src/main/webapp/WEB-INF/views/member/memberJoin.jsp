@@ -31,8 +31,8 @@
 			}
 			.login-container .loginbox {
 			    position: relative;
-			    width: 800px !important;
-			    height: 150% !important;
+			    width: 100% !important;
+			    height: 185% !important;
 			    padding: 20px 0 20px 0;
 			    -webkit-box-shadow: 0 0 14px rgba(0,0,0,.1);
 			    -moz-box-shadow: 0 0 14px rgba(0,0,0,.1);
@@ -194,6 +194,7 @@
 		<script>
 			'use strict';
 		  let idCheckSw = 0;
+		  let nickCheckSw = 0;
 		  
 			function JoinCheck() {
 		    	// 폼의 유효성 검사~~~~
@@ -258,18 +259,29 @@
 		    	  submitFlag = 1;
 		      }
 		    	
-		  		// 전송전에 '주소'를 하나로 묶어서 전송처리 준비한다.
+		  		/* // 전송전에 '주소'를 하나로 묶어서 전송처리 준비한다.
 		  		let postcode = JoinForm.postcode.value + " ";
 		  		let roadAddress = JoinForm.roadAddress.value + " ";
 		  		let detailAddress = JoinForm.detailAddress.value + " ";
 		  		let extraAddress = JoinForm.extraAddress.value + " ";
-		  		JoinForm.address.value = postcode + "/" + roadAddress + "/" + detailAddress + "/" + extraAddress + "/";
+		  		JoinForm.address.value = postcode + "/" + roadAddress + "/" + detailAddress + "/" + extraAddress + "/"; */
+		  		
+		  	// 전송전에 '주소'를 하나로 묶어서 전송처리 준비한다.
+		  		let sample5_address = JoinForm.sample5_address.value + " ";
+		  		let sample5_address2 = JoinForm.sample5_address2.value + " ";
+		  		JoinForm.address.value = sample5_address + "/" + sample5_address2;
 		  		
 		  		// 전송전에 모든 체크가 끝나서 submitFlag가 1이되면 서버로 전송한다.
 		    	if(submitFlag == 1) {
 		    		if(idCheckSw == 0) {
 		    			alert("아이디 중복체크버튼을 눌러주세요!");
 		    			document.getElementById("midBtn").focus();
+		    			return false;
+		    		}
+		    		else if(nickCheckSw == 0) {
+		    			alert("닉네임 중복체크버튼을 눌러주세요!");
+		    			document.getElementById("memberNickName").focus();
+		    			return false;
 		    		}
 		    		else {
 			  			// 묶여진 필드(email/tel)를 폼태그안에 hidden태그의 값으로 저장시켜준다.
@@ -316,6 +328,38 @@
 			    }
 			  }
 			
+			// 닉네임 중복체크
+			  function nickNameCheck() {
+			  	let memberNickName = JoinForm.memberNickName.value;
+			  	
+			  	if(memberNickName.trim() == "") {
+			  		alert("닉네임를 입력하세요!");
+			  		JoinForm.memberNickName.focus();
+			  		return false;
+			  	}
+			  	else {
+				  	$.ajax({
+					  	type   : "post",
+					  	url    : "${ctp}/member/memNickCheck",
+					  	data   : {memberNickName : memberNickName} ,
+					  	success:function(res) {
+					  		if(res == "1") {
+					  			document.getElementById("demo3").innerHTML = "<font color = 'red'> 존재하는 닉네임입니다! </font>"; 
+					  			
+					  		}
+					  		else {
+					  			document.getElementById("demo3").innerHTML = "<font color = 'blue'><b>사용가능한 닉네임입니다!</b> </font>";  
+					  			$("#memberNickName").attr("readonly","readonly");
+					  			nickCheckSw = 1;
+					  		}
+					  	},
+					  	error : function() {
+					  		alert("전송 오류~~");
+					  	}
+					  });	
+			    }
+			  }
+			
 		</script>
   </head>
 
@@ -340,6 +384,12 @@
 	            <div class="loginbox-textbox">
 	                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요"  style="width: 85%; margin: 0 auto;" required>
 	            </div>
+	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">닉네임</div>
+	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+	                <input type="text" class="form-control" id="memberNickName" name="memberNickName" placeholder="아이디를 입력하세요" style="width: 100px;" required>&nbsp;
+	                <input type="button" class="btn btn-primary" id="midBtn" onclick="nickNameCheck()" style="width: 20%; text-align: center;"  value="중복체크">
+	            </div>
+	            <div style="font-size: 10px; margin-left: 9%;" id="demo3"></div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">성명</div>
 	            <div class="loginbox-textbox">
 	                <input type="text" class="form-control" id="memberName" name="memberName" placeholder="성명을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
@@ -372,21 +422,16 @@
 							    </div> 
 						    </div>
 	            </div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">주소지</div>
-								<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"  class="btn btn-secondary" style=" margin-left:8%; width: 20%">
-								<input type="hidden" name="address" id="address">
-								<div class="loginbox-textbox" style="width: 80%; margin-left: 7%;">
-									<div class="form-group">
-										<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control mb-2">
-									</div>
-									<input type="text" name="roadAddress" id="sample6_address" placeholder="주소" class="form-control mb-2">
-									<div class="input-group">
-										<input type="text" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소" class="form-control mb-2"> &nbsp;&nbsp;
-									</div>
-									<div class="input-group-append">
-										<input type="text" name="extraAddress" id="sample6_extraAddress" placeholder="참고항목" class="form-control">
-									</div>
-								</div>
+							<div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">주소지</div>
+	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+								<input type="text" id="sample5_address" placeholder="오른쪽버튼을 눌러 검색하세요" class="form-control" readonly>
+								<input type="button" onclick="sample5_execDaumPostcode()" class="btn btn-secondary ml-2" value="주소 검색"><br>
+							</div>
+	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+								<input type="text" id="sample5_address2" placeholder="상세주소" class="form-control">
+							</div>
+							<div id="map" style="width:300px;height:300px;margin-top:10px;display:none; margin-left: 10%;"></div>
+							
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">이메일</div>
 	            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
 	             	<div class="input-group mb-3">
@@ -413,10 +458,71 @@
 	        </div>
 	        <input type="hidden" name="tel"/>
     			<input type="hidden" name="email"/>
+    			<input type="hidden" name="memberLatitude"/>
+    			<input type="hidden" name="memberLongitude"/>
+    			<input type="hidden" name="address"/>
         </form>
     </div>
 		</section>
+		
+		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+		
     </main>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ac23d1dc8d935cead13bb8f2c930e90f&libraries=services"></script>
+		<script>
+		    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+		        mapOption = {
+		            center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
+		            level: 5 // 지도의 확대 레벨
+		        };
+		
+		    //지도를 미리 생성
+		    var map = new daum.maps.Map(mapContainer, mapOption);
+		    //주소-좌표 변환 객체를 생성
+		    var geocoder = new daum.maps.services.Geocoder();
+		    //마커를 미리 생성
+		    var marker = new daum.maps.Marker({
+		        position: new daum.maps.LatLng(37.537187, 127.005476),
+		        map: map
+		    });
+		
+		    function sample5_execDaumPostcode() {
+		      new daum.Postcode({
+		        oncomplete: function(data) {
+		          var addr = data.address; // 최종 주소 변수
+		
+		          // 주소 정보를 해당 필드에 넣는다.
+		          document.getElementById("sample5_address").value = addr;
+		          // 주소로 상세 정보를 검색
+		          geocoder.addressSearch(data.address, function(results, status) {
+	              // 정상적으로 검색이 완료됐으면
+	              if (status === daum.maps.services.Status.OK) {
+	
+                  var result = results[0]; //첫번째 결과의 값을 활용
+
+                  // 해당 주소에 대한 좌표를 받아서
+                  var coords = new daum.maps.LatLng(result.y, result.x);
+                  
+                  // 히든으로 좌표값을 저장한다
+                  JoinForm.memberLatitude.value = result.y;
+  		    				JoinForm.memberLongitude.value = result.x;
+                  
+                  // 지도를 보여준다.
+                  mapContainer.style.display = "block";
+                  map.relayout();
+                  // 지도 중심을 변경한다.
+                  map.setCenter(coords);
+                  // 마커를 결과값으로 받은 위치로 옮긴다.
+                  marker.setPosition(coords)
+	              }
+	            });
+	          }
+		      }).open();
+		    }
+		</script>
+    
+    
     <script src="${ctp}/vendors/@popperjs/popper.min.js"></script>
     <script src="${ctp}/vendors/bootstrap/bootstrap.min.js"></script>
     <script src="${ctp}/vendors/is/is.min.js"></script>

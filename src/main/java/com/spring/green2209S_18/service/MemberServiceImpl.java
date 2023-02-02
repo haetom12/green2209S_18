@@ -24,6 +24,11 @@ public class MemberServiceImpl implements MemberService {
 		
 		return res;
 	}
+
+	@Override
+	public MemberVO getMemberNickCheck(String memberNickName) {
+		return memberDAO.getMemberNickCheck(memberNickName);
+	}
 	
 
 

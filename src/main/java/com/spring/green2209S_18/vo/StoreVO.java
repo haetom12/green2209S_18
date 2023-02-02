@@ -17,7 +17,15 @@ public class StoreVO {
 	private double storeLatitude;
 	private double storeLongitude;
 	private String storeDel;
+	private String storeTime;
 	
 	private String categoryStoreCode;
+	private String categoryPhoto;
+	
+	private double rateAvg;
+	
+	private String brandName;
+	private String foodTag;
+	
 	
 }

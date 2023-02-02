@@ -10,5 +10,7 @@ public interface MemberDAO {
 
 	public void setMemberJoinOk(@Param("vo") MemberVO vo);
 
+	public MemberVO getMemberNickCheck(@Param("memberNickName") String memberNickName);
+
 
 }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.green2209S_18.dao.AdminDAO">
+	
+	<select id="getcategoryCodeCheck" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from categoryStore where categoryStoreCode = #{categoryStoreCode};
+	</select>
+	
+	<select id="getcategoryCodeCheck2" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from categoryStore where storePart = #{storePart};
+	</select>
+
+	<select id="getCategoryList" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from store where storePart = #{vo.storePart};
+	</select>
+
+	<select id="getStoreBrandList" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from storeBrand;
+	</select>
+
+	<select id="getBrandNameCheck" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from storeBrand where storePart = #{storePart} and brandName = #{brandName};
+	</select>
+
+	<select id="getstoreBrand" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from storeBrand where brandName = #{brandName};
+	</select>
+
+	<select id="getstoreMenuList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from foodmenu where brandName = #{brandName};
+	</select>
+
+	<select id="getstoreTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeTag where brandName = #{brandName};
+	</select>
+
+	<select id="getFoodTagCheck" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeTag where brandName = #{brandName} and foodTag = #{foodTag};
+	</select>
+
+	<select id="getCheckTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from foodmenu where brandName = #{brandName} and foodTag = #{foodTag};
+	</select>
+
+
+
+	<insert id="setCategoryInput">
+		insert into categoryStore values (#{vo.categoryStoreCode}, #{vo.storePart}, #{vo.categoryPhoto});
+	</insert>
+
+	<insert id="setStoreBrandInputOk">
+		insert into storeBrand values (default, #{vo.storePart}, #{vo.brandName});
+	</insert>
+
+	<insert id="storeTagInputOk">
+		insert into storeTag values (default, #{vo.brandName}, #{vo.foodTag});
+	</insert>
+
+	
+	
+	<update id="setCategoryUpdate">
+		update categoryStore set categoryStoreCode = #{vo.categoryStoreCode}, storePart = #{vo.storePart}, categoryPhoto = #{vo.categoryPhoto} where categoryStoreCode = #{pastCode};
+	</update>
+
+	<update id="StoreBrandUpdateOk">
+		update storeBrand set storePart = #{vo.storePart}, brandName = #{vo.brandName} where idx = #{vo.idx};
+	</update>
+
+	<update id="storeTagUpdateOk">
+		update storeTag set foodTag = #{foodTag} where brandName = #{brandName} and foodTag = #{oldTag};
+	</update>
+	
+	
+	
+	<delete id="setCategoryDelete">
+		delete from categoryStore where storePart = #{vo.storePart};
+	</delete>
+
+	<delete id="setadminBrandDelete">
+		delete from storeBrand where brandName = #{brandName};
+	</delete>
+
+	<delete id="setStoreTagDelete">
+		delete from storeTag where foodTag = #{foodTag} and brandName = #{brandName};
+	</delete>
+	
+</mapper>

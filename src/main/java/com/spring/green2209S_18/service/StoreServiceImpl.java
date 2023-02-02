@@ -6,10 +6,12 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.StoreDAO;
+import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
 
 @Service
@@ -22,6 +24,7 @@ public class StoreServiceImpl implements StoreService {
 		return storeDAO.getStoreIdCheck(storeMid);
 	}
 
+	@Transactional
 	@Override
 	public int setStoreJoinOk(StoreVO vo, MultipartFile fName) {
 	// 업로드 된 사진을 서버 파일시스템에 저장시켜준다.
@@ -46,4 +49,26 @@ public class StoreServiceImpl implements StoreService {
 	public List<StoreVO> getStoreCategory() {
 		return storeDAO.getStoreCategory();
 	}
+
+	@Override
+	public List<StoreVO> getStoreList(String storePart, String ordered) {
+		return storeDAO.getStoreList(storePart, ordered);
+	}
+
+	@Override
+	public List<StoreVO> getNearMapStoreList(String storePart) {
+		return storeDAO.getNearMapStoreList(storePart);
+	}
+
+	@Override
+	public StoreVO getStoreMenu(int idx) {
+		return storeDAO.getStoreMenu(idx);
+	}
+
+	@Override
+	public FoodMenuVO getStoreFoodMenu(int idx) {
+		return storeDAO.getStoreFoodMenu(idx);
+	}
+
+
 }

@@ -27,12 +27,13 @@ public class JavaspringProvide {
 		return res;
 	}
 
+	// 사진 등록
 	public void writeFile(MultipartFile fName, String saveFileName, String flag) throws IOException {
 		byte[] data = fName.getBytes();
 		// service에서 request객체를 사용하기 위해서 형변환 및 여러가지
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = "";
-	  realPath = request.getSession().getServletContext().getRealPath("/resources/"+flag+"/");
+	  realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+flag+"/");
 		
 		
 		FileOutputStream fos = new FileOutputStream(realPath + saveFileName);
@@ -45,7 +46,7 @@ public class JavaspringProvide {
 		byte[] data = fName.getBytes();
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = "";
-	  realPath = request.getSession().getServletContext().getRealPath("/resources/"+flag+"/");
+	  realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+flag+"/");
 	  if(!oldFileName.equals("noimage.jpg")) {
 	  	File file = new File(realPath + oldFileName);
 	  	if(file.exists()) file.delete();
@@ -53,5 +54,14 @@ public class JavaspringProvide {
 		FileOutputStream fos = new FileOutputStream(realPath + saveFileName);
 		fos.write(data);
 		fos.close();
+	}
+	
+	// 사진 삭제
+	public void deletePhoto(String saveFileName, String flag) throws IOException {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = "";
+	  realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+flag+"/");
+  	File file = new File(realPath + saveFileName);
+  	if(file.exists()) file.delete();
 	}
 }

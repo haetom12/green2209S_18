@@ -7,14 +7,33 @@
 		select * from store where storeMid = #{storeMid};
 	</select>
 
+	<select id="getStoreMenu" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from store where idx = #{idx};
+	</select>
+
 	<select id="getStoreCategory" resultType="com.spring.green2209S_18.vo.StoreVO">
 		select * from categoryStore order by categoryStoreCode;
 	</select>
+
+	<select id="getNearMapStoreList" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from store <if test='storePart !="" '> where storePart = #{storePart} </if>;
+	</select>
+
+	<select id="getStoreList" resultType="com.spring.green2209S_18.vo.StoreVO">
+		<!-- select s.*, round(AVG(r.rating),1) as rateAvg from store s, rating r where s.idx = r.storeIdx and s.storePart = #{storePart} 
+		group by s.storeName <if test='ordered !="" '> order by ${ordered} desc</if>; -->
+	
+		select s.*, (select round(AVG(r.rating), 1) from rating r where s.idx = r.storeIdx) as rateAvg from store s where s.storePart = #{storePart} <if test='ordered !="" '> order by ${ordered} desc</if>;
 	
 	
+	</select>
+
+	<select id="getStoreFoodMenu" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from foodMenu where storeIdx = #{storeIdx};
+	</select>
 	
 	<insert id="setStoreJoinOk">
-		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default);
+		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime});
 	</insert>
 	
 	

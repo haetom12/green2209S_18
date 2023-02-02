@@ -16,9 +16,13 @@ create table member (
 	level int default 3,									/* 0: 관리자, 1: 우수회원 2: 정회원 3: 준회원 */
 	memberLatitude double not null, 				/* 위도 */
 	memberLongitude double not null,				/* 경도 */
+	memberNickName varchar(20) not null,      	/* 회원 성명 */
 	primary key(idx,mid)           		  	/* 주키: idx(고유번호), mid(아이디) */
 );
 
+ALTER TABLE member ADD memberLatitude double not null;
+ALTER TABLE member ADD memberLongitude double not null;
+ALTER TABLE member ADD memberNickName varchar(20) not null;
 
 select * from member;
 

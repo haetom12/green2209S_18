@@ -8,6 +8,7 @@ public class MemberVO {
 	private String mid;
 	private String pwd;
 	private String memberName;
+	private String memberNickName;
 	private String birthday;
 	private String tel;
 	private String address;
@@ -15,4 +16,6 @@ public class MemberVO {
 	private String userDel;
 	private int point;
 	private int orderCnt;
+	private double memberLatitude;
+	private double memberLongitude;
 }

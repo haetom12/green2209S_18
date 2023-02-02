@@ -93,18 +93,7 @@
 </head>
 <body class="w3-light-grey">
 
-	<div id="mySidebar" class="sidebar">
-	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-	  <a href="${ctp}/homePage.ad">홈페이지로</a>
-	  <a href="${ctp}/adMain.ad">관리자 홈으로</a>
-	  <a href="${ctp}/adProductList.ad">상품관리</a>
-	  <a href="${ctp}/adOrderList.ad">거래요청</a>
-	  <a href="${ctp}/adMemList.ad">회원관리</a>
-	  <a href="${ctp}/adRequestList.ad">회원가입요청</a>
-	  <a href="${ctp}/adMemDeleteList.ad">회원탈퇴요청</a>
-	  <a href="${ctp}/adBoList.ad">문의/답변</a>
-	</div>
-
+<jsp:include page="/WEB-INF/views/admin/adminNav.jsp"></jsp:include>	
 
 <!-- Top container -->
 <div id="main" style="margin-left : 0; padding-left: 0px;">
@@ -273,51 +262,7 @@
 	    <button class="w3-button w3-dark-grey">More Countries  <i class="fa fa-arrow-right"></i></button>
 	  </div>
 	  <hr>
-	  <!--   <hr>
-	  <div class="w3-container">
-	    <h5>General Stats</h5>
-	    <p>New Visitors</p>
-	    <div class="w3-grey">
-	      <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
-	    </div>
-	
-	    <p>New Users</p>
-	    <div class="w3-grey">
-	      <div class="w3-container w3-center w3-padding w3-orange" style="width:50%">50%</div>
-	    </div>
-	
-	    <p>Bounce Rate</p>
-	    <div class="w3-grey">
-	      <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
-	    </div>
-	  </div>
-	  <hr> -->
-	  
-	  
 	  <br>
-<!-- 	  <div class="w3-container w3-dark-grey w3-padding-32">
-	    <div class="w3-row">
-	      <div class="w3-container w3-third">
-	        <h5 class="w3-bottombar w3-border-green">Demographic</h5>
-	        <p>Language</p>
-	        <p>Country</p>
-	        <p>City</p>
-	      </div>
-	      <div class="w3-container w3-third">
-	        <h5 class="w3-bottombar w3-border-red">System</h5>
-	        <p>Browser</p>
-	        <p>OS</p>
-	        <p>More</p>
-	      </div>
-	      <div class="w3-container w3-third">
-	        <h5 class="w3-bottombar w3-border-orange">Target</h5>
-	        <p>Users</p>
-	        <p>Active</p>
-	        <p>Geo</p>
-	        <p>Interests</p>
-	      </div>
-	    </div>
-	  </div> -->
   </div>
 </div>
 
