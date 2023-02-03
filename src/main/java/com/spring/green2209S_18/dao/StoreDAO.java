@@ -21,7 +21,13 @@ public interface StoreDAO {
 
 	public StoreVO getStoreMenu(@Param("idx") int idx);
 
-	public FoodMenuVO getStoreFoodMenu(@Param("storeIdx") int idx);
+	public List<FoodMenuVO> getStoreFoodMenu(@Param("storeName") String storeName);
+
+	public int setStoreSubMenuDeletePost(@Param("foodName") String foodName);
+
+	public int setStoreMenuDeletePost(@Param("foodName") String foodName);
+
+	public FoodMenuVO getStoreFood(@Param("storeName") String brandName, @Param("foodName") String foodName);
 
 
 }

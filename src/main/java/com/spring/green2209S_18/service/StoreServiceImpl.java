@@ -66,8 +66,33 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public FoodMenuVO getStoreFoodMenu(int idx) {
-		return storeDAO.getStoreFoodMenu(idx);
+	public List<FoodMenuVO> getStoreFoodMenu(String storeName) {
+		return storeDAO.getStoreFoodMenu(storeName);
+	}
+
+	@Override
+	public int setStoreSubMenuDeletePost(String foodName) {
+		return storeDAO.setStoreSubMenuDeletePost(foodName);
+	}
+
+	@Override
+	public int setStoreMenuDeletePost(FoodMenuVO sVo) {
+		int res = 0;
+		JavaspringProvide ps = new JavaspringProvide();
+		
+		try {
+			ps.deletePhoto(sVo.getFoodPhoto(), "storeFoodPhoto");
+			storeDAO.setStoreMenuDeletePost(sVo.getFoodName());
+			res= 1;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public FoodMenuVO getStoreFood(String brandName, String foodName) {
+		return storeDAO.getStoreFood(brandName, foodName);
 	}
 
 

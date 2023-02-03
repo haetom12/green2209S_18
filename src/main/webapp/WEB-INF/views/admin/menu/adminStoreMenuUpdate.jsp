@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
+<% pageContext.setAttribute("newLine", "\n"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +16,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <style>
 	html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-	
 	body {
 				
 			  font-family: "Lato", sans-serif;
@@ -92,65 +93,78 @@
 
 <script>
   'use strict';
-  let brandCheckSw = 0;
+  let foodCheckSw = 0;
+	
 	
   //  체크후 서버로 전송(submit)
   function fCheck() {
-	  let storePart = $("#storePart").val();
-	  let brandName = $("#brandName").val();
+	  let foodName = myform.foodName.value;
+	  let price = myform.price.value;
 	  
-		if($.trim(storePart) == "") {
-			alert("프랜차이즈 종류를 선택하세요");
-			myform2.storePart.focus();
+		let fName = myform.fName.value;
+		let ext = fName.substring(fName.lastIndexOf(".")+1); // 확장자 발췌
+		let uExt = ext.toUpperCase();
+		let maxSize = 1024 * 1024 * 2;   // 업로드 가능한 최대파일의 용량은 2MByte로 한다.
+
+		
+		if(foodName.trim() == "") {
+			alert("메뉴명을 입력하세요");
+			myform.foodName.focus();
 			return false;
 		}
-		else if($.trim(brandName) == "") {
-			alert("프랜차이즈 명을 입력하세요");
-			myform2.brandName.focus();
+		else if(price.trim() == "") {
+			alert("가격을 입력하세요");
+			myform.price.focus();
 			return false;
 		}
-		else if(brandName != '${vo.brandName}') {
-			if(brandCheckSw == 0) {
-				alert("프랜차이즈 명 중복체크는 필수입니다!");
-				myform2.brandName.focus();
-				return false;
-			}
-			else {
-			  location.href="${ctp}/admin/adminStoreBrandUpdate2?idx=${vo.idx}&storePart="+storePart+"&brandName="+brandName;
-			}
+		else if(foodCheckSw == 0) {
+			alert("메뉴명 중복체크는 필수입니다!");
+			myform.foodName.focus();
+			return false;
+		}
+
+		let fileSize = document.getElementById("fName").files[0].size; //자바스크립트 명령어
+		
+		if(uExt != "JPG" && uExt != "PNG" && uExt != "GIF" && uExt != "ZIP" && uExt != "HWP" &&  uExt != "PPTX" &&  uExt != "PPT" ) {
+			alert("업로드 가능한 파일은 'JPG/GIF/PNG/HWP/PPT/PPTX'입니다.");
+			return false;
+		}
+		else if(fileSize > maxSize) {
+			alert("업로드할 파일의 최대용량은 2MByte 입니다.");
+			return false;
 		}
 		else {
-			location.href="${ctp}/admin/adminStoreBrandUpdate2?idx=${vo.idx}&brandName="+brandName;
+			myform.submit();
 		}
   }
   
 	//카테코리 이름 중복체크
-  function brandCheck() {
-	  let storePart = $("#storePart").val();
-	  let brandName = $("#brandName").val();
+  function foodNameCheck() {
+	  let foodName = myform.foodName.value;
+	  let brandName = myform.brandName.value;
 	  
-  	if(brandName.trim() == "") {
-  		alert("프랜차이즈명을 입력하세요!");
-  		myform2.brandName.focus();
+  	if(foodName.trim() == "") {
+  		alert("메뉴명을 입력하세요!");
+  		myform.foodName.focus();
   		return false;
   	}
   	else {
 	  	$.ajax({
 		  	type   : "post",
-		  	url    : "${ctp}/admin/storebrandNameCheck",
+		  	url    : "${ctp}/admin/foodNameCheck",
 		  	data   : {
-		  		storePart : storePart,
+		  		foodName : foodName,
 		  		brandName : brandName
 		  		} ,
 		  	success:function(res) {
 		  		if(res == "1") {
-		  			document.getElementById("demo2").innerHTML = "<font color = 'red'> 존재하는 프랜차이즈입니다! </font>"; 
+		  			document.getElementById("demo2").innerHTML = "<font color = 'red'> 존재하는 메뉴입니다! </font>"; 
 		  			
 		  		}
 		  		else {
-		  			document.getElementById("demo2").innerHTML = "<font color = 'blue'><b>사용가능한 프랜차이즈입니다!</b> </font>";  
-		  			$("#brandName").attr("readonly","readonly");
-		  			brandCheckSw = 1;
+		  			document.getElementById("demo2").innerHTML = "<font color = 'blue'><b>사용가능한 메뉴입니다!</b> </font>";  
+		  			$("#foodName").attr("readonly","readonly");
+		  			foodCheckSw = 1;
 		  		}
 		  	},
 		  	error : function() {
@@ -173,43 +187,63 @@
   <!-- <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button> -->
   <span class="w3-bar-item w3-right">Logo</span>
 </div>
+
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-container">
-  <form name="myform2" method="post" >
-	  <h2 class="text-center">프랜차이즈 수정</h2>
+  <form name="myform" method="post" enctype="multipart/form-data">
+	  <h2 class="text-center">메뉴 등록</h2>
 	  <br/>
 	  <div id="fileBoxAppend"></div>
 	  <div class="mb-2">
-	  프랜차이즈 종류 :
+	  프랜차이즈 이름 :
 	  	<div class="loginbox-textbox input-group" style="margin: 0 auto;">
-		    <select id="storePart" name="storePart" class="form-control">
-		    	<c:forEach var="cVo" items="${vos}">
-			    	<option value="${cVo.storePart}" ${cVo.storePart==vo.storePart  ? "selected" : ""}>${cVo.storePart}</option>
-			    </c:forEach>
-				</select>
+		    <input type="text" name="brandName" id="brandName" value="${vo.brandName}" class="form-control" style="width: 100px;" readonly />
 	  	</div>
 	  </div>
 	  <div style="font-size: 10px;" id="demo"></div>
-	  프랜차이즈 명 :
+	  메뉴명 :
 	  <div class="loginbox-textbox input-group" style="margin: 0 auto;">
-       <input type="text" name="brandName" id="brandName" value="${vo.brandName}" class="form-control" style="width: 200px;" required />
-       <input type="button" class="btn btn-primary" id="midBtn2" onclick="brandCheck()" style="width: 15%; text-align: center;"  value="중복체크">
+       <input type="text" name="foodName" id="foodName"  value="${vo.foodName}" class="form-control" style="width: 200px;" required />
+       <input type="button" class="btn btn-primary" id="midBtn2" onclick="foodNameCheck()" style="width: 15%; text-align: center;"  value="중복체크">
     </div>
-    <div style="font-size: 10px; margin-bottom: 5px;" id="demo2"></div>
-	  <div class="mb-2">
-	    <input type="button" value="프렌차이즈 수정" onclick="fCheck()" class="btn btn-primary"/> &nbsp;
-	    <input type="reset" value="다시쓰기" class="btn btn-warning"/> &nbsp;
-	    <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/storeBrandList';" class="btn btn-secondary"/> &nbsp;    
-	    <input type="hidden" name="idx" value="${vo.idx}" />
+    <div style="font-size: 10px;" id="demo2"></div>
+    음식 태그 :
+    <div class="input-group-append" style="width: 25%;">
+	    <select name="foodTag" class="form-control">
+	    	<c:forEach var="cVo" items="${vos}">
+		    	<option value="${vo.foodTag}"  ${cVo.foodTag==vo.foodTag  ? "selected" : ""}  >${vo.foodTag}</option>
+		    </c:forEach>
+		  </select>
 	  </div>
+	  가격 :
+	  <div class="loginbox-textbox input-group" style="margin: 0 auto;">
+       <input type="number" name="price" id="price"  value="${vo.price}" class="form-control" style="width: 200px;" required />
+    </div>
+    추가메뉴 :
+	  <input class="w3-radio" type="radio" name="subMenu" value="X"  ${vo.subMenu == "X"  ? "checked" : ""}  >
+	  <label>없음</label>&nbsp;
+	  <input class="w3-radio" type="radio" name="subMenu" value="O"  ${vo.subMenu == "O"  ? "checked" : ""}  >
+	  <label>있음</label>
+	  <p></p>
+	  메뉴 설명 :
+	  <textarea rows="6" name="foodInfo" id="foodInfo" class="form-control mb-2" >${fn:replace(vo.foodInfo, newLine, '<br/>')}</textarea>
+    <div>
+   		<label for="file">메뉴이미지 :</label>
+      <input type="file" name="fName" id="fName" class="form-control-file border" accept=".jpg,.gif,.png,.jpeg" required />
+      (업로드 가능파일:jpg, jpeg, gif, png)
+	  </div>
+	  <div class="mb-2 mt-2">
+	    <input type="button" value="메뉴 수정" onclick="fCheck()" class="btn btn-primary"/> &nbsp;
+	    <input type="reset" value="다시쓰기" class="btn btn-warning"/> &nbsp;
+	    <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/storeMenuList?brandName=${vo.brandName}';" class="btn btn-secondary"/> &nbsp;    
+	  </div>
+	  <input type="hidden" name="oldFoodName" value="${vo.foodName}" />
   </form>
 </div>
 <br />
-
-
 </div>
 
 <script>

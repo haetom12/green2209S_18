@@ -66,10 +66,10 @@ select s.*, (select round(AVG(r.rating), 1) from rating r where s.idx = r.storeI
 
 
 /* 음식 프랜차이즈 추가 */
-create table storeBrand (
-	idx int not null auto_increment, 	  	/* 브랜드 고유번호 */
-	storePart varchar(20) not null,				/* 치킨,피자 */
-	brandName varchar(30) not null,       /* 브랜드 이름(중복불허) */
+create table adminStoreBrand (
+	idx int not null auto_increment,  	/* 브랜드 고유번호 */
+	storePart varchar(20) not null, 		/* 치킨,피자 */
+	brandName varchar(30) not null,     /* 브랜드 이름(중복불허) */
 	foreign key(storePart) references categoryStore(storePart),
 	unique key(brandName),
 	primary key(idx)
@@ -77,7 +77,7 @@ create table storeBrand (
 
 
 /* 가게 음식 카테고리  */
-create table storeTag (
+create table adminStoreTag (
 	idx int not null auto_increment,						/* 푸드카테고리 고유번호 */
 	brandName varchar(30) not null,							/* 가게 고유번호 */
 	foodTag varchar(100) not null,
@@ -89,7 +89,7 @@ create table storeTag (
 -- drop table foodsubMenu;
  
 	-- 주 메뉴 테이블
-	CREATE TABLE foodMenu (
+	CREATE TABLE adminFoodMenu (
 		menuIdx	int	NOT NULL auto_increment,  		/* 메뉴 고유번호 */
 		brandName varchar(30) not null,								/* 해당 프랜차이즈 이름 */
 		foodName	varchar(30)	NOT NULL, 					/* 메뉴 이름 */
@@ -112,21 +112,19 @@ create table storeTag (
 	ALTER TABLE foodMenu ADD subMenu varchar(1) not null default 'X';
 		
 	-- 각 메뉴에 추가 옵션
-	CREATE TABLE foodSubMenu (
+	CREATE TABLE adminFoodSubMenu (
 		storeIdx	int	NOT NULL,
-		menuIdx	int	NOT NULL,
+		foodName	varchar(30)	NOT NULL,
 		subMenuIdx	int	NOT NULL auto_increment,
 		sMenuPart	varchar(20)	NOT NULL,
 		sMenuName	varchar(20)	NOT NULL,
 		price	int	NOT NULL,
 		runOut	varchar(20)	NOT NULL,
 		
-		foreign key(storeIdx) references store(idx),
-		foreign key(menuIdx) references foodMenu(menuIdx),
-		primary key(subMenuIdx)  
+		primary key(subMenuIdx)
 	);
 	
-	
+--	drop table adminFoodSubMenu
 	
 	
 	

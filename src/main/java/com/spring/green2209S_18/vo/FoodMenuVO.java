@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class FoodMenuVO {
 	private int menuIdx;
-	private int storeIdx;
+	private String storeName;
 	private String foodName;
 	private String foodPart;
 	private int price;

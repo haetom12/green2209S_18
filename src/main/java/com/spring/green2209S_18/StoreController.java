@@ -151,10 +151,10 @@ public class StoreController {
 	public String myStoreMenuGet(HttpSession session, Model model) {
 		String storeMid = (String) session.getAttribute("sMid"); 
 		StoreVO vo = storeService.getStoreIdCheck(storeMid);
-		FoodMenuVO fVo = storeService.getStoreFoodMenu(vo.getIdx());
+		List<FoodMenuVO> vos = storeService.getStoreFoodMenu(vo.getStoreName());
 		
 		model.addAttribute("vo",vo);
-		model.addAttribute("fVo",fVo);
+		model.addAttribute("vos",vos);
 		return "store/myStoreMenu";
 	}
 

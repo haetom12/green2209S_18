@@ -82,6 +82,7 @@ public class MemberController {
 				
 				session.setAttribute("sMid", mid);
 				session.setAttribute("sPart", "store");
+				session.setAttribute("sbrandName", vo.getStoreName());
 				session.setAttribute("sAddress", vo.getStoreAddress());
 				session.setAttribute("sNumber", vo.getStoreNumber());
 				session.setAttribute("sEmail", vo.getStoreEmail());

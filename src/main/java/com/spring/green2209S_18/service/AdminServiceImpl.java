@@ -12,6 +12,7 @@ import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
+import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -145,7 +146,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public FoodMenuVO getFoodTagCheck(String brandName, String foodTag) {
+	public List<FoodMenuVO> getFoodTagCheck(String brandName, String foodTag) {
 		return adminDAO.getFoodTagCheck(brandName, foodTag);
 	}
 
@@ -167,6 +168,56 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<FoodMenuVO> getCheckTagList(String foodTag, String brandName) {
 		return adminDAO.getCheckTagList(foodTag,brandName);
+	}
+
+	@Override
+	public FoodMenuVO getFoodNameCheck(String brandName, String foodName) {
+		return adminDAO.getFoodNameCheck(brandName, foodName);
+	}
+
+	@Override
+	public int setAdminMenuInput(FoodMenuVO vo, MultipartFile fName) {
+		// 업로드 된 사진을 서버 파일시스템에 저장시켜준다.
+		int res = 0;
+		try {
+			String oFileName = fName.getOriginalFilename();
+			UUID uid = UUID.randomUUID();
+			String saveFileName = uid + "_" + oFileName;
+			
+			JavaspringProvide ps = new JavaspringProvide();
+			ps.writeFile(fName,saveFileName, "adminFoodPhoto");
+			vo.setFoodPhoto(saveFileName);
+			adminDAO.setFoodInput(vo);
+			res = 1;
+		} catch (IOException e)	 {
+			e.printStackTrace();
+		}
+		return res;
+}
+
+	@Override
+	public List<SubFoodMenuVO> getCheckAdminSubMenu(String foodName) {
+		return adminDAO.getCheckAdminSubMenu(foodName);
+	}
+
+	@Override
+	public int setAdminSubMenuDeletePost(String foodName) {
+		return adminDAO.setAdminSubMenuDeletePost(foodName);
+	}
+
+	@Override
+	public int setAdminMenuDeletePost(FoodMenuVO aVo) {
+		int res = 0;
+		JavaspringProvide ps = new JavaspringProvide();
+		
+		try {
+			ps.deletePhoto(aVo.getFoodPhoto(), "adminFoodPhoto");
+			adminDAO.setAdminMenuDeletePost(aVo.getFoodName());
+			res= 1;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 }

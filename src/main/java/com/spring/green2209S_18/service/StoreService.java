@@ -21,7 +21,13 @@ public interface StoreService {
 
 	public StoreVO getStoreMenu(int idx);
 
-	public FoodMenuVO getStoreFoodMenu(int idx);
+	public List<FoodMenuVO> getStoreFoodMenu(String storeName);
+
+	public int setStoreSubMenuDeletePost(String foodName);
+
+	public int setStoreMenuDeletePost(FoodMenuVO sVo);
+
+	public FoodMenuVO getStoreFood(String brandName, String foodName);
 
 
 

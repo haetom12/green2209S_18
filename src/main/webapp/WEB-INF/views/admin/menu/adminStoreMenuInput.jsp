@@ -14,7 +14,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <style>
 	html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-	
 	body {
 				
 			  font-family: "Lato", sans-serif;
@@ -92,38 +91,33 @@
 
 <script>
   'use strict';
-  let codeCheckSw = 0;
-  let categoryCheckSw = 0;
+  let foodCheckSw = 0;
 	
 	
   //  체크후 서버로 전송(submit)
   function fCheck() {
-	  let categoryStoreCode = myform.categoryStoreCode.value;
-	  let storePart = myform.storePart.value;
+	  let foodName = myform.foodName.value;
+	  let price = myform.price.value;
+	  
 		let fName = myform.fName.value;
 		let ext = fName.substring(fName.lastIndexOf(".")+1); // 확장자 발췌
 		let uExt = ext.toUpperCase();
 		let maxSize = 1024 * 1024 * 2;   // 업로드 가능한 최대파일의 용량은 2MByte로 한다.
 
 		
-		if(categoryStoreCode.trim() == "") {
-			alert("카테고리 코드를 입력하세요");
-			myform.categoryStoreCode.focus();
+		if(foodName.trim() == "") {
+			alert("메뉴명을 입력하세요");
+			myform.foodName.focus();
 			return false;
 		}
-		else if(storePart.trim() == "") {
-			alert("카테고리 명을 입력하세요");
-			myform.storePart.focus();
+		else if(price.trim() == "") {
+			alert("가격을 입력하세요");
+			myform.price.focus();
 			return false;
 		}
-		else if(codeCheckSw == 0) {
-			alert("카테고리 코드 중복체크는 필수입니다!");
-			myform.categoryStoreCode.focus();
-			return false;
-		}
-		else if(categoryCheckSw == 0) {
-			alert("카테고리 명 중복체크는 필수입니다!");
-			myform.storePart.focus();
+		else if(foodCheckSw == 0) {
+			alert("메뉴명 중복체크는 필수입니다!");
+			myform.foodName.focus();
 			return false;
 		}
 
@@ -142,63 +136,33 @@
 		}
   }
   
-	//코드 중복체크
-  function CodeCheck() {
-	  let categoryStoreCode = myform.categoryStoreCode.value;
-	  let storePart = myform.storePart.value;
-	  
-  	if(categoryStoreCode.trim() == "") {
-  		alert("카테코리 코드를 입력하세요!");
-  		myform.categoryStoreCode.focus();
-  		return false;
-  	}
-  	else {
-	  	$.ajax({
-		  	type   : "post",
-		  	url    : "${ctp}/admin/categoryCodeCheck",
-		  	data   : {categoryStoreCode : categoryStoreCode} ,
-		  	success:function(res) {
-		  		if(res == "1") {
-		  			document.getElementById("demo").innerHTML = "<font color = 'red'> 존재하는 코드입니다! </font>"; 
-		  			
-		  		}
-		  		else {
-		  			document.getElementById("demo").innerHTML = "<font color = 'blue'><b>사용가능한 코드입니다!</b> </font>";  
-		  			$("#categoryStoreCode").attr("readonly","readonly");
-		  			codeCheckSw = 1;
-		  		}
-		  	},
-		  	error : function() {
-		  		alert("전송 오류~~");
-		  	}
-		  });	
-    }
-  }
-	
 	//카테코리 이름 중복체크
-  function categoryCheck() {
-	  let categoryStoreCode = myform.categoryStoreCode.value;
-	  let storePart = myform.storePart.value;
+  function foodNameCheck() {
+	  let foodName = myform.foodName.value;
+	  let brandName = myform.brandName.value;
 	  
-  	if(storePart.trim() == "") {
-  		alert("카테고리명을 입력하세요!");
-  		myform.storePart.focus();
+  	if(foodName.trim() == "") {
+  		alert("메뉴명을 입력하세요!");
+  		myform.foodName.focus();
   		return false;
   	}
   	else {
 	  	$.ajax({
 		  	type   : "post",
-		  	url    : "${ctp}/admin/categoryCodeCheck2",
-		  	data   : {storePart : storePart} ,
+		  	url    : "${ctp}/admin/foodNameCheck",
+		  	data   : {
+		  		foodName : foodName,
+		  		brandName : brandName
+		  		} ,
 		  	success:function(res) {
 		  		if(res == "1") {
-		  			document.getElementById("demo2").innerHTML = "<font color = 'red'> 존재하는 카테고리입니다! </font>"; 
+		  			document.getElementById("demo2").innerHTML = "<font color = 'red'> 존재하는 메뉴입니다! </font>"; 
 		  			
 		  		}
 		  		else {
-		  			document.getElementById("demo2").innerHTML = "<font color = 'blue'><b>사용가능한 카테고리입니다!</b> </font>";  
-		  			$("#storePart").attr("readonly","readonly");
-		  			categoryCheckSw = 1;
+		  			document.getElementById("demo2").innerHTML = "<font color = 'blue'><b>사용가능한 메뉴입니다!</b> </font>";  
+		  			$("#foodName").attr("readonly","readonly");
+		  			foodCheckSw = 1;
 		  		}
 		  	},
 		  	error : function() {
@@ -221,13 +185,14 @@
   <!-- <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button> -->
   <span class="w3-bar-item w3-right">Logo</span>
 </div>
+
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-container">
   <form name="myform" method="post" enctype="multipart/form-data">
-	  <h2 class="text-center">카테고리 등록</h2>
+	  <h2 class="text-center">메뉴 등록</h2>
 	  <br/>
 	  <div id="fileBoxAppend"></div>
 	  <div class="mb-2">
@@ -237,21 +202,41 @@
 	  	</div>
 	  </div>
 	  <div style="font-size: 10px;" id="demo"></div>
-	  카테고리 :
+	  메뉴명 :
 	  <div class="loginbox-textbox input-group" style="margin: 0 auto;">
-       <input type="text" name="storePart" id="storePart"  placeholder="카테고리명을 입력하세요" class="form-control" style="width: 200px;" required />
-       <input type="button" class="btn btn-primary" id="midBtn2" onclick="categoryCheck()" style="width: 15%; text-align: center;"  value="중복체크">
+       <input type="text" name="foodName" id="foodName"  placeholder="메뉴명을 입력하세요" class="form-control" style="width: 200px;" required />
+       <input type="button" class="btn btn-primary" id="midBtn2" onclick="foodNameCheck()" style="width: 15%; text-align: center;"  value="중복체크">
     </div>
     <div style="font-size: 10px;" id="demo2"></div>
-	   <div>
-	   		<label for="file">메인이미지</label>
-        <input type="file" name="fName" id="fName" class="form-control-file border" accept=".jpg,.gif,.png,.jpeg" required />
-        (업로드 가능파일:jpg, jpeg, gif, png)
+    음식 태그 :
+    <div class="input-group-append" style="width: 25%;">
+	    <select name="foodTag" class="form-control">
+	    	<c:forEach var="vo" items="${vos}">
+		    	<option value="${vo.foodTag}">${vo.foodTag}</option>
+		    </c:forEach>
+		  </select>
 	  </div>
-	  <div class="mb-2">
-	    <input type="button" value="카테고리 등록" onclick="fCheck()" class="btn btn-primary"/> &nbsp;
+	  가격 :
+	  <div class="loginbox-textbox input-group" style="margin: 0 auto;">
+       <input type="number" name="price" id="price"  placeholder="가격을 입력하세요" class="form-control" style="width: 200px;" required />
+    </div>
+    추가메뉴 :
+	  <input class="w3-radio" type="radio" name="subMenu" value="X" checked="checked">
+	  <label>없음</label>&nbsp;
+	  <input class="w3-radio" type="radio" name="subMenu" value="O" >
+	  <label>있음</label>
+	  <p></p>
+	  메뉴 설명 :
+	  <textarea rows="6" name="foodInfo" id="foodInfo" class="form-control mb-2" placeholder="메뉴 설명을 입력하세요" ></textarea>
+    <div>
+   		<label for="file">메뉴이미지 :</label>
+      <input type="file" name="fName" id="fName" class="form-control-file border" accept=".jpg,.gif,.png,.jpeg" required />
+      (업로드 가능파일:jpg, jpeg, gif, png)
+	  </div>
+	  <div class="mb-2 mt-2">
+	    <input type="button" value="메뉴 등록" onclick="fCheck()" class="btn btn-primary"/> &nbsp;
 	    <input type="reset" value="다시쓰기" class="btn btn-warning"/> &nbsp;
-	    <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/adminShopCategory';" class="btn btn-secondary"/> &nbsp;    
+	    <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/storeMenuList?brandName=${vo.brandName}';" class="btn btn-secondary"/> &nbsp;    
 	  </div>
   </form>
 </div>

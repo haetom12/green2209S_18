@@ -7,9 +7,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,7 @@ import com.spring.green2209S_18.service.AdminService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
+import com.spring.green2209S_18.vo.SubFoodMenuVO;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -234,7 +237,7 @@ public class AdminController {
 		return "admin/menu/storeBrandOptionList";
 	}
 	
-	// 선택한 프랜차이즈 메뉴 리스트 폼 이동
+	// 선택한 프랜차이즈 음식메뉴 리스트 폼 이동
 	@RequestMapping(value = "storeMenuList", method = RequestMethod.GET)
 	public String storeMenuListGet(Model model, String brandName) {
 		
@@ -263,6 +266,7 @@ public class AdminController {
 	// 프랜차이즈 메뉴 입력 폼 이동
 	@RequestMapping(value = "adminStoreMenuInput", method = RequestMethod.GET)
 	public String adminStoreMenuInputGet(String brandName, Model model) {
+		
 		StoreVO vo = adminService.getstoreBrand(brandName);
 		List<FoodMenuVO> vos = adminService.getstoreTagList(brandName);
 		
@@ -270,6 +274,16 @@ public class AdminController {
 		model.addAttribute("vos",vos);
 		
 		return "admin/menu/adminStoreMenuInput";
+	}
+
+	// 프랜차이즈 메뉴 등록
+	@RequestMapping(value = "adminStoreMenuInput", method = RequestMethod.POST)
+	public String adminStoreMenuInputPost(FoodMenuVO vo, MultipartFile fName) throws UnsupportedEncodingException {
+		
+		int res = adminService.setAdminMenuInput(vo,fName);
+		
+		if(res == 1) return "redirect:/msg/storeMenuInputOk?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8"); // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "redirect:/msg/storeMenuInputNo?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8"); // 정상처리가 되면 true == 1이 자동으로 넘어옴
 	}
 	
 	// 프랜차이즈 메뉴 태그 입력 폼 이동
@@ -282,15 +296,29 @@ public class AdminController {
 		return "admin/menu/adminStoreTagInput";
 	}
 
+//	// 프랜차이즈 태그 중복 확인
+//	@ResponseBody
+//	@RequestMapping(value = "adminFoodTagCheck", method = RequestMethod.POST)
+//	public String adminFoodTagCheckPost(String brandName, 
+//		@RequestParam(name = "foodTag", defaultValue = "", required = false) String foodTag) {
+//		int res = 1;
+//		
+//		FoodMenuVO vo = adminService.getFoodTagCheck(brandName, foodTag);
+//		
+//		if(vo == null) res = 0;
+//		return res+"";
+//	}
+	
 	// 프랜차이즈 태그 중복 확인
 	@ResponseBody
 	@RequestMapping(value = "adminFoodTagCheck", method = RequestMethod.POST)
-	public String adminFoodTagCheckPost(String brandName, String foodTag) {
+	public String adminFoodTagCheckPost(String brandName, 
+			@RequestParam(name = "foodTag", defaultValue = "", required = false) String foodTag) {
 		int res = 1;
 		
-		FoodMenuVO vo = adminService.getFoodTagCheck(brandName, foodTag);
+		List<FoodMenuVO> vos = adminService.getFoodTagCheck(brandName, foodTag);
 		
-		if(vo == null) res = 0;
+		if(vos.size()==0) res = 0;
 		return res+"";
 	}
 	
@@ -350,6 +378,73 @@ public class AdminController {
 		}
 		return res+"";
 	}
+	
+	// 프랜차이즈 태그 중복 확인
+	@ResponseBody
+	@RequestMapping(value = "foodNameCheck", method = RequestMethod.POST)
+	public String foodNameCheckPost(String brandName, String foodName) {
+		int res = 1;
+		
+		FoodMenuVO vo = adminService.getFoodNameCheck(brandName, foodName);
+		
+		if(vo == null) res = 0;
+		return res+"";
+	}
+
+	
+	// 관리자에서 음식 메뉴 삭제
+	@Transactional
+	@ResponseBody
+	@RequestMapping(value = "adminMenuDelete", method= RequestMethod.POST)
+	public String adminMenuDeletePost(String foodName, String brandName) {
+		int res1 = 0; int res2 = 0; int res3 = 0; int res4 = 0;
+		
+		// 추가 옵션 테이블에 해당음식을 포함하고 있는지 확인
+		List<SubFoodMenuVO> vos = adminService.getCheckAdminSubMenu(foodName);
+		
+		if(vos.size()==0) {
+			// 해당음식의 추가옵션 테이블을 어드민/사장 둘다 삭제
+			res1 = adminService.setAdminSubMenuDeletePost(foodName);
+			res2 = storeService.setStoreSubMenuDeletePost(foodName);
+			
+			// 메뉴를 어드민 음식 테이블과 가게 음식 테이블에 둘다 삭제
+			FoodMenuVO aVo =  adminService.getFoodNameCheck(brandName, foodName);
+			FoodMenuVO sVo =  storeService.getStoreFood(brandName, foodName);
+			if(aVo != null) res3 = adminService.setAdminMenuDeletePost(aVo);
+			if(sVo != null) res4 = storeService.setStoreMenuDeletePost(sVo);
+			
+			System.out.println(res1 + "/"+res2 + "/"+res3 + "/"+ res4);
+			if(res1 != 1||res2 != 1||res3 != 1||res4 != 1) {
+				return "2";
+			}
+			else {
+				return "1";
+			}
+		}
+		else {
+			return "0";
+		}
+	}
+	
+	
+	
+	// 프랜차이즈 메뉴 수정 폼으로 이동
+	@RequestMapping(value = "adminStoreMenuUpdate", method = RequestMethod.GET)
+	public String adminStoreMenuUpdateGet(String brandName, String foodName, Model model) {
+
+		FoodMenuVO vo = adminService.getFoodNameCheck(brandName, foodName);
+		
+		// 음식 태그 가져오기
+		List<FoodMenuVO> vos = adminService.getstoreTagList(brandName);
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("vos", vos);
+		
+		
+		return "admin/menu/adminStoreMenuUpdate";
+	}
+	
+	
 	
 }
 

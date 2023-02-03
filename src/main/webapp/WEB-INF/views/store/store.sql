@@ -81,49 +81,54 @@ select s.*, (select round(AVG(r.rating), 1) from rating r where s.idx = r.storeI
 select s.*, (select round(AVG(r.rating), 1) from rating r where s.idx = r.storeIdx) as rateAvg from store s where s.storePart = '치킨'order by rateAvg desc;
 
 --
-	
+
+/* 가게 음식 카테고리  */
+create table storeTag (
+	idx int not null auto_increment,						/* 푸드카테고리 고유번호 */
+	brandName varchar(30) not null,							/* 가게 고유번호 */
+	foodTag varchar(100) not null,
+	primary key(idx)
+);
+
+-- drop table storeTag;
+-- drop table foodMenu;
+-- drop table foodsubMenu;
+ 
 	-- 주 메뉴 테이블
-	CREATE TABLE `foodMenu` (
+	CREATE TABLE storeFoodMenu (
 		menuIdx	int	NOT NULL auto_increment,  		/* 메뉴 고유번호 */
-		storeIdx	int	NOT NULL,										/* 음식점 고유 번호 */
+		storeName varchar(30) not null,								/* 해당 프랜차이즈 이름 */
 		foodName	varchar(30)	NOT NULL, 					/* 메뉴 이름 */
 		foodTag	varchar(20)	NOT NULL, 					/* 메뉴 카테고리*/
 		price	int	NOT NULL,												/* 가격 */
 		runOut	varchar(1)	NOT NULL default 'X',	/* 품절여부 */
 		sale	varchar(20)	NOT NULL default 'X',		/* 세일여부 */
 		salePrice	int	NOT NULL default 1,					/* 할인율 */
-		foodPhoto	varchar(20)	NOT NULL,						/* 음식사진 */
+		foodPhoto	varchar(100)	NOT NULL,						/* 음식사진 */
 		subMenu varchar(1)	NOT NULL default 'X',	/* 추가옵션 여부 */ 
-		foodInfo varchar(100),	/* 추가옵션 여부 */ 
+		foodInfo varchar(100),	/* 음식 설명 */ 
 
-		foreign key(storeIdx) references store(idx),
-		foreign key(foodTag) references storeTag(foodTag),
 		primary key(menuIdx)    
 	);
 	
---	drop table storetag;
---	drop table foodMenu;
 	desc foodMenu;
 	
 	ALTER TABLE foodMenu ADD foodInfo varchar(100);
 	ALTER TABLE foodMenu ADD subMenu varchar(1) not null default 'X';
 		
 	-- 각 메뉴에 추가 옵션
-	CREATE TABLE foodSubMenu (
+	CREATE TABLE storeFoodSubMenu (
 		storeIdx	int	NOT NULL,
-		menuIdx	int	NOT NULL,
+		foodName	varchar(30)	NOT NULL,
 		subMenuIdx	int	NOT NULL auto_increment,
 		sMenuPart	varchar(20)	NOT NULL,
 		sMenuName	varchar(20)	NOT NULL,
 		price	int	NOT NULL,
 		runOut	varchar(20)	NOT NULL,
 		
-		foreign key(storeIdx) references store(idx),
-		foreign key(menuIdx) references foodMenu(menuIdx),
 		primary key(subMenuIdx)  
 	);
 	
-	
-	
+--	drop table storeFoodSubMenu
 	
 	

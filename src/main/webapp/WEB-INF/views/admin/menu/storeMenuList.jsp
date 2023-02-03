@@ -96,31 +96,50 @@
 <script>
 	'use strict';
 	
-	function drugSearch() {
-    	let searchString = $("#searchString").val();
-    	
-    	if(searchString.trim() == "") {
-    		alert("찾고자 하는 검색어를 입력하세요!");
-    		drugform.searchString.focus();
-    	}
-    	else {
-    		drugform.submit();
-    	}
-    }
-	function DelCheck(brandName) {
-    	let ans = confirm("선택된 브랜드를 삭제하시겠습니까?");
+	function fCheck(brandName) {
+		
+		$.ajax({
+    		type   : "post",
+    		url    : "${ctp}/admin/adminFoodTagCheck",
+    		data   : {brandName : brandName},
+    		success:function(res) {
+    			if(res == "0") {
+    				alert("메뉴등록을 위해선 메뉴태그를 입력해야합니다.\n음식태그 입력창으로 이동합니다.");
+    				location.href='${ctp}/admin/adminStoreTagInput?brandName='+brandName;
+    			}
+    			else {
+    				location.href='${ctp}/admin/adminStoreMenuInput?brandName='+brandName;
+    			}
+    		},
+    		error : function() {
+    			alert("전송 오류~~");
+    		}
+    	});
+  }
+	
+	
+	function DelCheck(foodName,brandName) {
+    	let ans = confirm("선택된 메뉴를 삭제하시겠습니까?");
     	if(!ans) return false;
     	   	
     	$.ajax({
     		type   : "post",
-    		url    : "${ctp}/admin/adminBrandDelete",
-    		data   : {brandName : brandName},
+    		url    : "${ctp}/admin/adminMenuDelete",
+    		data   : {
+    			foodName : foodName,
+    			brandName : brandName
+    			},
     		success:function(res) {
     			if(res == "0") {
-    				alert("하위항목이 있기에 삭제할수 없습니다.\n하위항목을 먼저 삭제해 주세요.");
+    				alert("선택한 제품의 추가메뉴가 있기에 삭제할수 없습니다.\n추가메뉴를 먼저 삭제해 주세요.");
+    				location.reload();
+    			}
+    			else if(res == "2") {
+    				alert("제품이 없는곳을 제외한 모든 곳에서 메뉴를 삭제하였습니다.\n확인이 필요합니다.");
+    				location.reload();
     			}
     			else {
-    				alert("카테고리가 삭제 되었습니다!");
+    				alert("메뉴가 완전히 삭제 되었습니다!");
     				location.reload();
     			}
     		},
@@ -141,7 +160,7 @@
 <div id="main" style="margin-left : 0; padding-left: 0px;">
 	<div class="w3-bar w3-top w3-large topbar" style="z-index:4">
 	<button class="openbtn"  onclick="openNav()">☰ 관리자 메뉴</button>
-	  <!-- <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button> -->
+	  <!-- "location.href='${ctp}/admin/adminStoreMenuInput?brandName=${brandName}';" -->
 	  <span class="w3-bar-item w3-right">Logo</span>
 	</div>
 	<!-- Overlay effect when opening sidebar on small screens -->
@@ -149,15 +168,15 @@
 	
 	<!-- !PAGE CONTENT! -->
 	<div class="w3-container" style="width:70%;">
-	  <h2>메뉴 목록</h2><br />
-	  <button type="button" onclick="location.href='${ctp}/admin/adminStoreMenuInput?brandName=${brandName}';" class="w3-right w3-button w3-round-large w3-blue w3-margin-bottom">새 메뉴 등록</button>
+	  <h2>${brandName}의 메뉴 목록</h2><br />
+	  <button type="button" onclick="fCheck('${brandName}')" class="w3-right w3-button w3-round-large w3-blue w3-margin-bottom">새 메뉴 등록</button>
 	  <table class="w3-table-all memtable w3-centered">
 	    <thead>
 	      <tr class="w3-blue">
 	        <th>번호</th>
 	        <th>프랜차이즈 이름</th>
 	        <th>메뉴 이름</th>
-	        <th>메뉴 카테고리</th>
+	        <th>메뉴 태그</th>
 	        <th>가격</th>
 	        <th>품절여부</th>
 	        <th>세일여부</th>
@@ -173,17 +192,17 @@
 		    	<td>${st.count}</td>
 		    	<td>${vo.brandName}</td>
 		    	<td>${vo.foodName}</td>
-		    	<td>${vo.foodPart}</td>
+		    	<td>${vo.foodTag}</td>
 		    	<td>${vo.price}</td>
 		    	<td>${vo.runOut}</td>
 		    	<td>${vo.sale}</td>
 		    	<td>${vo.salePrice}</td>
-		    	<td><img src="${ctp}/data/foodPhoto/${vo.foodPhoto}" style="width:100px;"></td>
-		    	<td>
+		    	<td><img src="${ctp}/data/adminFoodPhoto/${vo.foodPhoto}" style="width:100px;"></td>
 		    	<td>${vo.subMenu}</td>
 		    	<td>${vo.foodInfo}</td>
 		    	<td>
-		    	 <input type="button" onclick="location.href='#';" class="w3-button w3-round-large w3-green" value="메뉴 수정" />
+		    	 <input type="button" onclick="location.href='${ctp}/admin/adminStoreMenuUpdate?brandName=${vo.brandName}&foodName=${vo.foodName}';" class="w3-button w3-round-large w3-orange" value="수정" />
+		    	 <input type="button" onclick="DelCheck('${vo.foodName}','${vo.brandName}')" class="w3-button w3-round-large w3-red" value="삭제" />
 		    	</td>
 		    </tr>
 	    	<c:set var="curScrStartNo" value="${curScrStartNo - 1}"/>
@@ -218,7 +237,7 @@
 		<!-- 블록 페이지 끝 -->
 		 --%>
 		<div>
-			<input type="button" value="뒤로가기" onclick="location.href='${ctp}/admin/storeMenuList';" class="w3-center w3-button w3-margin-top w3-round-large w3-blue" />
+			<input type="button" value="뒤로가기" onclick="location.href='${ctp}/admin/storeBrandOptionList';" class="w3-center w3-button w3-margin-top w3-round-large w3-blue" />
 		</div>
 		  
 	</div>

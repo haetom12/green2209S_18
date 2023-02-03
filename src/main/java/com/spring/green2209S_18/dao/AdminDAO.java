@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
+import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
 public interface AdminDAO {
 
@@ -37,7 +38,7 @@ public interface AdminDAO {
 
 	public List<FoodMenuVO> getstoreTagList(@Param("brandName") String brandName);
 
-	public FoodMenuVO getFoodTagCheck(@Param("brandName") String brandName,@Param("foodTag") String foodTag);
+	public List<FoodMenuVO> getFoodTagCheck(@Param("brandName") String brandName,@Param("foodTag") String foodTag);
 
 	public int storeTagInputOk(@Param("vo") FoodMenuVO vo);
 
@@ -46,5 +47,15 @@ public interface AdminDAO {
 	public int setStoreTagDelete(@Param("foodTag") String foodTag, @Param("brandName") String brandName);
 
 	public List<FoodMenuVO> getCheckTagList(@Param("foodTag") String foodTag,@Param("brandName")  String brandName);
+
+	public FoodMenuVO getFoodNameCheck(@Param("brandName") String brandName, @Param("foodName")  String foodName);
+
+	public void setFoodInput(@Param("vo") FoodMenuVO vo);
+
+	public List<SubFoodMenuVO> getCheckAdminSubMenu(@Param("foodName") String foodName);
+
+	public int setAdminSubMenuDeletePost(@Param("foodName") String foodName);
+
+	public int setAdminMenuDeletePost(@Param("foodName") String foodName);
 
 }

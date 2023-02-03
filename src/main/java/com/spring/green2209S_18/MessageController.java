@@ -161,6 +161,14 @@ public class MessageController {
 			model.addAttribute("msg", "태그 수정에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "admin/storeTagList?brandName="+brandName);
 		}
+		else if(msgFlag.equals("storeMenuInputOk")) {
+			model.addAttribute("msg", "메뉴를 성공적으로 등록하였습니다!");
+			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
+		}
+		else if(msgFlag.equals("storeMenuInputNo")) {
+			model.addAttribute("msg", "메뉴 등록에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
+		}
 		
 		
 		return "include/message";

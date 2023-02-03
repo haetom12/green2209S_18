@@ -194,7 +194,7 @@
 		  <div class="mb-2">
 		    <input type="button" value="음식 태그 등록" onclick="fCheck()" class="btn btn-primary"/> &nbsp;
 		    <input type="reset" value="다시쓰기" class="btn btn-warning"/> &nbsp;
-		    <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/adminShopCategory';" class="btn btn-secondary"/> &nbsp; 
+		    <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/storeTagList?brandName=${brandName}';" class="btn btn-secondary"/> &nbsp; 
 		    <input type="hidden" name="oldTag" id="oldTag" value="${foodTag}" />
 		  </div>
 	  </form>

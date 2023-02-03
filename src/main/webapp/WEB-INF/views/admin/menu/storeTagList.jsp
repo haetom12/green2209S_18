@@ -192,7 +192,7 @@
 		<!-- 블록 페이지 끝 -->
 		 --%>
 		<div>
-			<input type="button" value="뒤로가기" onclick="location.href='${ctp}/admin/storeMenuList';" class="w3-center w3-button w3-margin-top w3-round-large w3-blue" />
+			<input type="button" value="뒤로가기" onclick="location.href='${ctp}/admin/storeBrandOptionList';" class="w3-center w3-button w3-margin-top w3-round-large w3-blue" />
 		</div>
 		   
 	</div>

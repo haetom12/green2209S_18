@@ -16,31 +16,39 @@
 	</select>
 
 	<select id="getStoreBrandList" resultType="com.spring.green2209S_18.vo.StoreVO">
-		select * from storeBrand;
+		select * from adminStoreBrand;
 	</select>
 
 	<select id="getBrandNameCheck" resultType="com.spring.green2209S_18.vo.StoreVO">
-		select * from storeBrand where storePart = #{storePart} and brandName = #{brandName};
+		select * from adminStoreBrand where storePart = #{storePart} and brandName = #{brandName};
 	</select>
 
 	<select id="getstoreBrand" resultType="com.spring.green2209S_18.vo.StoreVO">
-		select * from storeBrand where brandName = #{brandName};
+		select * from adminStoreBrand where brandName = #{brandName};
 	</select>
 
 	<select id="getstoreMenuList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from foodmenu where brandName = #{brandName};
+		select * from adminFoodMenu where brandName = #{brandName};
 	</select>
 
 	<select id="getstoreTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from storeTag where brandName = #{brandName};
+		select * from adminStoreTag where brandName = #{brandName};
 	</select>
 
 	<select id="getFoodTagCheck" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from storeTag where brandName = #{brandName} and foodTag = #{foodTag};
+		select * from adminStoreTag where brandName = #{brandName} <if test="foodTag != ''"> and foodTag = #{foodTag} </if> ;
 	</select>
 
 	<select id="getCheckTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from foodmenu where brandName = #{brandName} and foodTag = #{foodTag};
+		select * from adminFoodMenu where brandName = #{brandName} and foodTag = #{foodTag};
+	</select>
+
+	<select id="getFoodNameCheck" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from adminFoodMenu where brandName = #{brandName} and foodName = #{foodName};
+	</select>
+
+	<select id="getCheckAdminSubMenu" resultType="com.spring.green2209S_18.vo.SubFoodMenuVO">
+		select * from adminFoodSubMenu where foodName = #{foodName};
 	</select>
 
 
@@ -50,11 +58,15 @@
 	</insert>
 
 	<insert id="setStoreBrandInputOk">
-		insert into storeBrand values (default, #{vo.storePart}, #{vo.brandName});
+		insert into adminStoreBrand values (default, #{vo.storePart}, #{vo.brandName});
 	</insert>
 
 	<insert id="storeTagInputOk">
-		insert into storeTag values (default, #{vo.brandName}, #{vo.foodTag});
+		insert into adminStoreTag values (default, #{vo.brandName}, #{vo.foodTag});
+	</insert>
+
+	<insert id="setFoodInput">
+		insert into adminFoodMenu values (default, #{vo.brandName}, #{vo.foodName}, #{vo.foodTag}, #{vo.price}, default, default, default, #{vo.foodPhoto}, #{vo.subMenu}, #{vo.foodInfo});
 	</insert>
 
 	
@@ -64,11 +76,11 @@
 	</update>
 
 	<update id="StoreBrandUpdateOk">
-		update storeBrand set storePart = #{vo.storePart}, brandName = #{vo.brandName} where idx = #{vo.idx};
+		update adminStoreBrand set storePart = #{vo.storePart}, brandName = #{vo.brandName} where idx = #{vo.idx};
 	</update>
 
 	<update id="storeTagUpdateOk">
-		update storeTag set foodTag = #{foodTag} where brandName = #{brandName} and foodTag = #{oldTag};
+		update adminStoreTag set foodTag = #{foodTag} where brandName = #{brandName} and foodTag = #{oldTag};
 	</update>
 	
 	
@@ -78,11 +90,19 @@
 	</delete>
 
 	<delete id="setadminBrandDelete">
-		delete from storeBrand where brandName = #{brandName};
+		delete from adminStoreBrand where brandName = #{brandName};
 	</delete>
 
 	<delete id="setStoreTagDelete">
-		delete from storeTag where foodTag = #{foodTag} and brandName = #{brandName};
+		delete from adminStoreTag where foodTag = #{foodTag} and brandName = #{brandName};
+	</delete>
+
+	<delete id="setAdminSubMenuDeletePost">
+		delete from adminFoodSubMenu where foodName = #{foodName};
+	</delete>
+
+	<delete id="setAdminMenuDeletePost">
+		delete from adminFoodMenu where foodName = #{foodName};
 	</delete>
 	
 </mapper>

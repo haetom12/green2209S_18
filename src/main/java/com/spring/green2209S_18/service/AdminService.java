@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
+import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
 public interface AdminService {
 
@@ -38,7 +39,7 @@ public interface AdminService {
 
 	public List<FoodMenuVO> getstoreTagList(String brandName);
 
-	public FoodMenuVO getFoodTagCheck(String brandName, String foodTag);
+	public List<FoodMenuVO> getFoodTagCheck(String brandName, String foodTag);
 
 	public int storeTagInputOk(FoodMenuVO vo);
 
@@ -47,6 +48,16 @@ public interface AdminService {
 	public int setStoreTagDelete(String foodTag, String brandName);
 
 	public List<FoodMenuVO> getCheckTagList(String foodTag, String brandName);
+
+	public FoodMenuVO getFoodNameCheck(String brandName, String foodName);
+
+	public int setAdminMenuInput(FoodMenuVO vo, MultipartFile fName);
+
+	public List<SubFoodMenuVO> getCheckAdminSubMenu(String foodName);
+
+	public int setAdminSubMenuDeletePost(String foodName);
+
+	public int setAdminMenuDeletePost(FoodMenuVO aVo);
 
 
 }

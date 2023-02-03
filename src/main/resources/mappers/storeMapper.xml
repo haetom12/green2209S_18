@@ -18,6 +18,10 @@
 	<select id="getNearMapStoreList" resultType="com.spring.green2209S_18.vo.StoreVO">
 		select * from store <if test='storePart !="" '> where storePart = #{storePart} </if>;
 	</select>
+	
+	<select id="getStoreFood" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from storeFoodMenu where storeName = #{storeName} and foodName = #{foodName};
+	</select>
 
 	<select id="getStoreList" resultType="com.spring.green2209S_18.vo.StoreVO">
 		<!-- select s.*, round(AVG(r.rating),1) as rateAvg from store s, rating r where s.idx = r.storeIdx and s.storePart = #{storePart} 
@@ -29,12 +33,19 @@
 	</select>
 
 	<select id="getStoreFoodMenu" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from foodMenu where storeIdx = #{storeIdx};
+		select * from storeFoodMenu where storeName = #{storeName};
 	</select>
 	
 	<insert id="setStoreJoinOk">
 		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime});
 	</insert>
 	
+	<delete id="setStoreSubMenuDeletePost">
+		delete from storeFoodSubMenu where foodName = #{foodName};
+	</delete>
+	
+	<delete id="setStoreMenuDeletePost">
+		delete from storeFoodMenu where foodName = #{foodName};
+	</delete>
 	
 </mapper>
