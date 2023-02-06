@@ -6,10 +6,12 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.AdminDAO;
+import com.spring.green2209S_18.dao.StoreDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
@@ -19,7 +21,10 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	AdminDAO adminDAO;
-
+	
+	@Autowired
+	StoreDAO storeDAO;
+	
 	@Override
 	public StoreVO getcategoryCodeCheck(String categoryStoreCode) {
 		return adminDAO.getcategoryCodeCheck(categoryStoreCode);
@@ -94,7 +99,7 @@ public class AdminServiceImpl implements AdminService {
 		}
 		JavaspringProvide ps = new JavaspringProvide();
 		try {
-			ps.deleteFile(fName,saveFileName,pastPhoto, "categoryPhoto");
+			ps.deleteAndUpdateFile(fName,saveFileName,pastPhoto, "categoryPhoto");
 			vo.setCategoryPhoto(saveFileName);
 			adminDAO.setCategoryUpdate(vo, pastCode);
 			res= 1;
@@ -130,14 +135,10 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.getstoreBrand(brandName);
 	}
 
+	@Transactional
 	@Override
-	public int StoreBrandUpdateOk(StoreVO vo) {
-		return adminDAO.StoreBrandUpdateOk(vo);
-	}
-
-	@Override
-	public List<StoreVO> getstoreMenuList(String brandName) {
-		return adminDAO.getstoreMenuList(brandName);
+	public int StoreBrandUpdateOk(StoreVO vo, String oldBrandName) {
+		return adminDAO.StoreBrandUpdateOk(vo, oldBrandName);
 	}
 
 	@Override
@@ -205,6 +206,7 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.setAdminSubMenuDeletePost(foodName);
 	}
 
+	// 음식 삭제
 	@Override
 	public int setAdminMenuDeletePost(FoodMenuVO aVo) {
 		int res = 0;
@@ -218,6 +220,56 @@ public class AdminServiceImpl implements AdminService {
 			e.printStackTrace();
 		}
 		return res;
+	}
+
+	@Transactional
+	@Override
+	public int setStoreMenuUpdate(FoodMenuVO vo, MultipartFile fName, String pastPhoto, String pastFoodName) {
+		int res = 0;
+		String oFileName = fName.getOriginalFilename();
+		UUID uid = UUID.randomUUID();
+		String saveFileName = "";
+		
+		FoodMenuVO storeVo = storeDAO.getStoreFood(vo.getStoreName(), pastFoodName);
+		
+		if(oFileName.equals("")) {
+			vo.setFoodPhoto(pastPhoto);
+			saveFileName = pastPhoto;
+			adminDAO.setfoodMenuUpdate(vo);
+			
+			if(storeVo != null) {
+				storeVo.setFoodPhoto(pastPhoto);
+				storeDAO.setStoreMenuUpdate(storeVo,pastFoodName);
+			}
+			
+			res = 1;
+			return res;
+		}
+		else {
+			saveFileName = uid + "_" + oFileName;
+		}
+		JavaspringProvide ps = new JavaspringProvide();
+		try {
+			ps.deleteAndUpdateFile(fName,saveFileName,pastPhoto, "adminFoodPhoto");
+			vo.setFoodPhoto(saveFileName);
+			adminDAO.setfoodMenuUpdate(vo);
+			
+			if(storeVo != null) {
+				ps.deleteAndUpdateFile(fName,saveFileName,pastPhoto, "storeFoodPhoto");
+				storeVo.setFoodPhoto(saveFileName);
+				storeDAO.setStoreMenuUpdate(storeVo,pastFoodName);
+			}
+			
+			res= 1;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public List<SubFoodMenuVO> getChecksubTagList(String foodTag, String brandName) {
+		return adminDAO.getChecksubTagList(foodTag, brandName);
 	}
 
 }

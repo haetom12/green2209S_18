@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
+import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
 public interface StoreDAO {
 
@@ -28,6 +29,16 @@ public interface StoreDAO {
 	public int setStoreMenuDeletePost(@Param("foodName") String foodName);
 
 	public FoodMenuVO getStoreFood(@Param("storeName") String brandName, @Param("foodName") String foodName);
+
+	public void setStoreMenuUpdate(@Param("vo") FoodMenuVO storeVo, @Param("pastFoodName") String pastFoodName);
+
+	public List<FoodMenuVO> getCheckTagList(@Param("foodTag") String foodTag,@Param("storeName") String brandName);
+
+	public List<SubFoodMenuVO> getChecksubTagList(@Param("foodTag") String foodTag,@Param("storeName")  String brandName);
+
+	public List<StoreVO> getAdminStoreBrand(@Param("storePart") String storePart);
+
+	public List<FoodMenuVO> getstoreMenuList(@Param("brandName") String brandName);
 
 
 }

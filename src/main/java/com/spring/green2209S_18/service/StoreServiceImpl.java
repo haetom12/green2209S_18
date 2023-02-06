@@ -13,6 +13,7 @@ import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.StoreDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.StoreVO;
+import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -93,6 +94,27 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public FoodMenuVO getStoreFood(String brandName, String foodName) {
 		return storeDAO.getStoreFood(brandName, foodName);
+	}
+
+	@Override
+	public List<FoodMenuVO> getCheckTagList(String foodTag, String brandName) {
+		return storeDAO.getCheckTagList(foodTag, brandName);
+	}
+
+	@Override
+	public List<SubFoodMenuVO> getChecksubTagList(String foodTag, String brandName) {
+		return storeDAO.getChecksubTagList(foodTag, brandName);
+	}
+
+	@Override
+	public List<StoreVO> getAdminStoreBrand(String storePart) {
+		return storeDAO.getAdminStoreBrand(storePart);
+	}
+
+	@Override
+	public List<FoodMenuVO> getstoreMenuList(String brandName) {
+		System.out.println("들어왓음");
+		return storeDAO.getstoreMenuList(brandName);
 	}
 
 

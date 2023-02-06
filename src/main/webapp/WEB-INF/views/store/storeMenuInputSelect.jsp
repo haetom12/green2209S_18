@@ -24,8 +24,40 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+  
+  	<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+			.choose1 {
+				height: 120%;
+				background-color: #aaefdf;
+			}
+			.choose2 {
+				height: 120%;
+				background-color: #9ee37d;
+			}
+			.ftco-section {
+				margin: 0px;
+				padding: 0px;
+				width: 100%;
+				height: 100%;
+			}
+			.container2 {
+				margin: 0 auto;
+				width: 800px;
+				height: 130%;
+			}
+			.sectbox {
+				height: 100%;
+			}
+			
+		</style>
+  
+  
   </head>
-  <body class="goto-here">
+  <body class="goto-here" >
   
 		<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
 
@@ -40,51 +72,32 @@
       </div>
     </div>
 
-    <section class="ftco-section ftco-cart">
-			<div class="container">
-				<div class="row">
-    			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
-    					<h2 class="text-center">메뉴 리스트</h2><br />
-    					<input type="text" class="" style="width: 20%; float: left;"/>
-    					<input type="button" value="검색" class="btn btn-secondary ml-2" style="float: left: ;"/>
-    					<input type="button" value="메뉴 추가" onclick="location.href='${ctp}/store/storeMenuInputSelect';" class="btn btn-primary mb-1" style="float: right;"/>
-	    				<table class="table">
-						    <thead class="thead-primary">
-						      <tr class="text-center">
-						        <th>카테고리</th>
-						        <th>음식사진</th>
-						        <th>음식이름</th>
-						        <th>추가메뉴</th>
-						        <th>가격</th>
-						        <th>비고</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-						    	<c:forEach var="vo" items="${vos}" varStatus="st">
-							      <tr class="text-center">
-							        <td class="price">${vo}</td>
-							        <td class="image-prod"><div class="img" style="background-image:url(${ctp}/images/product-1.jpg);"></div></td>
-							        <td class="product-name">
-							        	<h3>후라이드 치킨</h3>
-							        	<p>부가 설명</p>
-							        </td>
-							        <td class="total">있음</td>
-							        <td class="total">$4.90</td>
-							        <td>
-								        <!-- <div class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></div> -->
-												<input type="button" value="수정" class="btn btn-warning"/>
-												<input type="button" value="삭제" class="btn btn-danger"/>
-							        </td>
-							      </tr><!-- END TR-->
-						      </c:forEach>
-						    </tbody>
-						  </table>
-					  </div>
-    			</div>
-    		</div>
-			</div>
-		</section>
+			<div class="container" >
+				<section class="ftco-section">
+				<div class="container2 bg-primary">
+					<div class="row no-gutters ftco-services sectbox">
+	          <div class="col-md-6 text-center d-flex align-self-stretch ftco-animate choose1">
+	            <div class="media block-6 services mb-md-0 mb-4">
+	            	<a href="${ctp}/store/storeMenuInput">
+		              <div class="media-body">
+		                <font size="6pt" >직접 등록하기</font>
+		              </div>
+	              </a>
+	            </div>      
+	          </div>
+	          <div class="col-md-6 text-center d-flex align-self-stretch ftco-animate choose2">
+	            <div class="media block-6 services mb-md-0 mb-4">
+	            	<a href="${ctp}/store/storeMenuInput2">
+		              <div class="media-body">
+		                <font size="6pt" >프렌차이즈 메뉴 가져오기</font>
+		              </div>
+	              </a>
+	            </div>    
+	          </div>
+	        </div>
+				</div>
+			</section>
+		</div>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 

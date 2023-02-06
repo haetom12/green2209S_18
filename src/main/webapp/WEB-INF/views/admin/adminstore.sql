@@ -2,8 +2,8 @@ show tables;
 
 /* 음식 분류 */
 create table categoryStore (
-	categoryStoreCode char(1) not null,			/* 대분류코드(A,B,C) 영문 대문자 1자 */
-	storePart varchar(20) not null,		/* 대분류명(회사명 : 삼성/LG/현대) 영문 대문자 1자 */
+	categoryStoreCode char(1) not null,			/* 카테고리 코드*/
+	storePart varchar(20) not null,		/* 카테고리명(음식점 분류) */
 	categoryPhoto varchar(100) not null,
 	primary key(categoryStoreCode),
 	unique key(storePart)
@@ -81,7 +81,8 @@ create table adminStoreTag (
 	idx int not null auto_increment,						/* 푸드카테고리 고유번호 */
 	brandName varchar(30) not null,							/* 가게 고유번호 */
 	foodTag varchar(100) not null,
-	primary key(idx)
+	primary key(idx),
+	unique key(foodTag)
 );
 
 -- drop table storeTag;
@@ -97,7 +98,7 @@ create table adminStoreTag (
 		price	int	NOT NULL,												/* 가격 */
 		runOut	varchar(1)	NOT NULL default 'X',	/* 품절여부 */
 		sale	varchar(20)	NOT NULL default 'X',		/* 세일여부 */
-		salePrice	int	NOT NULL default 1,					/* 할인율 */
+		salePrice	int	NOT NULL default 0,					/* 할인율 */
 		foodPhoto	varchar(100)	NOT NULL,						/* 음식사진 */
 		subMenu varchar(1)	NOT NULL default 'X',	/* 추가옵션 여부 */ 
 		foodInfo varchar(100),	/* 음식 설명 */ 
@@ -113,16 +114,16 @@ create table adminStoreTag (
 		
 	-- 각 메뉴에 추가 옵션
 	CREATE TABLE adminFoodSubMenu (
-		storeIdx	int	NOT NULL,
-		foodName	varchar(30)	NOT NULL,
+		brandName varchar(30) not null,								/* 해당 프랜차이즈 이름 */
 		subMenuIdx	int	NOT NULL auto_increment,
-		sMenuPart	varchar(20)	NOT NULL,
+		foodTag varchar(100) not null,
 		sMenuName	varchar(20)	NOT NULL,
 		price	int	NOT NULL,
 		runOut	varchar(20)	NOT NULL,
 		
 		primary key(subMenuIdx)
 	);
+	
 	
 --	drop table adminFoodSubMenu
 	

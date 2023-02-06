@@ -24,6 +24,95 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
+    <script>
+    	'use strict';
+    	/* 
+        $(document).ready(function() {
+        	
+        });
+    	 */
+    	// 음식 브랜드 선택시 리스트에 해당 음식 뿌리기
+        function categoryCheck() {
+        	let brandName = myform.brandName.value;
+        	
+    			$.ajax({
+    				type : "post",
+    				url  : "${ctp}/store/adminBrandMenu",
+    				data : {brandName : brandName},
+    				success:function(data) {
+    					/* alert("data" + data.menuIdx); */
+    					var str = "";
+     					for(var i=0; i<data.length; i++) {
+    						str += "<c:set var="maxIdx" value="0"/>";
+    						str += "<tr class='price'>";
+    						str += "<td><input type='checkbox' name='chk' class='chk' value='"+data[i].menuIdx+"' onClick='onCheck()' /></td>";
+    						str += "<td class='image-prod'>"+data[i].foodTag+"</td>";
+    						str += "<td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/adminFoodPhoto/"+data[i].foodPhoto+");'></td>";
+    						str += "<td class='product-name'>"+data[i].foodName+"</td>";
+    						str += "<td class='total'>"+data[i].price+"</td>";
+    						str += "</tr>";
+    						str += "<c:set var="maxIdx" value='"+data[i].menuIdx+"'/>";
+    					} 
+    					$("#demo").html(str);
+    				},
+    				error : function() {
+    					alert("전송오류!");
+    				}
+    			});
+      	}
+    	 
+   	  // 전체선택
+   	  $(function(){
+   	  	$("#checkAll").click(function(){
+   	  		if($("#checkAll").prop("checked")) {
+   		    		$(".chk").prop("checked", true);
+   	  		}
+   	  		else {
+   		    		$(".chk").prop("checked", false);
+   	  		}
+   	  	});
+   	  });
+   	  
+   	  
+   // 선택항목 가게에 저장하기(ajax처리하기)
+	  function selectSaveCheck() {
+	  	let ans = confirm("선택된 메뉴를 저장 하시겠습니까?");
+	  	if(!ans) return false;
+	  	
+	  	let delItems = "";
+	  	
+	  	for(let i=0; i<myform.chk.length; i++) {
+	  		if(myform.chk[i].checked == true) delItems += myform.chk[i].value + "/";
+	  	}
+	  	
+	  	alert("idx는 : " + delItems);
+	  	
+	  	if(delItems == "") {
+	  		alert("저장할 메뉴를 선택하세요.");
+	  		return false;
+	  	}
+			
+	  	$.ajax({
+	  		type : "post",
+	  		url  : "${ctp}/store/adminMenuInputOk",
+	  		data : {delItems : delItems},
+	  		success:function(res) {
+	  			if(res == "1") {
+	  				alert("선택된 메뉴를 저장 하였습니다.");
+	  			  location.reload();
+	  			}
+	  		},
+	  		error  :function() {
+	  			alert("전송오류!!");
+	  		}
+	  	});
+	  }
+   	  
+    	 
+    </script>
+    
   </head>
   <body class="goto-here">
   
@@ -46,40 +135,27 @@
     			<div class="col-md-12 ftco-animate">
     				<div class="cart-list">
     					<h2 class="text-center">메뉴 리스트</h2><br />
-    					<input type="text" class="" style="width: 20%; float: left;"/>
-    					<input type="button" value="검색" class="btn btn-secondary ml-2" style="float: left: ;"/>
-    					<input type="button" value="메뉴 추가" onclick="location.href='${ctp}/store/storeMenuInputSelect';" class="btn btn-primary mb-1" style="float: right;"/>
-	    				<table class="table">
-						    <thead class="thead-primary">
-						      <tr class="text-center">
-						        <th>카테고리</th>
-						        <th>음식사진</th>
-						        <th>음식이름</th>
-						        <th>추가메뉴</th>
-						        <th>가격</th>
-						        <th>비고</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-						    	<c:forEach var="vo" items="${vos}" varStatus="st">
+    					<form name="myform" method="post">
+						    <select name="brandName" id="brandName" onchange="categoryCheck()" style="width: 12%;">
+						    	<option value="" >프랜차이즈 선택</option>
+		    		    	<c:forEach var="vo" items="${vos}">
+						    		<option value="${vo.brandName}" >${vo.brandName}</option>
+						    	</c:forEach>
+							  </select>
+	    					<input type="button" value="메뉴 추가" onclick="selectSaveCheck()" class="btn btn-primary mb-1" style="float: right;"/>
+		    				<table class="table">
+							    <thead class="thead-primary">
 							      <tr class="text-center">
-							        <td class="price">${vo}</td>
-							        <td class="image-prod"><div class="img" style="background-image:url(${ctp}/images/product-1.jpg);"></div></td>
-							        <td class="product-name">
-							        	<h3>후라이드 치킨</h3>
-							        	<p>부가 설명</p>
-							        </td>
-							        <td class="total">있음</td>
-							        <td class="total">$4.90</td>
-							        <td>
-								        <!-- <div class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></div> -->
-												<input type="button" value="수정" class="btn btn-warning"/>
-												<input type="button" value="삭제" class="btn btn-danger"/>
-							        </td>
-							      </tr><!-- END TR-->
-						      </c:forEach>
-						    </tbody>
-						  </table>
+							        <th><input type="checkbox" id="checkAll" /></th>
+							        <th>카테고리</th>
+							        <th>음식사진</th>
+							        <th>음식이름</th>
+							        <th>가격</th>
+							      </tr>
+							    </thead>
+							    <tbody id="demo"></tbody>
+							  </table>
+						  </form>
 					  </div>
     			</div>
     		</div>

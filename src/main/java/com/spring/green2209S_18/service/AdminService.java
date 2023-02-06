@@ -16,7 +16,6 @@ public interface AdminService {
 
 	public int setCategoryInput(StoreVO vo, MultipartFile fName);
 
-
 	public List<StoreVO> getCategoryList(StoreVO vo);
 
 	public int setCategoryDelete(StoreVO vo);
@@ -33,9 +32,7 @@ public interface AdminService {
 
 	public StoreVO getstoreBrand(String brandName);
 
-	public int StoreBrandUpdateOk(StoreVO vo);
-
-	public List<StoreVO> getstoreMenuList(String brandName);
+	public int StoreBrandUpdateOk(StoreVO vo, String oldBrandName);
 
 	public List<FoodMenuVO> getstoreTagList(String brandName);
 
@@ -59,5 +56,8 @@ public interface AdminService {
 
 	public int setAdminMenuDeletePost(FoodMenuVO aVo);
 
+	public int setStoreMenuUpdate(FoodMenuVO vo, MultipartFile fName, String pastPhoto, String pastFoodName);
+
+	public List<SubFoodMenuVO> getChecksubTagList(String foodTag, String brandName);
 
 }

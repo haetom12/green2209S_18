@@ -104,27 +104,16 @@
               </ul>
             </div>
 
-            <!-- <div class="sidebar-box ftco-animate">
-              <h3 class="heading">Recent Blog</h3>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading-1"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> April 09, 2019</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
+            <div class="sidebar-box ftco-animate">
+              <h3 class="heading">최근 리뷰</h3>
               <div class="block-21 mb-4 d-flex">
                 <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
                 <div class="text">
-                  <h3 class="heading-1"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                  <h3 class="heading-1"><a href="#">리뷰창 나올곳</a></h3>
                   <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> April 09, 2019</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                    <div><a href="#"><span class="icon-calendar"></span> 리뷰날짜</a></div>
+                    <div><a href="#"><span class="icon-person"></span> 아이디</a></div>
+                    <div><a href="#"><span class="icon-chat"></span> 댓글수</a></div>
                   </div>
                 </div>
               </div>
@@ -139,7 +128,7 @@
                   </div>
                 </div>
               </div>
-            </div> -->
+            </div>
 
             <div class="sidebar-box ftco-animate">
               <h3 class="heading">Tag Cloud</h3>

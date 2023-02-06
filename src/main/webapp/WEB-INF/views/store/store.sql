@@ -87,9 +87,10 @@ create table storeTag (
 	idx int not null auto_increment,						/* 푸드카테고리 고유번호 */
 	brandName varchar(30) not null,							/* 가게 고유번호 */
 	foodTag varchar(100) not null,
+	admintag varchar(1)	NOT NULL default 'O',	
 	primary key(idx)
 );
-
+--ALTER TABLE storeTag ADD admintag varchar(1)	NOT NULL default 'O';
 -- drop table storeTag;
 -- drop table foodMenu;
 -- drop table foodsubMenu;
@@ -103,28 +104,32 @@ create table storeTag (
 		price	int	NOT NULL,												/* 가격 */
 		runOut	varchar(1)	NOT NULL default 'X',	/* 품절여부 */
 		sale	varchar(20)	NOT NULL default 'X',		/* 세일여부 */
-		salePrice	int	NOT NULL default 1,					/* 할인율 */
+		salePrice	int	NOT NULL default 0,					/* 할인율 */
 		foodPhoto	varchar(100)	NOT NULL,						/* 음식사진 */
 		subMenu varchar(1)	NOT NULL default 'X',	/* 추가옵션 여부 */ 
 		foodInfo varchar(100),	/* 음식 설명 */ 
+		admintag varchar(1)	NOT NULL default 'O',	/* 어드민에서 가져온 음식인지 여부 */
 
 		primary key(menuIdx)    
 	);
 	
 	desc foodMenu;
 	
-	ALTER TABLE foodMenu ADD foodInfo varchar(100);
-	ALTER TABLE foodMenu ADD subMenu varchar(1) not null default 'X';
+	ALTER TABLE storeFoodMenu ADD foodInfo varchar(100);
+	ALTER TABLE storeFoodMenu ADD subMenu varchar(1) not null default 'X';
+	ALTER TABLE storeFoodMenu ADD updateAndDelete varchar(1) not null default 'X';
+	
+	ALTER TABLE 테이블명 DROP COLUMN 컬럼명
 		
 	-- 각 메뉴에 추가 옵션
 	CREATE TABLE storeFoodSubMenu (
-		storeIdx	int	NOT NULL,
-		foodName	varchar(30)	NOT NULL,
+		storeName varchar(30) not null,       /* 가게 이름(중복불허) */
 		subMenuIdx	int	NOT NULL auto_increment,
-		sMenuPart	varchar(20)	NOT NULL,
+		foodTag varchar(100) not null,
 		sMenuName	varchar(20)	NOT NULL,
 		price	int	NOT NULL,
 		runOut	varchar(20)	NOT NULL,
+	  admintag varchar(1)	NOT NULL default 'O',	/* 어드민에서 가져온 음식인지 여부 */
 		
 		primary key(subMenuIdx)  
 	);

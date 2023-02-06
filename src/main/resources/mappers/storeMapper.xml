@@ -20,7 +20,7 @@
 	</select>
 	
 	<select id="getStoreFood" resultType="com.spring.green2209S_18.vo.StoreVO">
-		select * from storeFoodMenu where storeName = #{storeName} and foodName = #{foodName};
+		select * from storeFoodMenu where storeName = #{storeName} and foodName = #{foodName} and admintag = 'O';
 	</select>
 
 	<select id="getStoreList" resultType="com.spring.green2209S_18.vo.StoreVO">
@@ -35,17 +35,43 @@
 	<select id="getStoreFoodMenu" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
 		select * from storeFoodMenu where storeName = #{storeName};
 	</select>
+
+	<select id="getCheckTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodMenu where foodTag = #{foodTag} and storeName = #{storeName} and admintag = 'O';
+	</select>
+
+	<select id="getChecksubTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodSubMenu where foodTag = #{foodTag} and storeName = #{storeName} and admintag = 'O';
+	</select>
+
+	<select id="getAdminStoreBrand" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from adminstorebrand where storePart = #{storePart};
+	</select>
+	
+	<select id="getstoreMenuList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from adminfoodmenu where brandName = #{brandName};
+	</select>
+	
+	
+	
+	
 	
 	<insert id="setStoreJoinOk">
 		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime});
 	</insert>
+	
+	<update id="setStoreMenuUpdate">
+		update storeFoodMenu set foodName = #{vo.foodName}, foodTag = #{vo.foodTag}, price = #{vo.price}, runOut = #{vo.runOut}, sale = #{vo.sale}, salePrice = #{vo.salePrice}, foodPhoto = #{vo.foodPhoto}, subMenu = #{vo.subMenu}, foodInfo = #{vo.foodInfo} where foodName = #{pastFoodName};
+	</update>
+	
+	
 	
 	<delete id="setStoreSubMenuDeletePost">
 		delete from storeFoodSubMenu where foodName = #{foodName};
 	</delete>
 	
 	<delete id="setStoreMenuDeletePost">
-		delete from storeFoodMenu where foodName = #{foodName};
+		delete from storeFoodMenu where foodName = #{foodName} and admintag = 'O';
 	</delete>
 	
 </mapper>

@@ -130,11 +130,7 @@
     			brandName : brandName
     			},
     		success:function(res) {
-    			if(res == "0") {
-    				alert("선택한 제품의 추가메뉴가 있기에 삭제할수 없습니다.\n추가메뉴를 먼저 삭제해 주세요.");
-    				location.reload();
-    			}
-    			else if(res == "2") {
+    		  if(res == "2") {
     				alert("제품이 없는곳을 제외한 모든 곳에서 메뉴를 삭제하였습니다.\n확인이 필요합니다.");
     				location.reload();
     			}

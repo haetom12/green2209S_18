@@ -98,6 +98,7 @@
   function fCheck() {
 	  let storePart = $("#storePart").val();
 	  let brandName = $("#brandName").val();
+	  let oldBrandName = '${vo.brandName}';
 	  
 		if($.trim(storePart) == "") {
 			alert("프랜차이즈 종류를 선택하세요");
@@ -116,11 +117,11 @@
 				return false;
 			}
 			else {
-			  location.href="${ctp}/admin/adminStoreBrandUpdate2?idx=${vo.idx}&storePart="+storePart+"&brandName="+brandName;
+			  location.href="${ctp}/admin/adminStoreBrandUpdate2?idx=${vo.idx}&storePart="+storePart+"&brandName="+brandName+"&oldBrandName="+oldBrandName;
 			}
 		}
 		else {
-			location.href="${ctp}/admin/adminStoreBrandUpdate2?idx=${vo.idx}&brandName="+brandName;
+			location.href="${ctp}/admin/adminStoreBrandUpdate2?idx=${vo.idx}&storePart="+storePart+"&brandName="+brandName;
 		}
   }
   
@@ -128,9 +129,15 @@
   function brandCheck() {
 	  let storePart = $("#storePart").val();
 	  let brandName = $("#brandName").val();
+	  let oldName = '${vo.brandName}';
 	  
   	if(brandName.trim() == "") {
   		alert("프랜차이즈명을 입력하세요!");
+  		myform2.brandName.focus();
+  		return false;
+  	}
+  	else if(brandName.trim() == oldName) {
+  		alert("수정전과 동일한 브랜드명입니다!");
   		myform2.brandName.focus();
   		return false;
   	}

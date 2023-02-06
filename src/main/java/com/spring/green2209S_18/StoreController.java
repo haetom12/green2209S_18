@@ -1,12 +1,15 @@
 package com.spring.green2209S_18;
 
+import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,7 +69,6 @@ public class StoreController {
 		if(storeService.getStoreIdCheck(vo.getStoreMid()) != null) {
 			return "redirect:/msg/memberIdCheckNo";
 		}
-		System.out.println("vo : " + vo.getStoreTime() );
 		
 		// 비밀번호 암호화
 		vo.setStorePwd(passwordEncoder.encode(vo.getStorePwd()));
@@ -99,7 +101,6 @@ public class StoreController {
 		
 		
 		model.addAttribute("vos", vos);
-		System.out.println("vos : " + vos);
 		model.addAttribute("storePart", storePart);
 		return "store/storeList";
 	}
@@ -159,6 +160,16 @@ public class StoreController {
 	}
 
 	// 가게 메뉴 등록 폼으로 이동
+	@RequestMapping(value = "storeMenuInputSelect", method = RequestMethod.GET)
+	public String storeMenuInputSelectGet(HttpSession session, Model model) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		model.addAttribute("vo",vo);
+		return "store/storeMenuInputSelect";
+	}
+	
+	// 가게 메뉴 등록 폼으로 이동
 	@RequestMapping(value = "storeMenuInput", method = RequestMethod.GET)
 	public String storeMenuInputGet(HttpSession session, Model model) {
 		String storeMid = (String) session.getAttribute("sMid"); 
@@ -166,6 +177,69 @@ public class StoreController {
 		
 		model.addAttribute("vo",vo);
 		return "store/storeMenuInput";
+	}
+
+	// 가게 메뉴 등록 폼으로 이동
+	@RequestMapping(value = "storeMenuInput2", method = RequestMethod.GET)
+	public String storeMenuInput2Get(HttpSession session, Model model) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		List<StoreVO> vos = storeService.getAdminStoreBrand(vo.getStorePart());
+		
+		model.addAttribute("vo",vo);
+		model.addAttribute("vos",vos);
+		return "store/storeMenuInput2";
+	}
+	
+	// ajax로 선택한 메뉴리스트 가져오기
+	@ResponseBody
+	@RequestMapping(value = "adminBrandMenu", method = RequestMethod.POST)
+	public List<FoodMenuVO> adminBrandMenuPost(String brandName) {
+		
+		List<FoodMenuVO> vos = storeService.getstoreMenuList(brandName);
+		
+		return vos;
+//		JSONObject jsonObject = new JSONObject();
+//		
+//		JSONObject data = new JSONObject();
+//		
+//		for(int i=0; i<vos.size(); i++) {
+//			data.put("foodTag", vos.get(i).getFoodTag());
+//			data.put("foodPhoto", vos.get(i).getFoodPhoto());
+//			data.put("price", vos.get(i).getPrice()+"");
+//			data.put("foodName", vos.get(i).getFoodName());
+//			
+//			System.out.println("data" + data);
+//			
+//			JSONArray req_array = new JSONArray();
+//			req_array.add(data);
+//			jsonObject.put("vos"+i, req_array);
+//		}
+//		
+//		String str = jsonObject.toJSONString();
+//		System.out.println("=====================================");
+//		System.out.println("str : " + str);
+		
+//		return str;
+	}
+	
+	// 프랜차이즈 태그 중복 확인
+	@Transactional
+	@ResponseBody
+	@RequestMapping(value = "adminMenuInputOk", method = RequestMethod.POST)
+	public String adminMenuInputOkPost(HttpServletRequest request, String delItems) {
+		delItems = delItems.substring(0, delItems.length()-1);
+		
+		String[] menuIdxs = delItems.split("/");
+//		System.out.println("menuIdxs :" + Arrays.toString(menuIdxs));
+//		System.out.println("menuIdxs :" + menuIdxs.length);
+		
+		for(int i=0; i<menuIdxs.length; i++) {
+			
+		}
+		
+		return "";
 	}
 	
 }

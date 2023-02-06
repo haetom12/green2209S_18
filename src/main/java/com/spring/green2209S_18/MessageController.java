@@ -139,11 +139,11 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("brandUpdateOk")) {
 			model.addAttribute("msg", "프랜차이즈 수정이 완료되었습니다!");
-			model.addAttribute("url", "admin/StoreBrandList");
+			model.addAttribute("url", "admin/storeBrandList");
 		}
 		else if(msgFlag.equals("brandUpdateOk")) {
 			model.addAttribute("msg", "프랜차이즈 수정에 실패하였습니다. 다시 시도해주세요.");
-			model.addAttribute("url", "admin/StoreBrandList");
+			model.addAttribute("url", "admin/storeBrandList");
 		}
 		else if(msgFlag.equals("tagInputOk")) {
 			model.addAttribute("msg", "태그가 추가되었습니다!.");
@@ -167,6 +167,14 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("storeMenuInputNo")) {
 			model.addAttribute("msg", "메뉴 등록에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
+		}
+		else if(msgFlag.equals("adminMenuUpdateOk")) {
+			model.addAttribute("msg", "메뉴를 성공적으로 수정하였습니다!");
+			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
+		}
+		else if(msgFlag.equals("adminMenuUpdateNo")) {
+			model.addAttribute("msg", "메뉴 수정에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
 		}
 		

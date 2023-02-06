@@ -42,7 +42,7 @@ public class JavaspringProvide {
 	}
 
 	// 사진 삭제 후 수정
-	public void deleteFile(MultipartFile fName, String saveFileName, String oldFileName, String flag) throws IOException {
+	public void deleteAndUpdateFile(MultipartFile fName, String saveFileName, String oldFileName, String flag) throws IOException {
 		byte[] data = fName.getBytes();
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = "";

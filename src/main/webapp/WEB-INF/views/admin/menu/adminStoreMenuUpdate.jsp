@@ -117,34 +117,34 @@
 			myform.price.focus();
 			return false;
 		}
-		else if(foodCheckSw == 0) {
-			alert("메뉴명 중복체크는 필수입니다!");
-			myform.foodName.focus();
-			return false;
-		}
-
-		let fileSize = document.getElementById("fName").files[0].size; //자바스크립트 명령어
-		
-		if(uExt != "JPG" && uExt != "PNG" && uExt != "GIF" && uExt != "ZIP" && uExt != "HWP" &&  uExt != "PPTX" &&  uExt != "PPT" ) {
-			alert("업로드 가능한 파일은 'JPG/GIF/PNG/HWP/PPT/PPTX'입니다.");
-			return false;
-		}
-		else if(fileSize > maxSize) {
-			alert("업로드할 파일의 최대용량은 2MByte 입니다.");
-			return false;
+		else if(foodName != '${vo.foodName}') {
+		  if(foodCheckSw == 0) {
+				alert("메뉴명 중복체크는 필수입니다!");
+				myform.foodName.focus();
+				return false;
+			}
+		  else {
+				myform.submit();
+		  }
 		}
 		else {
 			myform.submit();
 		}
   }
   
-	//카테코리 이름 중복체크
+	//메뉴 이름 중복체크
   function foodNameCheck() {
 	  let foodName = myform.foodName.value;
 	  let brandName = myform.brandName.value;
+	  let oldName = '${vo.foodName}';
 	  
   	if(foodName.trim() == "") {
   		alert("메뉴명을 입력하세요!");
+  		myform.foodName.focus();
+  		return false;
+  	}
+  	else if(foodName.trim() == oldName) {
+  		alert("수정전과 동일한 메뉴명입니다!");
   		myform.foodName.focus();
   		return false;
   	}
@@ -173,6 +173,18 @@
 		  });	
     }
   }
+	
+	function saleCheck(check) {
+		let saleOk = $(sale).val();
+		
+		if(saleOk == "O") {
+			document.getElementById('salePrice').readOnly = false;
+		}
+		else {
+			document.getElementById('salePrice').value = 0;
+			document.getElementById('salePrice').readOnly = true;
+		}
+	}
 
 </script>
 </head>
@@ -222,6 +234,25 @@
 	  <div class="loginbox-textbox input-group" style="margin: 0 auto;">
        <input type="number" name="price" id="price"  value="${vo.price}" class="form-control" style="width: 200px;" required />
     </div>
+    품절여부 :
+	  <input class="w3-radio" type="radio" name="runOut" value="X"  ${vo.subMenu == "X"  ? "checked" : ""}  >
+	  <label>품절X</label>&nbsp;
+	  <input class="w3-radio" type="radio" name="runOut" value="O"  ${vo.subMenu == "O"  ? "checked" : ""}  >
+	  <label>품절O</label>
+	  <p></p>
+	  세일여부 :
+    <div class="input-group-append" style="width: 25%;">
+	    <select name="sale" id="sale" onchange="saleCheck(this)" class="form-control">
+		    	<option value="X"  ${vo.sale == "X"  ? "selected" : ""}>X</option>
+		    	<option value="O"  ${vo.sale == "O"  ? "selected" : ""}>O</option>
+		  </select>
+	  </div>
+	  <p></p>
+	  할인율 :
+	  <div class="loginbox-textbox input-group" style="margin: 0 auto;">
+       <input type="number" name="salePrice" id="salePrice"  class="form-control" value="${vo.salePrice}" min="0" max="100" style="width: 200px;" readonly/>
+    </div>
+	  <p></p>
     추가메뉴 :
 	  <input class="w3-radio" type="radio" name="subMenu" value="X"  ${vo.subMenu == "X"  ? "checked" : ""}  >
 	  <label>없음</label>&nbsp;
@@ -240,7 +271,9 @@
 	    <input type="reset" value="다시쓰기" class="btn btn-warning"/> &nbsp;
 	    <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/storeMenuList?brandName=${vo.brandName}';" class="btn btn-secondary"/> &nbsp;    
 	  </div>
-	  <input type="hidden" name="oldFoodName" value="${vo.foodName}" />
+	  <input type="hidden" name="menuIdx" value="${vo.menuIdx}" />
+	  <input type="hidden" name="pastPhoto" value="${vo.foodPhoto}" />
+	  <input type="hidden" name="pastFoodName" value="${vo.foodName}" />
   </form>
 </div>
 <br />
@@ -254,7 +287,7 @@
 	  document.getElementById("mySidebar").style.width = "250px";
 	  document.getElementById("main").style.marginLeft = "250px";
 	}
-
+	
 	function closeNav() {
 	  document.getElementById("mySidebar").style.width = "0";
 	  document.getElementById("main").style.marginLeft= "0";

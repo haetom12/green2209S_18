@@ -32,9 +32,9 @@ public interface AdminDAO {
 
 	public StoreVO getstoreBrand(@Param("brandName") String brandName);
 
-	public int StoreBrandUpdateOk(@Param("vo") StoreVO vo);
+	public int StoreBrandUpdateOk(@Param("vo") StoreVO vo,@Param("oldBrandName") String oldBrandName);
 
-	public List<StoreVO> getstoreMenuList(@Param("brandName") String brandName);
+	public List<FoodMenuVO> getstoreMenuList(@Param("brandName") String brandName);
 
 	public List<FoodMenuVO> getstoreTagList(@Param("brandName") String brandName);
 
@@ -57,5 +57,10 @@ public interface AdminDAO {
 	public int setAdminSubMenuDeletePost(@Param("foodName") String foodName);
 
 	public int setAdminMenuDeletePost(@Param("foodName") String foodName);
+
+	public void setfoodMenuUpdate(@Param("vo") FoodMenuVO vo);
+
+	public List<SubFoodMenuVO> getChecksubTagList(@Param("foodTag") String foodTag,@Param("brandName") String brandName);
+
 
 }

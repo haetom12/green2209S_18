@@ -27,5 +27,4 @@ public class StoreVO {
 	private String brandName;
 	private String foodTag;
 	
-	
 }

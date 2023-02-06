@@ -248,6 +248,14 @@
 		    <version>4.3.14.RELEASE</version>
 		</dependency>
 		
+		<!-- Json 객체 생성해주는것 -->
+		<dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>1.1</version>
+    </dependency>
+		
+		
 	</dependencies>
     <build>
         <plugins>

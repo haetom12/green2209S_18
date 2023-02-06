@@ -27,10 +27,6 @@
 		select * from adminStoreBrand where brandName = #{brandName};
 	</select>
 
-	<select id="getstoreMenuList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from adminFoodMenu where brandName = #{brandName};
-	</select>
-
 	<select id="getstoreTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
 		select * from adminStoreTag where brandName = #{brandName};
 	</select>
@@ -49,6 +45,10 @@
 
 	<select id="getCheckAdminSubMenu" resultType="com.spring.green2209S_18.vo.SubFoodMenuVO">
 		select * from adminFoodSubMenu where foodName = #{foodName};
+	</select>
+
+	<select id="getChecksubTagList" resultType="com.spring.green2209S_18.vo.SubFoodMenuVO">
+		select * from adminFoodSubMenu where foodTag = #{foodTag} and brandName = #{brandName};
 	</select>
 
 
@@ -77,10 +77,16 @@
 
 	<update id="StoreBrandUpdateOk">
 		update adminStoreBrand set storePart = #{vo.storePart}, brandName = #{vo.brandName} where idx = #{vo.idx};
+		update adminStoreTag set brandName = #{vo.brandName} where brandName = #{oldBrandName};
+		update adminFoodMenu set brandName = #{vo.brandName} where brandName = #{oldBrandName};
 	</update>
 
 	<update id="storeTagUpdateOk">
 		update adminStoreTag set foodTag = #{foodTag} where brandName = #{brandName} and foodTag = #{oldTag};
+	</update>
+
+	<update id="setfoodMenuUpdate">
+		update adminFoodMenu set foodName = #{vo.foodName}, foodTag = #{vo.foodTag}, price = #{vo.price}, runOut = #{vo.runOut}, sale = #{vo.sale}, salePrice = #{vo.salePrice}, foodPhoto = #{vo.foodPhoto}, subMenu = #{vo.subMenu}, foodInfo = #{vo.foodInfo} where menuIdx = #{vo.menuIdx};
 	</update>
 	
 	

@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -125,10 +127,6 @@ public class AdminController {
 	// 카테고리 수정 절차
 	@RequestMapping(value = "adminUpdateCategory", method = RequestMethod.POST)
 	public String adminUpdateCategoryPost(StoreVO vo, MultipartFile fName, String pastPhoto, String pastCode) {
-		StoreVO vo1 = adminService.getcategoryCodeCheck(vo.getCategoryStoreCode());
-		StoreVO vo2 = adminService.getcategoryCodeCheck2(vo.getStorePart());
-		
-		StoreVO pastVo = adminService.getcategoryCodeCheck(pastCode);
 		
 		int res = adminService.setCategoryUpdate(fName,vo,pastPhoto,pastCode);
 		
@@ -174,8 +172,6 @@ public class AdminController {
 		int res = 1;
 		StoreVO vo = adminService.getBrandNameCheck(storePart,brandName);
 		
-		System.out.println("브랜드이름 : " +  brandName);
-			
 		if(vo == null) res = 0;
 		return res+"";
 	}
@@ -207,9 +203,9 @@ public class AdminController {
 	
 	// 음식 프렌차이즈 리스트 수정
 	@RequestMapping(value = "adminStoreBrandUpdate2", method = RequestMethod.GET)
-	public String adminStoreBrandUpdatePost(StoreVO vo) {
+	public String adminStoreBrandUpdatePost(StoreVO vo, String oldBrandName) {
 		
-		int res = adminService.StoreBrandUpdateOk(vo);
+		int res = adminService.StoreBrandUpdateOk(vo, oldBrandName);
 		
 		if(res == 1) return "redirect:/msg/brandUpdateOk"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
 		else return "redirect:/msg/brandUpdateNo";
@@ -242,7 +238,7 @@ public class AdminController {
 	public String storeMenuListGet(Model model, String brandName) {
 		
 		// 음식 프렌차이즈 가져오기
-		List<StoreVO> vos = adminService.getstoreMenuList(brandName);
+		List<FoodMenuVO> vos = storeService.getstoreMenuList(brandName);
 		
 		model.addAttribute("brandName", brandName);
 		model.addAttribute("vos", vos);
@@ -328,8 +324,6 @@ public class AdminController {
 		
 		int res = adminService.storeTagInputOk(vo);
 		
-		System.out.println("vo" + vo);
-		
 		String brandName = vo.getBrandName();
 		
 		if(res == 1) return "redirect:/msg/tagInputOk?brandName="+URLEncoder.encode(brandName, "UTF-8"); // 정상처리가 되면 true == 1이 자동으로 넘어옴
@@ -357,12 +351,20 @@ public class AdminController {
 	}
 	
 	// 태그 삭제
+	@Transactional
 	@ResponseBody
 	@RequestMapping(value = "adminTagDelete", method = RequestMethod.POST)
 	public String adminTagDeletePost(String foodTag, String brandName) {
 		int res = 0;
-		System.out.println("브랜드 이름 : " + brandName +" / "+foodTag);
+		
+		// 태그에 속해있는 음식이 있는지 확인
 		List<FoodMenuVO> vos = adminService.getCheckTagList(foodTag,brandName);
+		// 태그에 속해있는 추가옵션이 있는지 확인
+		List<SubFoodMenuVO> sVos = adminService.getChecksubTagList(foodTag,brandName);
+		// (음식점)태그에 속해있는 음식이 있는지 확인
+		List<FoodMenuVO> storevos = storeService.getCheckTagList(foodTag,brandName);
+		// (음식점)태그에 속해있는 추가옵션이 있는지 확인
+		List<SubFoodMenuVO> storeSubVos = storeService.getChecksubTagList(foodTag,brandName);
 		
 		/*
 		 * if(vos.size() != 0) return "0";
@@ -372,9 +374,9 @@ public class AdminController {
 		 * return res+"";
 		 */
 		
-		if(vos.size() == 0) {
+		if(vos.size() == 0 && sVos.size() == 0 && storevos.size() == 0 && storeSubVos.size() == 0) {
 			res = adminService.setStoreTagDelete(foodTag, brandName);
-			return "1";
+			return "1"; 
 		}
 		return res+"";
 	}
@@ -399,30 +401,21 @@ public class AdminController {
 	public String adminMenuDeletePost(String foodName, String brandName) {
 		int res1 = 0; int res2 = 0; int res3 = 0; int res4 = 0;
 		
-		// 추가 옵션 테이블에 해당음식을 포함하고 있는지 확인
-		List<SubFoodMenuVO> vos = adminService.getCheckAdminSubMenu(foodName);
+//		// 해당음식의 추가옵션 테이블을 어드민/사장 둘다 삭제
+//		res1 = adminService.setAdminSubMenuDeletePost(foodName);
+//		res2 = storeService.setStoreSubMenuDeletePost(foodName);
 		
-		if(vos.size()==0) {
-			// 해당음식의 추가옵션 테이블을 어드민/사장 둘다 삭제
-			res1 = adminService.setAdminSubMenuDeletePost(foodName);
-			res2 = storeService.setStoreSubMenuDeletePost(foodName);
-			
-			// 메뉴를 어드민 음식 테이블과 가게 음식 테이블에 둘다 삭제
-			FoodMenuVO aVo =  adminService.getFoodNameCheck(brandName, foodName);
-			FoodMenuVO sVo =  storeService.getStoreFood(brandName, foodName);
-			if(aVo != null) res3 = adminService.setAdminMenuDeletePost(aVo);
-			if(sVo != null) res4 = storeService.setStoreMenuDeletePost(sVo);
-			
-			System.out.println(res1 + "/"+res2 + "/"+res3 + "/"+ res4);
-			if(res1 != 1||res2 != 1||res3 != 1||res4 != 1) {
-				return "2";
-			}
-			else {
-				return "1";
-			}
+		// 메뉴를 어드민 음식 테이블과 가게 음식 테이블에 둘다 삭제
+		FoodMenuVO aVo =  adminService.getFoodNameCheck(brandName, foodName);
+		FoodMenuVO sVo =  storeService.getStoreFood(brandName, foodName);
+		if(aVo != null) res3 = adminService.setAdminMenuDeletePost(aVo);
+		if(sVo != null) res4 = storeService.setStoreMenuDeletePost(sVo);
+		
+		if(res3 != 1||res4 != 1) {
+			return "2";
 		}
 		else {
-			return "0";
+			return "1";
 		}
 	}
 	
@@ -444,6 +437,15 @@ public class AdminController {
 		return "admin/menu/adminStoreMenuUpdate";
 	}
 	
+	// 프랜차이즈 메뉴 수정 작업
+	@RequestMapping(value = "adminStoreMenuUpdate", method = RequestMethod.POST)
+	public String adminStoreMenuUpdatePost(FoodMenuVO vo, String pastPhoto, String pastFoodName, MultipartFile fName) throws UnsupportedEncodingException {
+		
+		int res = adminService.setStoreMenuUpdate(vo, fName, pastPhoto, pastFoodName);
+		
+		if(res == 1) return "redirect:/msg/adminMenuUpdateOk?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8");
+		else return "redirect:/msg/adminMenuUpdateNo?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8");
+	}
 	
 	
 }
