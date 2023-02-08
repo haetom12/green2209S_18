@@ -161,11 +161,11 @@ public class MessageController {
 			model.addAttribute("msg", "태그 수정에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "admin/storeTagList?brandName="+brandName);
 		}
-		else if(msgFlag.equals("storeMenuInputOk")) {
+		else if(msgFlag.equals("adminStoreMenuInputOk")) {
 			model.addAttribute("msg", "메뉴를 성공적으로 등록하였습니다!");
 			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
 		}
-		else if(msgFlag.equals("storeMenuInputNo")) {
+		else if(msgFlag.equals("adminStoreMenuInputNo")) {
 			model.addAttribute("msg", "메뉴 등록에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
 		}
@@ -176,6 +176,22 @@ public class MessageController {
 		else if(msgFlag.equals("adminMenuUpdateNo")) {
 			model.addAttribute("msg", "메뉴 수정에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "admin/storeMenuList?brandName="+brandName);
+		}
+		else if(msgFlag.equals("adminMenuInputOk")) {
+			model.addAttribute("msg", "선택된 메뉴를 저장 하였습니다.");
+			model.addAttribute("url", "store/myStoreMenu");
+		}
+		else if(msgFlag.equals("storeMenuInputOk")) {
+			model.addAttribute("msg", "메뉴를 성공적으로 등록하였습니다.");
+			model.addAttribute("url", "store/myStoreMenu");
+		}
+		else if(msgFlag.equals("storeMenuInputNo")) {
+			model.addAttribute("msg", "메뉴 등록에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "store/myStoreMenu");
+		}
+		else if(msgFlag.equals("storeMenuUpdateOk")) {
+			model.addAttribute("msg", "메뉴를 성공적으로 수정하였습니다!");
+			model.addAttribute("url", "store/myStoreMenu");
 		}
 		
 		

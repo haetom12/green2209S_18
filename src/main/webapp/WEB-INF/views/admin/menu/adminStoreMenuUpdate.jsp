@@ -226,7 +226,7 @@
     <div class="input-group-append" style="width: 25%;">
 	    <select name="foodTag" class="form-control">
 	    	<c:forEach var="cVo" items="${vos}">
-		    	<option value="${vo.foodTag}"  ${cVo.foodTag==vo.foodTag  ? "selected" : ""}  >${vo.foodTag}</option>
+		    	<option value="${cVo.foodTag}"  ${cVo.foodTag==vo.foodTag  ? "selected" : ""}  >${cVo.foodTag}</option>
 		    </c:forEach>
 		  </select>
 	  </div>
@@ -235,9 +235,9 @@
        <input type="number" name="price" id="price"  value="${vo.price}" class="form-control" style="width: 200px;" required />
     </div>
     품절여부 :
-	  <input class="w3-radio" type="radio" name="runOut" value="X"  ${vo.subMenu == "X"  ? "checked" : ""}  >
+	  <input class="w3-radio" type="radio" name="runOut" value="X"  ${vo.runOut == "X"  ? "checked" : ""}  >
 	  <label>품절X</label>&nbsp;
-	  <input class="w3-radio" type="radio" name="runOut" value="O"  ${vo.subMenu == "O"  ? "checked" : ""}  >
+	  <input class="w3-radio" type="radio" name="runOut" value="O"  ${vo.runOut == "O"  ? "checked" : ""}  >
 	  <label>품절O</label>
 	  <p></p>
 	  세일여부 :
@@ -248,9 +248,9 @@
 		  </select>
 	  </div>
 	  <p></p>
-	  할인율 :
+	  할인가격	 :
 	  <div class="loginbox-textbox input-group" style="margin: 0 auto;">
-       <input type="number" name="salePrice" id="salePrice"  class="form-control" value="${vo.salePrice}" min="0" max="100" style="width: 200px;" readonly/>
+       <input type="number" name="salePrice" id="salePrice"  class="form-control" value="${vo.salePrice}" min="1" style="width: 200px;" readonly/>
     </div>
 	  <p></p>
     추가메뉴 :

@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -238,7 +236,7 @@ public class AdminController {
 	public String storeMenuListGet(Model model, String brandName) {
 		
 		// 음식 프렌차이즈 가져오기
-		List<FoodMenuVO> vos = storeService.getstoreMenuList(brandName);
+		List<FoodMenuVO> vos = adminService.getstoreMenuList(brandName);
 		
 		model.addAttribute("brandName", brandName);
 		model.addAttribute("vos", vos);
@@ -278,8 +276,8 @@ public class AdminController {
 		
 		int res = adminService.setAdminMenuInput(vo,fName);
 		
-		if(res == 1) return "redirect:/msg/storeMenuInputOk?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8"); // 정상처리가 되면 true == 1이 자동으로 넘어옴
-		else return "redirect:/msg/storeMenuInputNo?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8"); // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		if(res == 1) return "redirect:/msg/adminStoreMenuInputOk?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8"); // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "redirect:/msg/adminStoreMenuInputNo?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8"); // 정상처리가 되면 true == 1이 자동으로 넘어옴
 	}
 	
 	// 프랜차이즈 메뉴 태그 입력 폼 이동
@@ -408,6 +406,7 @@ public class AdminController {
 		// 메뉴를 어드민 음식 테이블과 가게 음식 테이블에 둘다 삭제
 		FoodMenuVO aVo =  adminService.getFoodNameCheck(brandName, foodName);
 		FoodMenuVO sVo =  storeService.getStoreFood(brandName, foodName);
+		System.out.println("sVO : " + sVo);
 		if(aVo != null) res3 = adminService.setAdminMenuDeletePost(aVo);
 		if(sVo != null) res4 = storeService.setStoreMenuDeletePost(sVo);
 		

@@ -42,7 +42,7 @@
     		<div class="row justify-content-center">
     			<div class="col-md-10 mb-5 text-center">
     				<ul class="product-category">
-    					<li><a href="${ctp}/store/storeList" class="active">전 체</a></li>
+    					<li><a href="${ctp}/store/storeList?storePart=${storePart}" class="active">전 체</a></li>
     					<li><a href="${ctp}/store/storeList?storePart=${storePart}&ordered=rateAvg">별점 높은 순</a></li>
     					<li><a href="#">주문 많은 순</a></li>
     					<li><a href="#">가까운 순</a></li>

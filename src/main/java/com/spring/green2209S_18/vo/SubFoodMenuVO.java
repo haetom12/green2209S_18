@@ -4,11 +4,12 @@ import lombok.Data;
 
 @Data
 public class SubFoodMenuVO {
-	private int storeIdx;
-	private String foodName;
+	private String brandName;
 	private int subMenuIdx;
-	private String sMenuPart;
+	private String foodTag;
 	private String sMenuName;
 	private int price;
 	private String runOut;
+	
+	private String storeName;
 }

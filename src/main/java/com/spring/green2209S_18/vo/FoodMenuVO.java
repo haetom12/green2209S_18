@@ -11,6 +11,7 @@ public class FoodMenuVO {
 	private int price;
 	private String runOut;
 	private String sale;
+	private int salePercent;
 	private int salePrice;
 	private String foodPhoto;
 	private String subMenu;
@@ -18,5 +19,6 @@ public class FoodMenuVO {
 	
 	private String brandName;
 	private String foodTag;
+	private String admintag;
 	
 }

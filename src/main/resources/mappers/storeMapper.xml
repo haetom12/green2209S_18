@@ -19,8 +19,8 @@
 		select * from store <if test='storePart !="" '> where storePart = #{storePart} </if>;
 	</select>
 	
-	<select id="getStoreFood" resultType="com.spring.green2209S_18.vo.StoreVO">
-		select * from storeFoodMenu where storeName = #{storeName} and foodName = #{foodName} and admintag = 'O';
+	<select id="getStoreFood" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodMenu where foodName = #{foodName} and admintag = 'O';
 	</select>
 
 	<select id="getStoreList" resultType="com.spring.green2209S_18.vo.StoreVO">
@@ -49,19 +49,67 @@
 	</select>
 	
 	<select id="getstoreMenuList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from adminfoodmenu where brandName = #{brandName};
+		select * from adminfoodmenu where brandName = #{brandName}; 
+		<!-- select * from adminfoodmenu a, storeFoodMenu s  where a.brandName = #{brandName} group by a.foodName having s.storeName = #{storeName} and a.foodName != s.foodName; -->
 	</select>
 	
-	
-	
-	
+	<select id="getAdminStoreMenu" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from adminfoodmenu where menuIdx = #{menuIdx};
+	</select>
+
+	<select id="getAdminStoreTag" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from adminstoretag where brandName = #{brandName};
+	</select>
+
+	<select id="getAdminStoreSubMenu" resultType="com.spring.green2209S_18.vo.SubFoodMenuVO">
+		select * from adminfoodsubmenu where brandName = #{brandName};
+	</select>
+
+	<select id="getCheckStoreTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storetag where foodTag = #{foodTag} and storeName = #{storeName};
+	</select>
+
+	<select id="getstoreTagList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storetag where storeName = #{storeName};
+	</select>
+
+	<select id="getStoreFoodMenuByTag" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodMenu where storeName = #{storeName} <if test="foodTag != ''"> and foodTag = #{foodTag} </if>;
+	</select>
+
+	<select id="storeFoodNameCheck" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodMenu where storeName = #{storeName} and foodName = #{foodName};
+	</select>
+
 	
 	<insert id="setStoreJoinOk">
 		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime});
 	</insert>
 	
+	<insert id="setAdminStoreTag">
+		insert into storetag values (default, #{storeName}, #{foodTag} , default);
+	</insert>
+	
+	<insert id="setAdminStoreMenu">
+		insert into storefoodmenu values (default, #{storeName}, #{vo.foodName}, #{vo.foodTag}, #{vo.price}, #{vo.runOut}, #{vo.sale}, #{vo.salePercent}, #{vo.salePrice}, #{vo.foodPhoto}, #{vo.subMenu}, #{vo.foodInfo}, default);
+	</insert>
+	
+	<insert id="setAdminStoreSubMenu">
+		insert into storefoodsubmenu values (#{storeName}, default, #{vo.foodTag}, #{vo.sMenuName}, #{vo.price}, #{vo.runOut}, default);
+	</insert>
+	
+	<insert id="setStoreMenuInput">
+		insert into storefoodmenu values (default, #{vo.storeName}, #{vo.foodName}, #{vo.foodTag}, #{vo.price}, default, default, default, default, #{vo.foodPhoto}, #{vo.subMenu}, #{vo.foodInfo}, #{vo.admintag});
+	</insert>
+	
+	
+	
 	<update id="setStoreMenuUpdate">
-		update storeFoodMenu set foodName = #{vo.foodName}, foodTag = #{vo.foodTag}, price = #{vo.price}, runOut = #{vo.runOut}, sale = #{vo.sale}, salePrice = #{vo.salePrice}, foodPhoto = #{vo.foodPhoto}, subMenu = #{vo.subMenu}, foodInfo = #{vo.foodInfo} where foodName = #{pastFoodName};
+		update storeFoodMenu set foodName = #{vo.foodName}, foodTag = #{vo.foodTag}, price = #{vo.price}, runOut = #{vo.runOut}, sale = #{vo.sale}, salePrice = #{vo.salePrice}, foodPhoto = #{vo.foodPhoto}, subMenu = #{vo.subMenu}, foodInfo = #{vo.foodInfo} where foodName = #{pastFoodName} and admintag = 'O';
+	</update>
+	
+	<update id="setfoodMenuUpdate">
+		update storefoodmenu set foodName = #{vo.foodName}, foodTag = #{vo.foodTag}, price = #{vo.price}, runOut = #{vo.runOut}, sale = #{vo.sale}, salePrice = #{vo.salePrice}, foodPhoto = #{vo.foodPhoto}, subMenu = #{vo.subMenu}, foodInfo = #{vo.foodInfo} where menuIdx = #{vo.menuIdx};
 	</update>
 	
 	
@@ -72,6 +120,10 @@
 	
 	<delete id="setStoreMenuDeletePost">
 		delete from storeFoodMenu where foodName = #{foodName} and admintag = 'O';
+	</delete>
+	
+	<delete id="setStoreMenuDeleteOk">
+		delete from storeFoodMenu where foodName = #{foodName};
 	</delete>
 	
 </mapper>

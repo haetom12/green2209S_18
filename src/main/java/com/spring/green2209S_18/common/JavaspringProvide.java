@@ -1,6 +1,8 @@
 package com.spring.green2209S_18.common;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
@@ -63,5 +65,31 @@ public class JavaspringProvide {
 	  realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+flag+"/");
   	File file = new File(realPath + saveFileName);
   	if(file.exists()) file.delete();
+	}
+	
+	
+	public void fileCopyCheck(String originalFilePath, String copyFilePath) {
+		File origFile = new File(originalFilePath);
+		File copyFile = new File(copyFilePath);
+		
+		try {
+			FileInputStream fis = new FileInputStream(origFile);
+			FileOutputStream fos = new FileOutputStream(copyFile);
+			
+			byte[] buffer = new byte[2048];
+			int cnt = 0;
+			while((cnt = fis.read(buffer)) != -1) {
+				fos.write(buffer, 0, cnt);
+			}
+			fos.flush();
+			fos.close();
+			fis.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

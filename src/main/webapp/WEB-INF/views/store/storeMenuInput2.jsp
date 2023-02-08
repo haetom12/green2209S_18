@@ -36,25 +36,37 @@
     	// 음식 브랜드 선택시 리스트에 해당 음식 뿌리기
         function categoryCheck() {
         	let brandName = myform.brandName.value;
+        	let storeName = '${vo.storeName}';
+        	
+    			/* location.href="${ctp}/store/adminBrandMenu?brandName="+brandName+"&storeName="+storeName; */
+    			location.href="${ctp}/store/storeMenuInput2?brandName="+brandName+"&storeName="+storeName;
+      	}
+    	 
+    	 
+    	 /* 
+        function categoryCheck() {
+        	let brandName = myform.brandName.value;
+        	let storeName = '${vo.storeName}';
         	
     			$.ajax({
     				type : "post",
     				url  : "${ctp}/store/adminBrandMenu",
-    				data : {brandName : brandName},
+    				data : {
+    					brandName : brandName,
+    					storeName : storeName
+    					},
     				success:function(data) {
-    					/* alert("data" + data.menuIdx); */
     					var str = "";
      					for(var i=0; i<data.length; i++) {
-    						str += "<c:set var="maxIdx" value="0"/>";
     						str += "<tr class='price'>";
-    						str += "<td><input type='checkbox' name='chk' class='chk' value='"+data[i].menuIdx+"' onClick='onCheck()' /></td>";
-    						str += "<td class='image-prod'>"+data[i].foodTag+"</td>";
+    						str += "<td><input type='checkbox' name='chk' class='chk' value='"+data[i].menuIdx+"'/></td>";
     						str += "<td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/adminFoodPhoto/"+data[i].foodPhoto+");'></td>";
     						str += "<td class='product-name'>"+data[i].foodName+"</td>";
+    						str += "<td class='image-prod'>"+data[i].foodTag+"</td>";
     						str += "<td class='total'>"+data[i].price+"</td>";
     						str += "</tr>";
-    						str += "<c:set var="maxIdx" value='"+data[i].menuIdx+"'/>";
     					} 
+     					
     					$("#demo").html(str);
     				},
     				error : function() {
@@ -62,7 +74,9 @@
     				}
     			});
       	}
-    	 
+    	  */
+        
+        
    	  // 전체선택
    	  $(function(){
    	  	$("#checkAll").click(function(){
@@ -80,15 +94,26 @@
 	  function selectSaveCheck() {
 	  	let ans = confirm("선택된 메뉴를 저장 하시겠습니까?");
 	  	if(!ans) return false;
+	  	let chkLength = $("input:checkbox[name=chk]").length;
+	  	//alert($("input:checkbox[name=chk]:checked").length);
 	  	
 	  	let delItems = "";
-	  	
-	  	for(let i=0; i<myform.chk.length; i++) {
-	  		if(myform.chk[i].checked == true) delItems += myform.chk[i].value + "/";
+	  	let storeName = '${vo.storeName}';
+	  	for(let i=0; i<chkLength; i++) {
+	  		if($('#chk'+i).is(':checked')) {
+	  			delItems += $('#chk'+i).val() + "/";
+	  		}
 	  	}
 	  	
-	  	alert("idx는 : " + delItems);
+	  	if(delItems == "") {
+	  		alert("저장할 메뉴를 선택하세요.");
+	  		return false;
+	  	}
 	  	
+	  	location.href="${ctp}/store/adminMenuInputOk?delItems="+delItems+"&storeName="+storeName;
+	  	
+	  	
+	  	/* 
 	  	if(delItems == "") {
 	  		alert("저장할 메뉴를 선택하세요.");
 	  		return false;
@@ -96,8 +121,11 @@
 			
 	  	$.ajax({
 	  		type : "post",
-	  		url  : "${ctp}/store/adminMenuInputOk",
-	  		data : {delItems : delItems},
+	  		url  : "${ctp}/store/adminMenuInputOk	",
+	  		data : {
+	  			delItems : delItems,
+	  			storeName : storeName
+	  			},
 	  		success:function(res) {
 	  			if(res == "1") {
 	  				alert("선택된 메뉴를 저장 하였습니다.");
@@ -108,6 +136,7 @@
 	  			alert("전송오류!!");
 	  		}
 	  	});
+			 */
 	  }
    	  
     	 
@@ -139,21 +168,31 @@
 						    <select name="brandName" id="brandName" onchange="categoryCheck()" style="width: 12%;">
 						    	<option value="" >프랜차이즈 선택</option>
 		    		    	<c:forEach var="vo" items="${vos}">
-						    		<option value="${vo.brandName}" >${vo.brandName}</option>
+						    		<option value="${vo.brandName}" ${vo.brandName==brandName  ? "selected" : ""} >${vo.brandName}</option>
 						    	</c:forEach>
 							  </select>
 	    					<input type="button" value="메뉴 추가" onclick="selectSaveCheck()" class="btn btn-primary mb-1" style="float: right;"/>
 		    				<table class="table">
 							    <thead class="thead-primary">
 							      <tr class="text-center">
-							        <th><input type="checkbox" id="checkAll" /></th>
+							        <th><input type="checkbox" id="checkAll" />&nbsp;전체선택</th>
 							        <th>카테고리</th>
 							        <th>음식사진</th>
 							        <th>음식이름</th>
 							        <th>가격</th>
 							      </tr>
 							    </thead>
-							    <tbody id="demo"></tbody>
+							    <!-- <tbody id="demo"></tbody> -->
+							    <c:forEach var="mVo" items="${mVos}" varStatus="st">
+							    	<tr class="text-center">
+								    	<td><input type='checkbox' name='chk' class='chk' id="chk${st.index}" value='${mVo.menuIdx}'/></td>
+								    	<%-- <td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/adminFoodPhoto/${mVo.foodPhoto});'></div></td> --%>
+								    	<td><img src="${ctp}/data/adminFoodPhoto/${mVo.foodPhoto}" style="width:150px; margin: 0px; padding: 0px;"></td>
+								    	<td class='product-name'>${mVo.foodName}</td>
+								    	<td class='image-prod'>${mVo.foodTag}</td>
+								    	<td class='total'>${mVo.price}</td>
+							    	</tr>
+							    </c:forEach>
 							  </table>
 						  </form>
 					  </div>

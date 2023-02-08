@@ -30,7 +30,7 @@ public interface StoreDAO {
 
 	public FoodMenuVO getStoreFood(@Param("storeName") String brandName, @Param("foodName") String foodName);
 
-	public void setStoreMenuUpdate(@Param("vo") FoodMenuVO storeVo, @Param("pastFoodName") String pastFoodName);
+	public void setStoreMenuUpdate(@Param("vo") FoodMenuVO vo, @Param("pastFoodName") String pastFoodName);
 
 	public List<FoodMenuVO> getCheckTagList(@Param("foodTag") String foodTag,@Param("storeName") String brandName);
 
@@ -38,7 +38,33 @@ public interface StoreDAO {
 
 	public List<StoreVO> getAdminStoreBrand(@Param("storePart") String storePart);
 
-	public List<FoodMenuVO> getstoreMenuList(@Param("brandName") String brandName);
+	public List<FoodMenuVO> getstoreMenuList(@Param("brandName") String brandName,@Param("storeName") String storeName);
+
+	public FoodMenuVO getAdminStoreMenu(@Param("menuIdx") int menuIdx);
+
+	public FoodMenuVO getAdminStoreTag(@Param("foodName") String foodName);
+
+	public SubFoodMenuVO getAdminStoreSubMenu(@Param("brandName") String brandName);
+
+	public void setAdminStoreMenu(@Param("vo") FoodMenuVO foodVo,@Param("storeName")  String storeName);
+
+	public void setAdminStoreSubMenu(@Param("vo") SubFoodMenuVO subFoodVo,@Param("storeName")  String storeName);
+
+	public FoodMenuVO getCheckStoreTagList(@Param("foodTag") String foodTag,@Param("storeName") String storeName);
+
+	public void setAdminStoreTag(@Param("foodTag") String foodTag, @Param("storeName") String storeName);
+
+	public List<FoodMenuVO> getstoreTagList(@Param("storeName") String storeName);
+
+	public List<FoodMenuVO> getStoreFoodMenuByTag(@Param("storeName") String storeName,@Param("foodTag") String foodTag);
+
+	public int setStoreMenuDeleteOk(@Param("foodName") String foodName);
+
+	public FoodMenuVO storeFoodNameCheck(@Param("storeName") String storeName, @Param("foodName") String foodName);
+
+	public void setStoreMenuInput(@Param("vo") FoodMenuVO vo);
+
+	public void setfoodMenuUpdate(@Param("vo") FoodMenuVO vo);
 
 
 }

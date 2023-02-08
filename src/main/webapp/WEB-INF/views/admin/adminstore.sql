@@ -48,6 +48,7 @@ create table store (
 ALTER TABLE store ADD rateAvg double not null default 0.0;
 
 
+
 --drop table rating;
 
 --alter table member add level int default 0;
@@ -98,7 +99,8 @@ create table adminStoreTag (
 		price	int	NOT NULL,												/* 가격 */
 		runOut	varchar(1)	NOT NULL default 'X',	/* 품절여부 */
 		sale	varchar(20)	NOT NULL default 'X',		/* 세일여부 */
-		salePrice	int	NOT NULL default 0,					/* 할인율 */
+		salePercent	int	NOT NULL default 0,					/* 할인율 */
+		salePrice	int	NOT NULL default 0,					/* 할인가격 */
 		foodPhoto	varchar(100)	NOT NULL,						/* 음식사진 */
 		subMenu varchar(1)	NOT NULL default 'X',	/* 추가옵션 여부 */ 
 		foodInfo varchar(100),	/* 음식 설명 */ 

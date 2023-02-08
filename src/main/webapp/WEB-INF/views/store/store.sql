@@ -85,7 +85,7 @@ select s.*, (select round(AVG(r.rating), 1) from rating r where s.idx = r.storeI
 /* 가게 음식 카테고리  */
 create table storeTag (
 	idx int not null auto_increment,						/* 푸드카테고리 고유번호 */
-	brandName varchar(30) not null,							/* 가게 고유번호 */
+	storeName varchar(30) not null,							/* 가게 고유번호 */
 	foodTag varchar(100) not null,
 	admintag varchar(1)	NOT NULL default 'O',	
 	primary key(idx)
@@ -133,7 +133,12 @@ create table storeTag (
 		
 		primary key(subMenuIdx)  
 	);
+
+	select * from storeFoodMenu where storeName = 'BBQ치킨 세종충남병원점' and foodName = '페퍼로니 시카고 피자';
 	
+	select * from adminfoodmenu  where brandName = 'BBQ' ;
+	select * from adminfoodmenu a, storeFoodMenu s  where a.brandName = 'BBQ' and s.foodName != a.foodName;
+	select * from adminfoodmenu a, storeFoodMenu s  where a.brandName = 'BBQ' and s.storeName = 'BBQ치킨 세종충남병원점'  group by a.foodName having a.foodName != s.foodName;
 --	drop table storeFoodSubMenu
 	
 	

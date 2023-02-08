@@ -1,17 +1,24 @@
 package com.spring.green2209S_18.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.green2209S_18.common.DistanceCal;
 import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.StoreDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -112,10 +119,149 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public List<FoodMenuVO> getstoreMenuList(String brandName) {
-		System.out.println("들어왓음");
-		return storeDAO.getstoreMenuList(brandName);
+	public List<FoodMenuVO> getstoreMenuList(String brandName, String storeName) {
+		return storeDAO.getstoreMenuList(brandName, storeName);
 	}
+
+	@Override
+	public FoodMenuVO getAdminStoreMenu(int menuIdx) {
+		return storeDAO.getAdminStoreMenu(menuIdx);
+	}
+
+	@Override
+	public FoodMenuVO getAdminStoreTag(String foodName) {
+		return storeDAO.getAdminStoreTag(foodName);
+	}
+
+	@Override
+	public SubFoodMenuVO getAdminStoreSubMenu(String brandName) {
+		return storeDAO.getAdminStoreSubMenu(brandName);
+	}
+
+	@Override
+	public void setAdminStoreMenu(FoodMenuVO foodVo, String storeName) {
+		
+		String imgFile = foodVo.getFoodPhoto();
+		
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/");
+		
+		String origFilePath = uploadPath + "adminFoodPhoto/" +imgFile;
+		String copyFilePath = uploadPath + "storeFoodPhoto/" + imgFile;
+		
+		JavaspringProvide ps = new JavaspringProvide();
+		
+		ps.fileCopyCheck(origFilePath,copyFilePath); // board 폴더에 파일을 복사하고자 한다.
+		
+		
+		storeDAO.setAdminStoreMenu(foodVo, storeName);
+	}
+
+	@Override
+	public void setAdminStoreSubMenu(SubFoodMenuVO subFoodVo, String storeName) {
+		storeDAO.setAdminStoreSubMenu(subFoodVo, storeName);
+	}
+
+	@Override
+	public FoodMenuVO getCheckStoreTagList(String foodTag, String storeName) {
+		return storeDAO.getCheckStoreTagList(foodTag, storeName);
+	}
+
+	@Override
+	public void setAdminStoreTag(String foodTag, String storeName) {
+		storeDAO.setAdminStoreTag(foodTag, storeName);
+	}
+
+	@Override
+	public List<FoodMenuVO> getstoreTagList(String storeName) {
+		return storeDAO.getstoreTagList(storeName);
+	}
+
+	@Override
+	public List<FoodMenuVO> getStoreFoodMenuByTag(String storeName, String foodTag) {
+		return storeDAO.getStoreFoodMenuByTag(storeName, foodTag);
+	}
+
+	@Override
+	public int setStoreMenuDeleteOk(String foodName) {
+		return storeDAO.setStoreMenuDeleteOk(foodName);
+	}
+
+	@Override
+	public FoodMenuVO storeFoodNameCheck(String storeName, String foodName) {
+		return storeDAO.storeFoodNameCheck(storeName, foodName);
+	}
+	
+	@Transactional
+	@Override
+	public int setStoreMenuInput(FoodMenuVO vo, MultipartFile fName) {
+	// 업로드 된 사진을 서버 파일시스템에 저장시켜준다.
+			int res = 0;
+			try {
+				String oFileName = fName.getOriginalFilename();
+				UUID uid = UUID.randomUUID();
+				String saveFileName = uid + "_" + oFileName;
+				
+				JavaspringProvide ps = new JavaspringProvide();
+				ps.writeFile(fName, saveFileName, "storeFoodPhoto");
+				vo.setFoodPhoto(saveFileName);
+				storeDAO.setStoreMenuInput(vo);
+				res = 1;
+			} catch (IOException e)	 {
+				e.printStackTrace();
+			}
+			return res;
+	}
+
+	@Override
+	public int setStoreMenuUpdate(FoodMenuVO vo, MultipartFile fName, String pastPhoto, String pastFoodName) {
+		int res = 0;
+		String oFileName = fName.getOriginalFilename();
+		UUID uid = UUID.randomUUID();
+		String saveFileName = "";
+		
+		if(oFileName.equals("")) {
+			vo.setFoodPhoto(pastPhoto);
+			saveFileName = pastPhoto;
+			storeDAO.setfoodMenuUpdate(vo);
+			
+			res = 1;
+			return res;
+		}
+		else {
+			saveFileName = uid + "_" + oFileName;
+		}
+		JavaspringProvide ps = new JavaspringProvide();
+		try {
+			ps.deleteAndUpdateFile(fName,saveFileName,pastPhoto, "storeFoodPhoto");
+			vo.setFoodPhoto(saveFileName);
+			storeDAO.setfoodMenuUpdate(vo);
+			
+			res= 1;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public List<StoreVO> getStoreDistance(List<StoreVO> vos, MemberVO mVo, int distanceCal) {
+	// 자기 위치를 변수로 담아서 밑에 변수로 받기
+			double centerLat = mVo.getMemberLatitude();
+			double centerLongi = mVo.getMemberLongitude();
+			
+			List<StoreVO> mVos = new ArrayList<StoreVO>();
+			
+			for(int i=0; i<vos.size(); i++) {
+				double distance = DistanceCal.distance(centerLat, centerLongi, vos.get(i).getStoreLatitude(), vos.get(i).getStoreLongitude(), "kilometer");
+				if(distance < distanceCal) {
+					System.out.println("계산된 거리  : " + distance);
+					mVos.add(vos.get(i));
+				}
+			}
+			return mVos;
+	}
+
 
 
 }

@@ -24,6 +24,36 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+    <script>
+    	'use strict';
+    	
+    	function deleteCheck(foodName) {
+	    	let ans = confirm("선택된 메뉴를 삭제하시겠습니까?");
+	    	if(!ans) return false;
+	    	
+	    	$.ajax({
+	    		type   : "post",
+	    		url    : "${ctp}/store/storeMenuDeleteOk",
+	    		data   : {foodName : foodName},
+	    		success:function(res) {
+	    			if(res == "0") {
+	    				alert("메뉴 삭제에 실패하였습니다.");
+	    			}
+	    			else {
+	    				alert("메뉴가 삭제 되었습니다!");
+	    				location.reload();
+	    			}
+	    		},
+	    		error : function() {
+	    			alert("전송 오류~~");
+	    		}
+	    	});
+    		
+			}
+    	
+    </script>
+    
   </head>
   <body class="goto-here">
   
@@ -63,18 +93,21 @@
 						    <tbody>
 						    	<c:forEach var="vo" items="${vos}" varStatus="st">
 							      <tr class="text-center">
-							        <td class="price">${vo}</td>
-							        <td class="image-prod"><div class="img" style="background-image:url(${ctp}/images/product-1.jpg);"></div></td>
+							        <td class="price">${vo.foodTag}</td>
+							        <%-- <td class="image-prod"><div class="img" style="background-image:url(${ctp}/data/storeFoodPhoto/${vo.foodPhoto});"></div></td> --%>
+											<td><img src="${ctp}/data/storeFoodPhoto/${vo.foodPhoto}" style="width:150px; margin: 0px; padding: 0px;"></td>
 							        <td class="product-name">
-							        	<h3>후라이드 치킨</h3>
-							        	<p>부가 설명</p>
+							        	<h3>${vo.foodName}</h3>
+							        	<p>${vo.foodInfo}</p>
 							        </td>
-							        <td class="total">있음</td>
-							        <td class="total">$4.90</td>
+							        <td class="total">${vo.subMenu}</td>
+							        <td class="total">${vo.price}</td>
 							        <td>
 								        <!-- <div class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></div> -->
-												<input type="button" value="수정" class="btn btn-warning"/>
-												<input type="button" value="삭제" class="btn btn-danger"/>
+								        <c:if test="${vo.admintag != 'O'}">
+													<input type="button" value="수정" onclick="location.href='${ctp}/store/storeMenuUpdate?foodName=${vo.foodName}';" class="btn btn-warning"/>
+												</c:if>
+												<input type="button" value="삭제" onclick="deleteCheck('${vo.foodName}')" class="btn btn-danger"/>
 							        </td>
 							      </tr><!-- END TR-->
 						      </c:forEach>

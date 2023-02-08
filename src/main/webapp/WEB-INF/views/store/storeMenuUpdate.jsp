@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
+<% pageContext.setAttribute("newLine", "\n"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -221,34 +222,35 @@
 				myform.price.focus();
 				return false;
 			}
-			else if(foodCheckSw == 0) {
-				alert("메뉴명 중복체크는 필수입니다!");
-				myform.foodName.focus();
-				return false;
-			}
-	
-			let fileSize = document.getElementById("fName").files[0].size; //자바스크립트 명령어
 			
-			if(uExt != "JPG" && uExt != "PNG" && uExt != "GIF" && uExt != "ZIP" && uExt != "HWP" &&  uExt != "PPTX" &&  uExt != "PPT" ) {
-				alert("업로드 가능한 파일은 'JPG/GIF/PNG/HWP/PPT/PPTX'입니다.");
-				return false;
-			}
-			else if(fileSize > maxSize) {
-				alert("업로드할 파일의 최대용량은 2MByte 입니다.");
-				return false;
+			else if(foodName != '${fVo.foodName}') {
+			  if(foodCheckSw == 0) {
+					alert("메뉴명 중복체크는 필수입니다!");
+					myform.foodName.focus();
+					return false;
+				}
+			  else {
+					myform.submit();
+			  }
 			}
 			else {
 				myform.submit();
 			}
 	  }
 	  
-		//카테코리 이름 중복체크
+		//메뉴 이름 중복체크
 	  function foodNameCheck() {
 		  let foodName = myform.foodName.value;
 		  let storeName = '${storeName}';
+		  let oldName = '${fVo.foodName}';
 		  
 	  	if(foodName.trim() == "") {
 	  		alert("메뉴명을 입력하세요!");
+	  		myform.foodName.focus();
+	  		return false;
+	  	}
+	  	else if(foodName.trim() == oldName) {
+	  		alert("수정전과 동일한 메뉴명입니다!");
 	  		myform.foodName.focus();
 	  		return false;
 	  	}
@@ -277,6 +279,20 @@
 			  });	
 	    }
 	  }
+		
+	  function saleCheck(check) {
+			let saleOk = $(sale).val();
+			
+			if(saleOk == "O") {
+				document.getElementById('salePrice').readOnly = false;
+			}
+			else {
+				document.getElementById('salePrice').value = 0;
+				document.getElementById('salePrice').readOnly = true;
+			}
+		}
+		
+		
 	</script>
   
   </head>
@@ -306,7 +322,7 @@
 			            </div>
 			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">메뉴 이름</div>
 			            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-			                <input type="text" class="form-control" id="foodName" name="foodName" placeholder="메뉴명 입력하세요" style="width: 100px;" required>&nbsp;
+			                <input type="text" class="form-control" id="foodName" name="foodName" value="${fVo.foodName}" style="width: 100px;" required>&nbsp;
 			                <input type="button" class="btn btn-primary" id="midBtn" onclick="foodNameCheck()" style="width: 20%; text-align: center;"  value="중복체크">
 			            </div>
 			            <div style="font-size: 10px; margin-left: 9%;" id="demo2"></div>
@@ -316,7 +332,7 @@
 										  <div class="input-group-append">
 										    <select name="foodTag" class="form-control" style="width: 120px;">
 										    	<c:forEach var="vo" items="${vos}">
-											    	<option value="${vo.foodTag}">${vo.foodTag}</option>
+											    	<option value="${vo.foodTag}"  ${fVo.foodTag==vo.foodTag  ? "selected" : ""}  >${vo.foodTag}</option>
 											    </c:forEach>
 											  </select>
 										  </div>
@@ -325,19 +341,45 @@
 			            <div style="font-size: 10px; margin-left: 9%;" id="demo"></div>
 			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">가격</div>
 			            <div class="loginbox-textbox">
-			                <input type="number" class="form-control" id="price" name="price" placeholder="가격을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
+			                <input type="number" class="form-control" id="price" name="price" value="${fVo.price}" style="width: 85%; margin: 0 auto;" required>
 			            </div>
 			            
+			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">품절 여부</div>
+			            <div class="loginbox-textbox" style="width: 85%; margin: 0 auto;">
+										<input type="radio" name="runOut" value="X" ${fVo.runOut == "X"  ? "checked" : ""} >
+										<label>품절X</label>&nbsp;
+										<input type="radio" name="runOut" value="O" ${fVo.runOut == "O"  ? "checked" : ""}  >
+										<label>품절O</label>
+									</div>
+									
+									<div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">세일 여부</div>
+			            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
+			             	<div class="input-group mb-3">
+										  <div class="input-group-append">
+										    <select name="sale" id="sale" onchange="saleCheck(this)" class="form-control" style="width: 120px;">
+											    	<option value="X"  ${fVo.sale == "X"  ? "selected" : ""}  >X</option>
+											    	<option value="O"  ${fVo.sale == "O"  ? "selected" : ""}  >O</option>
+											  </select>
+										  </div>
+										</div>
+			            </div>
+			            
+			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">세일 가격</div>
+			            <div class="loginbox-textbox">
+			                <input type="number" class="form-control" id="salePrice" name="salePrice" value="${fVo.salePrice}"  min="0"  style="width: 85%; margin: 0 auto;" required>
+			            </div>
+									
 			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">추가 메뉴</div>
 			            <div class="loginbox-textbox" style="width: 85%; margin: 0 auto;">
-										<input type="radio" name="subMenu" value="X" checked="checked">
+										<input type="radio" name="subMenu" value="X" ${fVo.subMenu == "X"  ? "checked" : ""} >
 										<label>없음</label>&nbsp;
-										<input type="radio" name="subMenu" value="O" >
+										<input type="radio" name="subMenu" value="O" ${fVo.subMenu == "O"  ? "checked" : ""}  >
 										<label>있음</label>
 									</div>
+									
 									<div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">메뉴 설명</div>
 									<div class="loginbox-textbox" style="width: 85%; margin: 0 auto;">
-										<textarea rows="6" name="foodInfo" id="foodInfo" class="form-control mb-2" placeholder="메뉴 설명을 입력하세요" ></textarea>
+										<textarea rows="6" name="foodInfo" id="foodInfo" class="form-control mb-2">${fn:replace(fVo.foodInfo, newLine, '<br/>')}</textarea>
 									</div>
 			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">메뉴 사진</div>
 			            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
@@ -347,17 +389,13 @@
 								    </div>
 							    </div>
 			            <div class="loginbox-submit text-center input-group">
-		                <input type="button" onclick="fCheck()" class="btn btn-success" value="메뉴 등록" style="width: 40%;">
+		                <input type="button" onclick="fCheck()" class="btn btn-success" value="메뉴 수정" style="width: 40%;">
 		                <input type="button" onclick="location.href='${ctp}/member/JoinSelect';" class="btn btn-primary" value="돌아가기" style="width: 40%; ">
 			            </div>
 			        </div>
-			        <input type="hidden" name="storeNumber"/>
-		    			<input type="hidden" name="storeEmail"/>
-		    			<input type="hidden" name="storeLatitude"/>
-		    			<input type="hidden" name="storeLongitude"/>
-		    			<input type="hidden" name="storeAddress"/>
-		    			<input type="hidden" name="logoPhoto"/>
-		    			<input type="hidden" name="storeTime"/>
+			       	<input type="hidden" name="menuIdx" value="${fVo.menuIdx}" />
+						  <input type="hidden" name="pastPhoto" value="${fVo.foodPhoto}" />
+						  <input type="hidden" name="pastFoodName" value="${fVo.foodName}" />
 		        </form>
 		    </div>
 			</section>

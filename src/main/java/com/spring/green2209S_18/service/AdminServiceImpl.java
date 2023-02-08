@@ -239,7 +239,7 @@ public class AdminServiceImpl implements AdminService {
 			
 			if(storeVo != null) {
 				storeVo.setFoodPhoto(pastPhoto);
-				storeDAO.setStoreMenuUpdate(storeVo,pastFoodName);
+				storeDAO.setStoreMenuUpdate(vo,pastFoodName);
 			}
 			
 			res = 1;
@@ -270,6 +270,11 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<SubFoodMenuVO> getChecksubTagList(String foodTag, String brandName) {
 		return adminDAO.getChecksubTagList(foodTag, brandName);
+	}
+
+	@Override
+	public List<FoodMenuVO> getstoreMenuList(String brandName) {
+		return adminDAO.getstoreMenuList(brandName);
 	}
 
 }

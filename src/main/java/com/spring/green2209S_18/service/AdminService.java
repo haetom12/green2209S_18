@@ -60,4 +60,6 @@ public interface AdminService {
 
 	public List<SubFoodMenuVO> getChecksubTagList(String foodTag, String brandName);
 
+	public List<FoodMenuVO> getstoreMenuList(String brandName);
+
 }

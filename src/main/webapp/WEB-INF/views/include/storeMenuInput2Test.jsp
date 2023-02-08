@@ -24,6 +24,101 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
+    <script>
+    	'use strict';
+    	/* 
+        $(document).ready(function() {
+        	
+        });
+    	 */
+    	// 음식 브랜드 선택시 리스트에 해당 음식 뿌리기
+        function categoryCheck() {
+        	let brandName = myform.brandName.value;
+        	let storeName = '${vo.storeName}';
+        	
+    			$.ajax({
+    				type : "post",
+    				url  : "${ctp}/store/adminBrandMenu",
+    				data : {
+    					brandName : brandName,
+    					storeName : storeName
+    					},
+    				success:function(data) {
+    					/* alert("data" + data.menuIdx); */
+    					var str = "";
+     					for(var i=0; i<data.length; i++) {
+    						str += "<tr class='price'>";
+    						str += "<td><input type='checkbox' name='chk' class='chk' value='"+data[i].menuIdx+"'/></td>";
+    						str += "<td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/adminFoodPhoto/"+data[i].foodPhoto+");'></td>";
+    						str += "<td class='product-name'>"+data[i].foodName+"</td>";
+    						str += "<td class='image-prod'>"+data[i].foodTag+"</td>";
+    						str += "<td class='total'>"+data[i].price+"</td>";
+    						str += "</tr>";
+    					} 
+     					
+    					$("#demo").html(str);
+    				},
+    				error : function() {
+    					alert("전송오류!");
+    				}
+    			});
+      	}
+    	 
+   	  // 전체선택
+   	  $(function(){
+   	  	$("#checkAll").click(function(){
+   	  		if($("#checkAll").prop("checked")) {
+   		    		$(".chk").prop("checked", true);
+   	  		}
+   	  		else {
+   		    		$(".chk").prop("checked", false);
+   	  		}
+   	  	});
+   	  });
+   	  
+   	  
+   // 선택항목 가게에 저장하기(ajax처리하기)
+	  function selectSaveCheck() {
+	  	let ans = confirm("선택된 메뉴를 저장 하시겠습니까?");
+	  	if(!ans) return false;
+	  	
+	  	let delItems = "";
+	  	let storeName = '${vo.storeName}';
+	  	for(let i=0; i<myform.chk.length; i++) {
+	  		if(myform.chk[i].checked == true) delItems += myform.chk[i].value + "/";
+	  	}
+	  	
+	  	
+	  	if(delItems == "") {
+	  		alert("저장할 메뉴를 선택하세요.");
+	  		return false;
+	  	}
+			
+	  	$.ajax({
+	  		type : "post",
+	  		url  : "${ctp}/store/adminMenuInputOk	",
+	  		data : {
+	  			delItems : delItems,
+	  			storeName : storeName
+	  			},
+	  		success:function(res) {
+	  			if(res == "1") {
+	  				alert("선택된 메뉴를 저장 하였습니다.");
+	  			  location.reload();
+	  			}
+	  		},
+	  		error  :function() {
+	  			alert("전송오류!!");
+	  		}
+	  	});
+			
+	  }
+   	  
+    	 
+    </script>
+    
   </head>
   <body class="goto-here">
   
@@ -40,49 +135,38 @@
       </div>
     </div>
 
-    <section class="ftco-section testimony-section">
-      <div class="container">
-      	<div class="row">
-      		<!-- <div class="mouse">
-						<a href="#" class="mouse-icon">
-							<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-						</a>
-					</div> -->
-      	</div>
-        <div class="row mb-5">
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">내 가게 정보</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게정보 수정하기</a></li>
-                <li><a href="${ctp}/store/myStoreMenu" class="py-2 d-block">메뉴 추가/수정</a></li>
-                <li><a href="#" class="py-2 d-block">가게 삭제 신청</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">거래관리</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">최근 주문 내역</a></li>
-                <li><a href="#" class="py-2 d-block">주문 취소 내역</a></li>
-                <li><a href="#" class="py-2 d-block">Journal</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">서비스 관리</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게리뷰 조회</a></li>
-                <li><a href="#" class="py-2 d-block">문의 등록 하기</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="ftco-section ftco-cart">
+			<div class="container">
+				<div class="row">
+    			<div class="col-md-12 ftco-animate">
+    				<div class="cart-list">
+    					<h2 class="text-center">메뉴 리스트</h2><br />
+    					<form name="myform" method="post">
+						    <select name="brandName" id="brandName" onchange="categoryCheck()" style="width: 12%;">
+						    	<option value="" >프랜차이즈 선택</option>
+		    		    	<c:forEach var="vo" items="${vos}">
+						    		<option value="${vo.brandName}" >${vo.brandName}</option>
+						    	</c:forEach>
+							  </select>
+	    					<input type="button" value="메뉴 추가" onclick="selectSaveCheck()" class="btn btn-primary mb-1" style="float: right;"/>
+		    				<table class="table">
+							    <thead class="thead-primary">
+							      <tr class="text-center">
+							        <th><input type="checkbox" id="checkAll" />&nbsp;전체선택</th>
+							        <th>카테고리</th>
+							        <th>음식사진</th>
+							        <th>음식이름</th>
+							        <th>가격</th>
+							      </tr>
+							    </thead>
+							    <tbody id="demo"></tbody>
+							  </table>
+						  </form>
+					  </div>
+    			</div>
+    		</div>
+			</div>
+		</section>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 
