@@ -222,6 +222,7 @@ public class AdminServiceImpl implements AdminService {
 		return res;
 	}
 
+	// 메뉴 수정
 	@Transactional
 	@Override
 	public int setStoreMenuUpdate(FoodMenuVO vo, MultipartFile fName, String pastPhoto, String pastFoodName) {
@@ -230,15 +231,35 @@ public class AdminServiceImpl implements AdminService {
 		UUID uid = UUID.randomUUID();
 		String saveFileName = "";
 		
-		FoodMenuVO storeVo = storeDAO.getStoreFood(vo.getStoreName(), pastFoodName);
+		//
+		List<FoodMenuVO> vos  = storeDAO.getStoreFood(pastFoodName);
 		
 		if(oFileName.equals("")) {
 			vo.setFoodPhoto(pastPhoto);
 			saveFileName = pastPhoto;
 			adminDAO.setfoodMenuUpdate(vo);
 			
-			if(storeVo != null) {
-				storeVo.setFoodPhoto(pastPhoto);
+			// 관리자 메뉴에서 가져온 가게가 있을때
+			if(vos.size() != 0) {
+				
+//				// 메뉴를 수정하는데 수정한 메뉴의 태그가 해당 가게에 없을때
+//				List<FoodMenuVO> vos = storeDAO.getStoreListsWhereAdminFood(pastFoodName);
+				for(int i=0; i<vos.size(); i++) {
+					List<FoodMenuVO> tVos = storeDAO.getstoreTagList(vos.get(i).getStoreName());
+					int k = 0;
+					
+					for(int j=0; j<tVos.size(); j++) {
+						if(vo.getFoodTag().equals(tVos.get(j).getFoodTag())) {
+							k = 1;
+						}
+					}
+					
+					if(k == 0) {
+						storeDAO.setAdminStoreTag(vo.getFoodTag(), vos.get(i).getStoreName());
+					}
+				}
+				
+				// 관리자에서 가져온 메뉴를 수정한다.
 				storeDAO.setStoreMenuUpdate(vo,pastFoodName);
 			}
 			
@@ -254,10 +275,10 @@ public class AdminServiceImpl implements AdminService {
 			vo.setFoodPhoto(saveFileName);
 			adminDAO.setfoodMenuUpdate(vo);
 			
-			if(storeVo != null) {
+			if(vos.size() != 0) {
 				ps.deleteAndUpdateFile(fName,saveFileName,pastPhoto, "storeFoodPhoto");
-				storeVo.setFoodPhoto(saveFileName);
-				storeDAO.setStoreMenuUpdate(storeVo,pastFoodName);
+				
+				storeDAO.setStoreMenuUpdate(vo,pastFoodName);
 			}
 			
 			res= 1;

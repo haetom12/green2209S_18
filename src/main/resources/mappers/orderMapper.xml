@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.green2209S_18.dao.OrderDAO">
+	
+	<select id="getCheckWishList" resultType="com.spring.green2209S_18.vo.wishListVO">
+		select * from wishlist where storeName = #{storeName} and menuIdx = #{menuIdx} and mid = #{mid};
+	</select>
+	
+	<select id="getMyWishList" resultType="com.spring.green2209S_18.vo.wishListVO">
+		select * from wishlist where mid = #{mid};
+	</select>
+	
+	<select id="getWishListInfo" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storefoodmenu where menuIdx = #{menuIdx};
+	</select>
+	
+	
+	
+	<insert id="setWishListInput">
+		insert into wishlist values (default, #{mid},  #{menuIdx}, #{storeName});
+	</insert>
+	
+	
+	<delete id="setDeleteWishList">
+		delete from wishlist where menuIdx = #{menuIdx};
+	</delete>	
+
+</mapper>

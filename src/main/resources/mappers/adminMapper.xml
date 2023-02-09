@@ -87,6 +87,7 @@
 
 	<update id="storeTagUpdateOk">
 		update adminStoreTag set foodTag = #{foodTag} where brandName = #{brandName} and foodTag = #{oldTag};
+		update adminFoodMenu set foodTag = #{foodTag} where foodTag  = #{oldTag} and brandName = #{brandName};
 	</update>
 
 	<update id="setfoodMenuUpdate">

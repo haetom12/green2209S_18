@@ -20,5 +20,6 @@ public class FoodMenuVO {
 	private String brandName;
 	private String foodTag;
 	private String admintag;
+	private int idx;
 	
 }

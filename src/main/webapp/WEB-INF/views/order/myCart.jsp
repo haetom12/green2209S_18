@@ -28,11 +28,7 @@
     
     <script>
     	'use strict';
-    	/* 
-        $(document).ready(function() {
-        	
-        });
-    	 */
+    	
     	// 음식 브랜드 선택시 리스트에 해당 음식 뿌리기
         function categoryCheck() {
         	let brandName = myform.brandName.value;
@@ -43,38 +39,6 @@
       	}
     	 
     	 
-    	 /* 
-        function categoryCheck() {
-        	let brandName = myform.brandName.value;
-        	let storeName = '${vo.storeName}';
-        	
-    			$.ajax({
-    				type : "post",
-    				url  : "${ctp}/store/adminBrandMenu",
-    				data : {
-    					brandName : brandName,
-    					storeName : storeName
-    					},
-    				success:function(data) {
-    					var str = "";
-     					for(var i=0; i<data.length; i++) {
-    						str += "<tr class='price'>";
-    						str += "<td><input type='checkbox' name='chk' class='chk' value='"+data[i].menuIdx+"'/></td>";
-    						str += "<td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/adminFoodPhoto/"+data[i].foodPhoto+");'></td>";
-    						str += "<td class='product-name'>"+data[i].foodName+"</td>";
-    						str += "<td class='image-prod'>"+data[i].foodTag+"</td>";
-    						str += "<td class='total'>"+data[i].price+"</td>";
-    						str += "</tr>";
-    					} 
-     					
-    					$("#demo").html(str);
-    				},
-    				error : function() {
-    					alert("전송오류!");
-    				}
-    			});
-      	}
-    	  */
         
         
    	  // 전체선택
@@ -91,52 +55,44 @@
    	  
    	  
    // 선택항목 가게에 저장하기(ajax처리하기)
-	  function selectSaveCheck() {
-	  	let ans = confirm("선택된 메뉴를 저장 하시겠습니까?");
+	  function deleteCheck() {
+	  	let ans = confirm("선택된 메뉴를 찜목록에서 삭제 하시겠습니까?");
 	  	if(!ans) return false;
 	  	let chkLength = $("input:checkbox[name=chk]").length;
 	  	//alert($("input:checkbox[name=chk]:checked").length);
 	  	
 	  	let delItems = "";
-	  	let storeName = '${vo.storeName}';
 	  	for(let i=0; i<chkLength; i++) {
 	  		if($('#chk'+i).is(':checked')) {
 	  			delItems += $('#chk'+i).val() + "/";
 	  		}
 	  	}
 	  	
+	  	/* alert("삭제할 idx들 : " + delItems); */
+	  	
 	  	if(delItems == "") {
 	  		alert("저장할 메뉴를 선택하세요.");
 	  		return false;
 	  	}
 	  	
-	  	location.href="${ctp}/store/adminMenuInputOk?delItems="+delItems+"&storeName="+storeName;
-	  	
-	  	
-	  	/* 
-	  	if(delItems == "") {
-	  		alert("저장할 메뉴를 선택하세요.");
-	  		return false;
-	  	}
-			
 	  	$.ajax({
-	  		type : "post",
-	  		url  : "${ctp}/store/adminMenuInputOk	",
-	  		data : {
-	  			delItems : delItems,
-	  			storeName : storeName
-	  			},
-	  		success:function(res) {
-	  			if(res == "1") {
-	  				alert("선택된 메뉴를 저장 하였습니다.");
-	  			  location.reload();
-	  			}
-	  		},
-	  		error  :function() {
-	  			alert("전송오류!!");
-	  		}
-	  	});
-			 */
+    		type   : "post",
+    		url    : "${ctp}/order/myWishListDelete",
+    		data   : {delItems : delItems},
+    		success:function(res) {
+    			if(res == "0") {
+    				alert("메뉴 삭제에 실패하였습니다. 다시 시도해주세요.");
+    			}
+    			else {
+    				alert("선택한 메뉴가 삭제 되었습니다!");
+    				location.reload();
+    			}
+    		},
+    		error : function() {
+    			alert("전송 오류~~");
+    		}
+    	});
+	  	/* location.href="${ctp}/store/myWishListDelete?delItems="+delItems;  */
 	  }
    	  
     	 
@@ -147,12 +103,13 @@
   
 		<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
 
-    <div class="hero-wrap hero-bread" style="background-image: url('${ctp}/data/store/${vo.logoPhoto}'); width:40%; margin: 0 auto;">
+    <div class="hero-wrap hero-bread" style="background-image: url('${ctp}/images/bg_1.jpg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<!-- <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Blog</span></p> -->
-            <h1 class="mb-0 bread">${vo.storeName}</h1>
+            <h1 class="mb-0 bread">마이 페이지</h1>
+<!--           	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">나의</a></span></p>
+            <h1 class="mb-0 bread">찜목록</h1> -->
           </div>
         </div>
       </div>
@@ -163,40 +120,121 @@
 				<div class="row">
     			<div class="col-md-12 ftco-animate">
     				<div class="cart-list">
-    					<h2 class="text-center">메뉴 리스트</h2><br />
-    					<form name="myform" method="post">
-						    <select name="brandName" id="brandName" onchange="categoryCheck()" style="width: 12%;">
-						    	<option value="" >프랜차이즈 선택</option>
-		    		    	<c:forEach var="vo" items="${vos}">
-						    		<option value="${vo.brandName}" ${vo.brandName==brandName  ? "selected" : ""} >${vo.brandName}</option>
-						    	</c:forEach>
-							  </select>
-	    					<input type="button" value="돌아가기" onclick="location.href='${ctp}/store/storeMenuInputSelect';" class="btn btn-secondary mb-1" />
-	    					<input type="button" value="메뉴 추가" onclick="selectSaveCheck()" class="btn btn-primary mb-1" style="float: right;"/>
-		    				<table class="table">
-							    <thead class="thead-primary">
-							      <tr class="text-center">
-							        <th><input type="checkbox" id="checkAll" />&nbsp;전체선택</th>
-							        <th>카테고리</th>
-							        <th>음식사진</th>
-							        <th>음식이름</th>
-							        <th>가격</th>
-							      </tr>
-							    </thead>
-							    <!-- <tbody id="demo"></tbody> -->
-							    <c:forEach var="mVo" items="${mVos}" varStatus="st">
-							    	<tr class="text-center">
-								    	<td><input type='checkbox' name='chk' class='chk' id="chk${st.index}" value='${mVo.menuIdx}'/></td>
-								    	<%-- <td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/adminFoodPhoto/${mVo.foodPhoto});'></div></td> --%>
-								    	<td><img src="${ctp}/data/adminFoodPhoto/${mVo.foodPhoto}" style="width:150px; margin: 0px; padding: 0px;"></td>
-								    	<td class='product-name'>${mVo.foodName}</td>
-								    	<td class='image-prod'>${mVo.foodTag}</td>
-								    	<td class='total'>${mVo.price}</td>
-							    	</tr>
-							    </c:forEach>
-							  </table>
-						  </form>
+	    				<table class="table">
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>&nbsp;</th>
+						        <th>&nbsp;</th>
+						        <th>Product name</th>
+						        <th>Price</th>
+						        <th>Quantity</th>
+						        <th>Total</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+						      <tr class="text-center">
+						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+						        
+						        <td class="image-prod"><div class="img" style="background-image:url(images/product-3.jpg);"></div></td>
+						        
+						        <td class="product-name">
+						        	<h3>Bell Pepper</h3>
+						        	<p>Far far away, behind the word mountains, far from the countries</p>
+						        </td>
+						        
+						        <td class="price">$4.90</td>
+						        
+						        <td class="quantity">
+						        	<div class="input-group mb-3">
+					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
+					          	</div>
+					          </td>
+						        
+						        <td class="total">$4.90</td>
+						      </tr><!-- END TR-->
+
+						      <tr class="text-center">
+						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+						        
+						        <td class="image-prod"><div class="img" style="background-image:url(images/product-4.jpg);"></div></td>
+						        
+						        <td class="product-name">
+						        	<h3>Bell Pepper</h3>
+						        	<p>Far far away, behind the word mountains, far from the countries</p>
+						        </td>
+						        
+						        <td class="price">$15.70</td>
+						        
+						        <td class="quantity">
+						        	<div class="input-group mb-3">
+					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
+					          	</div>
+					          </td>
+						        
+						        <td class="total">$15.70</td>
+						      </tr><!-- END TR-->
+						    </tbody>
+						  </table>
 					  </div>
+    			</div>
+    		</div>
+    		<div class="row justify-content-end">
+    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    				<div class="cart-total mb-3">
+    					<h3>Coupon Code</h3>
+    					<p>Enter your coupon code if you have one</p>
+  						<form action="#" class="info">
+	              <div class="form-group">
+	              	<label for="">Coupon code</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	            </form>
+    				</div>
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
+    			</div>
+    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    				<div class="cart-total mb-3">
+    					<h3>Estimate shipping and tax</h3>
+    					<p>Enter your destination to get a shipping estimate</p>
+  						<form action="#" class="info">
+	              <div class="form-group">
+	              	<label for="">Country</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	              <div class="form-group">
+	              	<label for="country">State/Province</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	              <div class="form-group">
+	              	<label for="country">Zip/Postal Code</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	            </form>
+    				</div>
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
+    			</div>
+    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    				<div class="cart-total mb-3">
+    					<h3>Cart Totals</h3>
+    					<p class="d-flex">
+    						<span>Subtotal</span>
+    						<span>$20.60</span>
+    					</p>
+    					<p class="d-flex">
+    						<span>Delivery</span>
+    						<span>$0.00</span>
+    					</p>
+    					<p class="d-flex">
+    						<span>Discount</span>
+    						<span>$3.00</span>
+    					</p>
+    					<hr>
+    					<p class="d-flex total-price">
+    						<span>Total</span>
+    						<span>$17.60</span>
+    					</p>
+    				</div>
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
     			</div>
     		</div>
 			</div>

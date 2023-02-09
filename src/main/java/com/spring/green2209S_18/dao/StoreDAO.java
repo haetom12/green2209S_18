@@ -28,7 +28,7 @@ public interface StoreDAO {
 
 	public int setStoreMenuDeletePost(@Param("foodName") String foodName);
 
-	public FoodMenuVO getStoreFood(@Param("storeName") String brandName, @Param("foodName") String foodName);
+	public List<FoodMenuVO> getStoreFood(@Param("foodName") String foodName);
 
 	public void setStoreMenuUpdate(@Param("vo") FoodMenuVO vo, @Param("pastFoodName") String pastFoodName);
 
@@ -65,6 +65,26 @@ public interface StoreDAO {
 	public void setStoreMenuInput(@Param("vo") FoodMenuVO vo);
 
 	public void setfoodMenuUpdate(@Param("vo") FoodMenuVO vo);
+
+	public FoodMenuVO storefoodTagCheck(@Param("foodTag") String foodTag,@Param("storeName") String storeName);
+
+	public int setStoreTagInput(@Param("vo") FoodMenuVO vo);
+
+	public int storefoodTagDelete(@Param("foodTag") String foodTag);
+
+	public int setStoreTagUpdate(@Param("vo") FoodMenuVO vo, @Param("oldTag") String oldTag, @Param("storeName") String storeName);
+
+	public List<SubFoodMenuVO> getstoreSubMenuList(@Param("storeName") String storeName,@Param("foodTag") String foodTag);
+
+	public SubFoodMenuVO storeSubMenuNameCheck(@Param("subMenuName") String subMenuName, @Param("storeName") String storeName, @Param("foodTag") String foodTag);
+
+	public int setStoreSubMenuInput(@Param("vo") SubFoodMenuVO vo);
+
+	public int setStoreSubMenuDelete(@Param("subMenuIdx") int subMenuIdx);
+
+	public SubFoodMenuVO getSubMenuInfo(@Param("subMenuIdx") int subMenuIdx);
+
+	public int setSubMenuUpdateOk(@Param("vo") SubFoodMenuVO vo);
 
 
 }

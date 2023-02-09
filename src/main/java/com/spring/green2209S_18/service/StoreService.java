@@ -27,9 +27,9 @@ public interface StoreService {
 
 	public int setStoreSubMenuDeletePost(String foodName);
 
-	public int setStoreMenuDeletePost(FoodMenuVO sVo);
+	public int setStoreMenuDeletePost(String foodName);
 
-	public FoodMenuVO getStoreFood(String brandName, String foodName);
+	public List<FoodMenuVO> getStoreFood(String foodName);
 
 	public List<FoodMenuVO> getCheckTagList(String foodTag, String brandName);
 
@@ -66,6 +66,26 @@ public interface StoreService {
 	public int setStoreMenuUpdate(FoodMenuVO vo, MultipartFile fName, String pastPhoto, String pastFoodName);
 
 	public List<StoreVO> getStoreDistance(List<StoreVO> vos, MemberVO mVo, int distance);
+
+	public FoodMenuVO storefoodTagCheck(String foodTag, String storeName);
+
+	public int setStoreTagInput(FoodMenuVO vo);
+
+	public int storefoodTagDelete(String foodTag);
+
+	public int setStoreTagUpdate(FoodMenuVO vo, String oldTag, String storeName);
+
+	public List<SubFoodMenuVO> getstoreSubMenuList(String storeName, String foodTag);
+
+	public SubFoodMenuVO storeSubMenuNameCheck(String subMenuName, String storeName, String foodTag);
+
+	public int setStoreSubMenuInput(SubFoodMenuVO vo);
+
+	public int setStoreSubMenuDelete(int subMenuIdx);
+
+	public SubFoodMenuVO getSubMenuInfo(int subMenuIdx);
+
+	public int setSubMenuUpdateOk(SubFoodMenuVO vo);
 
 
 }

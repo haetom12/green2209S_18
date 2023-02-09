@@ -84,13 +84,13 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public int setStoreMenuDeletePost(FoodMenuVO sVo) {
+	public int setStoreMenuDeletePost(String foodName) {
 		int res = 0;
 		JavaspringProvide ps = new JavaspringProvide();
 		
 		try {
-			ps.deletePhoto(sVo.getFoodPhoto(), "storeFoodPhoto");
-			storeDAO.setStoreMenuDeletePost(sVo.getFoodName());
+			ps.deletePhoto(foodName, "storeFoodPhoto");
+			storeDAO.setStoreMenuDeletePost(foodName);
 			res= 1;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -99,8 +99,8 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public FoodMenuVO getStoreFood(String brandName, String foodName) {
-		return storeDAO.getStoreFood(brandName, foodName);
+	public List<FoodMenuVO> getStoreFood(String foodName) {
+		return storeDAO.getStoreFood(foodName);
 	}
 
 	@Override
@@ -260,6 +260,56 @@ public class StoreServiceImpl implements StoreService {
 				}
 			}
 			return mVos;
+	}
+
+	@Override
+	public FoodMenuVO storefoodTagCheck(String foodTag, String storeName) {
+		return storeDAO.storefoodTagCheck(foodTag, storeName);
+	}
+
+	@Override
+	public int setStoreTagInput(FoodMenuVO vo) {
+		return storeDAO.setStoreTagInput(vo);
+	}
+
+	@Override
+	public int storefoodTagDelete(String foodTag) {
+		return storeDAO.storefoodTagDelete(foodTag);
+	}
+
+	@Override
+	public int setStoreTagUpdate(FoodMenuVO vo, String oldTag, String storeName) {
+		return storeDAO.setStoreTagUpdate(vo, oldTag, storeName);
+	}
+
+	@Override
+	public List<SubFoodMenuVO> getstoreSubMenuList(String storeName, String foodTag) {
+		return storeDAO.getstoreSubMenuList(storeName, foodTag);
+	}
+
+	@Override
+	public SubFoodMenuVO storeSubMenuNameCheck(String subMenuName, String storeName, String foodTag) {
+		return storeDAO.storeSubMenuNameCheck(subMenuName, storeName, foodTag);
+	}
+
+	@Override
+	public int setStoreSubMenuInput(SubFoodMenuVO vo) {
+		return storeDAO.setStoreSubMenuInput(vo);
+	}
+
+	@Override
+	public int setStoreSubMenuDelete(int subMenuIdx) {
+		return storeDAO.setStoreSubMenuDelete(subMenuIdx);
+	}
+
+	@Override
+	public SubFoodMenuVO getSubMenuInfo(int subMenuIdx) {
+		return storeDAO.getSubMenuInfo(subMenuIdx);
+	}
+
+	@Override
+	public int setSubMenuUpdateOk(SubFoodMenuVO vo) {
+		return storeDAO.setSubMenuUpdateOk(vo);
 	}
 
 

@@ -29,6 +29,40 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+    <script>
+    	'use strict';
+    	
+    	function fCheck(storeName, menuIdx) {
+    		let ans = confirm("선택된 메뉴를 찜하시겠습니까?");
+	    	if(!ans) return false;
+	    	
+	    	$.ajax({
+	    		type   : "post",
+	    		url    : "${ctp}/order/wishListInput",
+	    		data   : {
+	    			storeName : storeName,
+	    			menuIdx : menuIdx
+	    			},
+	    		success:function(res) {
+	    			if(res == "1") {
+	    				alert("메뉴가 찜목록에 추가되었습니다!");
+	    				location.reload();
+	    			}
+	    			else {
+	    				alert("이미 찜목록에 들어가 있는 제품입니다!");
+	    			}
+	    		},
+	    		error : function() {
+	    			alert("전송 오류~~");
+	    		}
+	    	});
+			
+			}
+    
+    </script>
+    
+    
   </head>
   <body class="goto-here">
   
@@ -78,7 +112,10 @@
 									    				<font style="font-size: 20pt;">${vo.price}원</font>
 						                </c:if>
 						                <p></p>
-						                <p><a href="blog-single.html" class="btn btn-primary py-2 px-3">주문하기</a></p>
+						                <p>
+						                <a href="blog-single.html" class="btn btn-primary py-2 px-3">주문하기</a>
+						                <a href="javascript:fCheck('${vo.storeName}', '${vo.menuIdx}');"><i class="icon-shopping-cart btn btn-warning">찜하기</i></a>
+						                </p>
 						              </div>
 					            </div>
 					          </div>
@@ -153,7 +190,6 @@
 		              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
 		            </div>
 		          </div>
-		          
 						
 	        </div>
 	      </div>

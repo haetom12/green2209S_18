@@ -200,6 +200,19 @@
   <script>
 	  'use strict';
 	  let foodCheckSw = 0;
+	  
+	  $(document).ready(function(){    
+		  let saleOk = $(sale).val();
+			
+			if(saleOk == "O") {
+				document.getElementById('salePrice').readOnly = false;
+			}
+			else {
+				document.getElementById('salePrice').value = 0;
+				document.getElementById('salePrice').readOnly = true;
+			}
+    });
+	  
 		
 	  //  체크후 서버로 전송(submit)
 	  function fCheck() {
@@ -385,12 +398,12 @@
 			            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
 			              <div  class="form-group">
 								      메뉴 사진(파일용량:2MByte이내) :
-								      <input type="file" name="fName" id="fName" class="form-control-file border"/>
+								      <input type="file" name="fName" id="fName" class="form-control-file border mt-1"/>
 								    </div>
 							    </div>
 			            <div class="loginbox-submit text-center input-group">
-		                <input type="button" onclick="fCheck()" class="btn btn-success" value="메뉴 수정" style="width: 40%;">
-		                <input type="button" onclick="location.href='${ctp}/member/JoinSelect';" class="btn btn-primary" value="돌아가기" style="width: 40%; ">
+		                <input type="button" onclick="location.href='${ctp}/store/myStoreMenu';" class="btn btn-primary" value="돌아가기" style="width: 20%; margin-left: 15%;">
+		                <input type="button" onclick="fCheck()" class="btn btn-success" value="메뉴 수정" style="width: 22%; margin-left: 15%;">
 			            </div>
 			        </div>
 			       	<input type="hidden" name="menuIdx" value="${fVo.menuIdx}" />

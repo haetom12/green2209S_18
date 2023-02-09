@@ -340,7 +340,7 @@ public class AdminController {
 	
 	// 프랜차이즈 메뉴 태그 수정
 	@RequestMapping(value = "storeUpdateTagListOk", method = RequestMethod.GET)
-	public String adminstoreUpdateTagListOkGet(String brandName, String foodTag, String oldTag, Model model) throws UnsupportedEncodingException {
+	public String adminstoreUpdateTagListOkGet(String brandName, String foodTag, String oldTag) throws UnsupportedEncodingException {
 		
 		int res = adminService.storeTagUpdateOk(brandName,foodTag, oldTag);
 		
@@ -358,11 +358,11 @@ public class AdminController {
 		// 태그에 속해있는 음식이 있는지 확인
 		List<FoodMenuVO> vos = adminService.getCheckTagList(foodTag,brandName);
 		// 태그에 속해있는 추가옵션이 있는지 확인
-		List<SubFoodMenuVO> sVos = adminService.getChecksubTagList(foodTag,brandName);
+//		List<SubFoodMenuVO> sVos = adminService.getChecksubTagList(foodTag,brandName);
 		// (음식점)태그에 속해있는 음식이 있는지 확인
 		List<FoodMenuVO> storevos = storeService.getCheckTagList(foodTag,brandName);
 		// (음식점)태그에 속해있는 추가옵션이 있는지 확인
-		List<SubFoodMenuVO> storeSubVos = storeService.getChecksubTagList(foodTag,brandName);
+//		List<SubFoodMenuVO> storeSubVos = storeService.getChecksubTagList(foodTag,brandName);
 		
 		/*
 		 * if(vos.size() != 0) return "0";
@@ -372,7 +372,7 @@ public class AdminController {
 		 * return res+"";
 		 */
 		
-		if(vos.size() == 0 && sVos.size() == 0 && storevos.size() == 0 && storeSubVos.size() == 0) {
+		if(vos.size() == 0 && storevos.size() == 0) {
 			res = adminService.setStoreTagDelete(foodTag, brandName);
 			return "1"; 
 		}
@@ -405,10 +405,9 @@ public class AdminController {
 		
 		// 메뉴를 어드민 음식 테이블과 가게 음식 테이블에 둘다 삭제
 		FoodMenuVO aVo =  adminService.getFoodNameCheck(brandName, foodName);
-		FoodMenuVO sVo =  storeService.getStoreFood(brandName, foodName);
-		System.out.println("sVO : " + sVo);
+		List<FoodMenuVO> vos =  storeService.getStoreFood(foodName);
 		if(aVo != null) res3 = adminService.setAdminMenuDeletePost(aVo);
-		if(sVo != null) res4 = storeService.setStoreMenuDeletePost(sVo);
+		if(vos.size() != 0) res4 = storeService.setStoreMenuDeletePost(foodName);
 		
 		if(res3 != 1||res4 != 1) {
 			return "2";
@@ -445,7 +444,7 @@ public class AdminController {
 		if(res == 1) return "redirect:/msg/adminMenuUpdateOk?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8");
 		else return "redirect:/msg/adminMenuUpdateNo?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8");
 	}
-	
+
 	
 }
 

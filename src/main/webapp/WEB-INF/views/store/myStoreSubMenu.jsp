@@ -24,6 +24,36 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+    <script>
+    	'use strict';
+    	
+    	function deleteCheck(subMenuIdx) {
+	    	let ans = confirm("선택된 메뉴를 삭제하시겠습니까?");
+	    	if(!ans) return false;
+	    	
+	    	$.ajax({
+	    		type   : "post",
+	    		url    : "${ctp}/store/storeSubMenuDeleteOk",
+	    		data   : {subMenuIdx : subMenuIdx},
+	    		success:function(res) {
+	    			if(res == "0") {
+	    				alert("메뉴 삭제에 실패하였습니다.");
+	    			}
+	    			else {
+	    				alert("메뉴가 삭제 되었습니다!");
+	    				location.reload();
+	    			}
+	    		},
+	    		error : function() {
+	    			alert("전송 오류~~");
+	    		}
+	    	});
+    		
+			}
+    	
+    </script>
+    
   </head>
   <body class="goto-here">
   
@@ -40,51 +70,45 @@
       </div>
     </div>
 
-    <section class="ftco-section testimony-section">
-      <div class="container">
-      	<div class="row">
-      		<!-- <div class="mouse">
-						<a href="#" class="mouse-icon">
-							<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-						</a>
-					</div> -->
-      	</div>
-        <div class="row mb-5">
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">내 가게 정보</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게정보 수정하기</a></li>
-                <li><a href="${ctp}/store/myStoreTag" class="py-2 d-block">메뉴 태그 추가/수정</a></li>
-                <li><a href="${ctp}/store/myStoreMenu" class="py-2 d-block">메뉴 추가/수정</a></li>
-                <li><a href="${ctp}/store/myStoreSubOption" class="py-2 d-block">서브 메뉴 추가/수정</a></li>
-                <li><a href="#" class="py-2 d-block">가게 삭제 신청</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">거래관리</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">최근 주문 내역</a></li>
-                <li><a href="#" class="py-2 d-block">주문 취소 내역</a></li>
-                <li><a href="#" class="py-2 d-block">Journal</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">서비스 관리</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게리뷰 조회</a></li>
-                <li><a href="#" class="py-2 d-block">문의 등록 하기</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="ftco-section ftco-cart">
+			<div class="container">
+				<div class="row">
+    			<div class="col-md-12 ftco-animate">
+    				<div class="cart-list">
+    					<h2 class="text-center"><font color="blue">(${foodTag})</font>태그의 추가메뉴</h2><br />
+    					<input type="text" class="" style="width: 20%; float: left;"/>
+    					<input type="button" value="검색" class="btn btn-secondary ml-2" style="float: left: ;"/>
+    					<input type="button" value="메뉴 추가" onclick="location.href='${ctp}/store/myStoreSubMenuInput?foodTag=${foodTag}';" class="btn btn-warning mb-1" style="float: right;"/>
+	    				<table class="table">
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>음식태그</th>
+						        <th>추가메뉴이름</th>
+						        <th>가격</th>
+						        <th>품절여부</th>
+						        <th>비고</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+						    	<c:forEach var="co" items="${cVos}" varStatus="st">
+							      <tr class="text-center">
+							        <td class="price">${co.foodTag}</td>
+							        <td class="product-name">${co.subMenuName}</td>
+							        <td class="total">${co.price}원</td>
+							        <td class="total">${co.runOut}</td>
+							        <td>
+												<input type="button" value="수정" onclick="location.href='${ctp}/store/myStoreSubMenuUpdate?subMenuIdx=${co.subMenuIdx}';" class="btn btn-warning"/>
+												<input type="button" value="삭제" onclick="deleteCheck('${co.subMenuIdx}')" class="btn btn-danger"/>
+							        </td>
+							      </tr><!-- END TR-->
+						      </c:forEach>
+						    </tbody>
+						  </table>
+					  </div>
+    			</div>
+    		</div>
+			</div>
+		</section>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 

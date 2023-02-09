@@ -36,7 +36,8 @@
 				  <br><h2>메뉴 설정</h2><br>
 				  <h4><a href="${ctp}/admin/storeBrandList">프랜차이즈 목록 추가/수정 <i class="fa fa-wrench" aria-hidden="true"></i></a></h4>
 				  <h4><a href="${ctp}/admin/storeBrandOptionList">프랜차이즈  메뉴 추가/수정 <i class="fa fa-hospital-o" aria-hidden="true"></i></a></h4>
-				  <h4><a href="">가게 삭제 신청 <i class="fa fa-trash"></i></a></h4>
+				  <h4><a href="#">가게 삭제 요청 <i class="fa fa-hospital-o" aria-hidden="true"></i></a></h4>
+				  <%-- <h4><a href="${ctp}/admin/adminStoreSubMenuOption">음식 태그별 추가 메뉴 추가/수정<i class="fa fa-trash"></i></a></h4> --%>
 			  </div>
 			</div>
 		</div>

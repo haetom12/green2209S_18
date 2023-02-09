@@ -198,77 +198,55 @@
   
   <script>
 	  'use strict';
-	  let foodCheckSw = 0;
+	  let tagCheckSw = 0;
 		
 	  //  체크후 서버로 전송(submit)
 	  function fCheck() {
-		  let foodName = myform.foodName.value;
-		  let price = myform.price.value;
-		  
-			let fName = myform.fName.value;
-			let ext = fName.substring(fName.lastIndexOf(".")+1); // 확장자 발췌
-			let uExt = ext.toUpperCase();
-			let maxSize = 1024 * 1024 * 2;   // 업로드 가능한 최대파일의 용량은 2MByte로 한다.
-	
+		  let foodTag = myform.foodTag.value;
 			
-			if(foodName.trim() == "") {
-				alert("메뉴명을 입력하세요");
-				myform.foodName.focus();
+			if(foodTag.trim() == "") {
+				alert("태그명을 입력하세요");
+				myform.foodTag.focus();
 				return false;
 			}
-			else if(price.trim() == "") {
-				alert("가격을 입력하세요");
-				myform.price.focus();
-				return false;
-			}
-			else if(foodCheckSw == 0) {
+			else if(tagCheckSw == 0) {
 				alert("메뉴명 중복체크는 필수입니다!");
-				myform.foodName.focus();
+				myform.foodTag.focus();
 				return false;
 			}
 	
-			let fileSize = document.getElementById("fName").files[0].size; //자바스크립트 명령어
-			
-			if(uExt != "JPG" && uExt != "PNG" && uExt != "GIF" && uExt != "ZIP" && uExt != "HWP" &&  uExt != "PPTX" &&  uExt != "PPT" ) {
-				alert("업로드 가능한 파일은 'JPG/GIF/PNG/HWP/PPT/PPTX'입니다.");
-				return false;
-			}
-			else if(fileSize > maxSize) {
-				alert("업로드할 파일의 최대용량은 2MByte 입니다.");
-				return false;
-			}
 			else {
 				myform.submit();
 			}
 	  }
 	  
 		//카테코리 이름 중복체크
-	  function foodNameCheck() {
-		  let foodName = myform.foodName.value;
-		  let storeName = '${storeName}';
+	  function foodTagCheck() {
+		  let foodTag = myform.foodTag.value;
+		  let storeName = '${vo.storeName}';
 		  
-	  	if(foodName.trim() == "") {
-	  		alert("메뉴명을 입력하세요!");
-	  		myform.foodName.focus();
+	  	if(foodTag.trim() == "") {
+	  		alert("태그명을 입력하세요!");
+	  		myform.foodTag.focus();
 	  		return false;
 	  	}
 	  	else {
 		  	$.ajax({
 			  	type   : "post",
-			  	url    : "${ctp}/store/foodNameCheck",
+			  	url    : "${ctp}/store/foodTagCheck",
 			  	data   : {
-			  		foodName : foodName,
+			  		foodTag : foodTag,
 			  		storeName : storeName
 			  		} ,
 			  	success:function(res) {
 			  		if(res == "1") {
-			  			document.getElementById("demo2").innerHTML = "<font color = 'red'> 존재하는 메뉴입니다! </font>"; 
+			  			document.getElementById("demo2").innerHTML = "<font color = 'red'> 존재하는 태그입니다! </font>"; 
 			  			
 			  		}
 			  		else {
-			  			document.getElementById("demo2").innerHTML = "<font color = 'blue'><b>사용가능한 메뉴입니다!</b> </font>";  
-			  			$("#foodName").attr("readonly","readonly");
-			  			foodCheckSw = 1;
+			  			document.getElementById("demo2").innerHTML = "<font color = 'blue'><b>사용가능한 태그입니다!</b> </font>";  
+			  			$("#foodTag").attr("readonly","readonly");
+			  			tagCheckSw = 1;
 			  		}
 			  	},
 			  	error : function() {
@@ -300,64 +278,22 @@
 					<div class="login-container animated fadeInDown bootstrap snippets bootdeys">
 						<form name="myform" method="post" enctype="multipart/form-data">
 			        <div class="loginbox bg-light">
-			            <div class="fw-bold text-danger fs-3 fs-lg-5 lh-sm my-2 mt-2 text-center"><font size="20pt">메뉴 등록</font></div>
+			            <div class="fw-bold text-danger fs-3 fs-lg-5 lh-sm my-2 mt-2 text-center"><font size="20pt">새 태그 등록</font></div>
 			            <div class="loginbox-or">
 			                <div class="or-line"></div>
 			            </div>
-			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">메뉴 이름</div>
+			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">태그명</div>
 			            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-			                <input type="text" class="form-control" id="foodName" name="foodName" placeholder="메뉴명 입력하세요" style="width: 100px;" required>&nbsp;
-			                <input type="button" class="btn btn-primary" id="midBtn" onclick="foodNameCheck()" style="width: 20%; text-align: center;"  value="중복체크">
+			                <input type="text" class="form-control" id="foodTag" name="foodTag" placeholder="태그명 입력하세요" style="width: 100px;" required>&nbsp;
+			                <input type="button" class="btn btn-primary" id="midBtn" onclick="foodTagCheck()" style="width: 20%; text-align: center;"  value="중복체크">
 			            </div>
 			            <div style="font-size: 10px; margin-left: 9%;" id="demo2"></div>
-			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">음식 태그</div>
-			            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
-			             	<div class="input-group mb-3">
-										  <div class="input-group-append">
-										    <select name="foodTag" class="form-control" style="width: 120px;">
-										    	<c:forEach var="vo" items="${vos}">
-											    	<option value="${vo.foodTag}">${vo.foodTag}</option>
-											    </c:forEach>
-											  </select>
-										  </div>
-										</div>
-			            </div>
-			            <div style="font-size: 10px; margin-left: 9%;" id="demo"></div>
-			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">가격</div>
-			            <div class="loginbox-textbox">
-			                <input type="number" class="form-control" id="price" name="price" placeholder="가격을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
-			            </div>
-			            
-			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">추가 메뉴</div>
-			            <div class="loginbox-textbox" style="width: 85%; margin: 0 auto;">
-										<input type="radio" name="subMenu" value="X" checked="checked">
-										<label>없음</label>&nbsp;
-										<input type="radio" name="subMenu" value="O" >
-										<label>있음</label>
-									</div>
-									<div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">메뉴 설명</div>
-									<div class="loginbox-textbox" style="width: 85%; margin: 0 auto;">
-										<textarea rows="6" name="foodInfo" id="foodInfo" class="form-control mb-2" placeholder="메뉴 설명을 입력하세요" ></textarea>
-									</div>
-			            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">메뉴 사진</div>
-			            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
-			              <div  class="form-group">
-								      메뉴 사진(파일용량:2MByte이내) :
-								      <input type="file" name="fName" id="fName" class="form-control-file border"/>
-								    </div>
-							    </div>
+			            <p></p>
 			            <div class="loginbox-submit text-center input-group">
-		                <input type="button" onclick="fCheck()" class="btn btn-success" value="메뉴 등록" style="width: 22%; margin-left: 15%;">
-		                <input type="button" onclick="location.href='${ctp}/store/storeMenuInputSelect';" class="btn btn-primary" value="돌아가기" style="width: 22%;  margin-left: 15%;">
+		                <input type="button" onclick="fCheck()" class="btn btn-success" value="태그 등록" style="width: 20%; margin-left: 15%;">
+		                <input type="button" onclick="location.href='${ctp}/store/myStoreTag';" class="btn btn-secondary" value="돌아가기" style="width: 20%; margin-left: 15%;">
 			            </div>
 			        </div>
-			        <input type="hidden" name="storeNumber"/>
-		    			<input type="hidden" name="storeEmail"/>
-		    			<input type="hidden" name="storeLatitude"/>
-		    			<input type="hidden" name="storeLongitude"/>
-		    			<input type="hidden" name="storeAddress"/>
-		    			<input type="hidden" name="logoPhoto"/>
-		    			<input type="hidden" name="storeTime"/>
 		        </form>
 		    </div>
 			</section>

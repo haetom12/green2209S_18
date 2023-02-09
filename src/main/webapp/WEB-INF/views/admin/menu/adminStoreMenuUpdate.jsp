@@ -94,6 +94,20 @@
 <script>
   'use strict';
   let foodCheckSw = 0;
+  
+  
+  $(document).ready(function(){	    
+	  let saleOk = $(sale).val();
+		
+		if(saleOk == "O") {
+			document.getElementById('salePrice').readOnly = false;
+		}
+		else {
+			document.getElementById('salePrice').value = 0;
+			document.getElementById('salePrice').readOnly = true;
+		}
+	});
+  
 	
 	
   //  체크후 서버로 전송(submit)

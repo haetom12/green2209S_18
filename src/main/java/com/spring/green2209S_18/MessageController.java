@@ -14,6 +14,7 @@ public class MessageController {
 	public String msgGet(@PathVariable String msgFlag, Model model,
 			@RequestParam(value="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(value="flag", defaultValue = "", required = false) String flag,
+			@RequestParam(value="foodTag", defaultValue = "", required = false) String foodTag,
 			@RequestParam(value="brandName", defaultValue = "", required = false) String brandName) {
 		System.out.println("brandName : "+brandName);
 		
@@ -192,6 +193,42 @@ public class MessageController {
 		else if(msgFlag.equals("storeMenuUpdateOk")) {
 			model.addAttribute("msg", "메뉴를 성공적으로 수정하였습니다!");
 			model.addAttribute("url", "store/myStoreMenu");
+		}
+		else if(msgFlag.equals("storeMenuUpdateNo")) {
+			model.addAttribute("msg", "메뉴 수정에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "store/myStoreMenu");
+		}
+		else if(msgFlag.equals("storeTagInputOk")) {
+			model.addAttribute("msg", "태그를 성공적으로 등록하였습니다!");
+			model.addAttribute("url", "store/myStoreTag");
+		}
+		else if(msgFlag.equals("storeTagInputNo")) {
+			model.addAttribute("msg", "태그 등록에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "store/myStoreTag");
+		}
+		else if(msgFlag.equals("storeTagUpdateOk")) {
+			model.addAttribute("msg", "태그를 성공적으로 수정하였습니다!");
+			model.addAttribute("url", "store/myStoreTag");
+		}
+		else if(msgFlag.equals("storeTagUpdateNo")) {
+			model.addAttribute("msg", "태그 수정에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "store/myStoreTag");
+		}
+		else if(msgFlag.equals("subMenuInputOk")) {
+			model.addAttribute("msg", "추가메뉴를 성공적으로 등록하였습니다!");
+			model.addAttribute("url", "store/myStoreSubMenu?foodTag="+foodTag);
+		}
+		else if(msgFlag.equals("subMenuInputNo")) {
+			model.addAttribute("msg", "추가메뉴 등록에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "store/myStoreSubMenu?foodTag="+foodTag);
+		}
+		else if(msgFlag.equals("subMenuUpdateOk")) {
+			model.addAttribute("msg", "추가메뉴를 성공적으로 수정하였습니다!");
+			model.addAttribute("url", "store/myStoreSubMenu?foodTag="+foodTag);
+		}
+		else if(msgFlag.equals("subMenuUpdateNo")) {
+			model.addAttribute("msg", "추가메뉴 수정에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "store/myStoreSubMenu?foodTag="+foodTag);
 		}
 		
 		

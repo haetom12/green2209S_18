@@ -24,6 +24,41 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+    <script>
+    	'use strict';
+    	
+    	function deleteCheck(foodTag) {
+	    	let ans = confirm("선택된 태그를 삭제하시겠습니까?");
+	    	if(!ans) return false;
+	    	
+	    	let storeName = '${vo.storeName}';
+	    	
+	    	$.ajax({
+	    		type   : "post",
+	    		url    : "${ctp}/store/storeTagDeleteOk",
+	    		data   : {
+	    			foodTag : foodTag,
+	    			storeName : storeName
+	    			},
+	    		success:function(res) {
+	    			if(res == "0") {
+	    				alert("태그에 속해있는 메뉴가 있습니다. 먼저 메뉴를 삭제해주세요!");
+	    			}
+	    			else {
+	    				alert("태그가 삭제 되었습니다!");
+	    				location.reload();
+	    			}
+	    		},
+	    		error : function() {
+	    			alert("전송 오류~~");
+	    		}
+	    	});
+    		
+			}
+    	
+    </script>
+    
   </head>
   <body class="goto-here">
   
@@ -40,51 +75,40 @@
       </div>
     </div>
 
-    <section class="ftco-section testimony-section">
-      <div class="container">
-      	<div class="row">
-      		<!-- <div class="mouse">
-						<a href="#" class="mouse-icon">
-							<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-						</a>
-					</div> -->
-      	</div>
-        <div class="row mb-5">
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">내 가게 정보</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게정보 수정하기</a></li>
-                <li><a href="${ctp}/store/myStoreTag" class="py-2 d-block">메뉴 태그 추가/수정</a></li>
-                <li><a href="${ctp}/store/myStoreMenu" class="py-2 d-block">메뉴 추가/수정</a></li>
-                <li><a href="${ctp}/store/myStoreSubOption" class="py-2 d-block">서브 메뉴 추가/수정</a></li>
-                <li><a href="#" class="py-2 d-block">가게 삭제 신청</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">거래관리</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">최근 주문 내역</a></li>
-                <li><a href="#" class="py-2 d-block">주문 취소 내역</a></li>
-                <li><a href="#" class="py-2 d-block">Journal</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">서비스 관리</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게리뷰 조회</a></li>
-                <li><a href="#" class="py-2 d-block">문의 등록 하기</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="ftco-section ftco-cart">
+			<div class="container" style="width: 50%;">
+				<div class="row">
+    			<div class="col-md-12 ftco-animate">
+    				<div class="cart-list">
+    					<h2 class="text-center">내 가게 메뉴 태그</h2><br />
+    					<input type="button" value="돌아가기" onclick="location.href='${ctp}/store/myStorePage';" class="btn btn-secondary mb-1" />
+    					<input type="button" value="음식 태그 추가" onclick="location.href='${ctp}/store/storeTagInput';" class="btn btn-primary mb-1" style="float: right;"/>
+	    				<table class="table">
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>번호</th>
+						        <th>태그명</th>
+						        <th>비고</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+						    	<c:forEach var="vo" items="${vos}" varStatus="st">
+							      <tr class="text-center">
+							        <td class="price">${st.count}</td>
+							        <td class="price">${vo.foodTag}</td>
+							        <td class="price">
+												<input type="button" value="수정" onclick="location.href='${ctp}/store/storeTagUpdate?foodTag=${vo.foodTag}';" class="btn btn-warning"/>
+												<input type="button" value="삭제" onclick="deleteCheck('${vo.foodTag}')" class="btn btn-danger"/>
+							        </td>
+							      </tr><!-- END TR-->
+						      </c:forEach>
+						    </tbody>
+						  </table>
+					  </div>
+    			</div>
+    		</div>
+			</div>
+		</section>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 

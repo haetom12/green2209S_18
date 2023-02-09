@@ -44,6 +44,8 @@ create table store (
 
 ALTER TABLE store ADD rateAvg double not null default 0.0;
 
+ALTER TABLE store MODIFY COLUMN 필드이름 필드타입 UNIQUE
+
 select * from store;
 
 desc store;

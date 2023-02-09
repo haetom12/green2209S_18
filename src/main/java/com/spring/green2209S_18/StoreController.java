@@ -1,5 +1,6 @@
 package com.spring.green2209S_18;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class StoreController {
 		return "store/storeJoin";
 	}
 	
-//아이디 중복검사
+  //아이디 중복검사
 	@ResponseBody
 	@RequestMapping(value = "/storeIdCheck", method = RequestMethod.POST)
 	public String memIdCheckPost(String storeMid) {
@@ -140,8 +141,6 @@ public class StoreController {
 	public String storeMenuGet(Model model, 
 			@RequestParam(name = "idx" , defaultValue = "1", required = false) int idx,
 			@RequestParam(name = "foodTag" , defaultValue = "", required = false) String foodTag) {
-		
-		System.out.println("음식 태그 : " + foodTag);
 		
 		StoreVO vo = storeService.getStoreMenu(idx);
 		// 메뉴 리스트
@@ -328,7 +327,6 @@ public class StoreController {
 	}
 	*/
 	
-	
 //선택한 프랜차이즈 메뉴 입력
 	@Transactional
 	@RequestMapping(value = "/adminMenuInputOk", method = RequestMethod.GET)
@@ -478,5 +476,202 @@ public class StoreController {
 		else return "redirect:/msg/storeMenuUpdateNo";
 	}
 	
+	// 내 가게 음식 태그 리스트 폼으로
+	@RequestMapping(value = "/myStoreTag", method = RequestMethod.GET)
+	public String myStoreTagGet(Model model, HttpSession session) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		// 음식 태그 리스트
+		List<FoodMenuVO> vos = storeService.getstoreTagList(vo.getStoreName());
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("vo", vo);
+		
+		return "store/myStoreTag";
+	}
+	
+	// 내 가게 음식 태그 입력 폼으로
+	@RequestMapping(value = "/storeTagInput", method = RequestMethod.GET)
+	public String storeTagInputGet(Model model, HttpSession session) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		model.addAttribute("vo", vo);
+		return "store/storeTagInput";
+	}
+	
+	// 내 가게 음식 태그 입력
+	@RequestMapping(value = "/storeTagInput", method = RequestMethod.POST)
+	public String storeTagInputPost(FoodMenuVO vo, HttpSession session) {
+		int res = 0;
+		
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO sVo = storeService.getStoreIdCheck(storeMid);
+		
+		vo.setStoreName(sVo.getStoreName());
+		
+		res = storeService.setStoreTagInput(vo);
+		
+		if(res == 1) return "redirect:/msg/storeTagInputOk";
+		else return "redirect:/msg/storeTagInputNo";
+	}
+	
+	//음식 이름 중복 체크
+	@ResponseBody
+	@RequestMapping(value = "/foodTagCheck", method = RequestMethod.POST)
+	public String foodTagCheckPost(String foodTag, String storeName) {
+		int res = 0;
+		FoodMenuVO vo = storeService.storefoodTagCheck(foodTag, storeName);
+		
+		if(vo != null) return "1";
+		else return res+"";
+	}
+	
+  // 선택한 태그 삭제 
+	@ResponseBody
+	@RequestMapping(value = "/storeTagDeleteOk", method = RequestMethod.POST)
+	public String storeTagDeleteOkPost(String foodTag, String storeName) {
+		int res = 0;
+		
+		List<FoodMenuVO> vos = storeService.getStoreFoodMenuByTag(storeName, foodTag);
+		
+		if(vos.size() != 0) {
+			return "0";
+		}
+		
+		res = storeService.storefoodTagDelete(foodTag);
+		if(res == 1) return "1";
+		else return res+"";
+	}
+	
+	// 선택한 태그 수정 
+	@RequestMapping(value = "/storeTagUpdate", method = RequestMethod.GET)
+	public String storeTagUpdateGet(String foodTag, Model model, HttpSession session) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		FoodMenuVO sVo = storeService.getCheckStoreTagList(foodTag, vo.getStoreName());
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("sVo", sVo);
+		
+		return "store/storeTagUpdate";
+	}
+	
+	// 선택한 태그 수정 
+	@RequestMapping(value = "/storeTagUpdate", method = RequestMethod.POST)
+	public String storeTagUpdatePost(FoodMenuVO vo, String oldTag, HttpSession session) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO sVo = storeService.getStoreIdCheck(storeMid);
+		
+		int res = 0;
+		res = storeService.setStoreTagUpdate(vo, oldTag, sVo.getStoreName());
+		
+		
+		if(res == 1) return "redirect:/msg/storeTagUpdateOk";
+		else return "redirect:/msg/storeTagUpdateNo";
+	}
+
+	// 해당 가게의 태그 리스트 
+	@RequestMapping(value = "/myStoreSubOption", method = RequestMethod.GET)
+	public String myStoreSubOptionGet(HttpSession session, Model model) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		// 음식 태그 리스트
+		List<FoodMenuVO> vos = storeService.getstoreTagList(vo.getStoreName());
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("vo", vo);
+		
+		return "store/myStoreSubOption";
+	}
+	
+	// 해당 태그의 서브 메뉴 리스트 
+	@RequestMapping(value = "/myStoreSubMenu", method = RequestMethod.GET)
+	public String myStoreSubMenuGet(HttpSession session, Model model, String foodTag) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		// 서브 메뉴 리스트 
+		List<SubFoodMenuVO> vos = storeService.getstoreSubMenuList(vo.getStoreName(),foodTag);
+		
+		model.addAttribute("foodTag", foodTag);
+		model.addAttribute("cVos", vos);
+		model.addAttribute("vo", vo);
+		
+		return "store/myStoreSubMenu";
+	}
+
+	// 서브 메뉴 추가 폼 이동 
+	@RequestMapping(value = "/myStoreSubMenuInput", method = RequestMethod.GET)
+	public String storeSubMenuInputGet(HttpSession session, Model model, String foodTag) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		model.addAttribute("foodTag", foodTag);
+		model.addAttribute("vo", vo);
+		
+		return "store/myStoreSubMenuInput";
+	}
+	
+	//추가 메뉴 이름 중복 체크
+	@ResponseBody
+	@RequestMapping(value = "/subMenuNameCheck", method = RequestMethod.POST)
+	public String subMenuNameCheckPost(String subMenuName, String storeName, String foodTag) {
+		int res = 0;
+		SubFoodMenuVO vo = storeService.storeSubMenuNameCheck(subMenuName, storeName, foodTag);
+		
+		if(vo != null) return "1";
+		else return res+"";
+	}
+
+	//추가 메뉴 삭제
+	@ResponseBody
+	@RequestMapping(value = "/storeSubMenuDeleteOk", method = RequestMethod.POST)
+	public String storeSubMenuDeleteOkPost(int subMenuIdx) {
+		int res = 0;
+		
+		res = storeService.setStoreSubMenuDelete(subMenuIdx);
+		
+		if(res == 1) return "1";
+		else return res+"";
+	}
+	
+	// 서브 메뉴 추가 작업
+	@RequestMapping(value = "/myStoreSubMenuInput", method = RequestMethod.POST)
+	public String storeSubMenuInputPost(SubFoodMenuVO vo) throws UnsupportedEncodingException {
+		int res = 0;
+		
+		res = storeService.setStoreSubMenuInput(vo);
+		
+		if(res == 1) return "redirect:/msg/subMenuInputOk?foodTag="+URLEncoder.encode(vo.getFoodTag(), "UTF-8");
+		else return "store/subMenuInputNo?foodTag="+URLEncoder.encode(vo.getFoodTag(), "UTF-8");
+	}
+	
+	// 서브 메뉴 수정 폼 이동
+	@RequestMapping(value = "/myStoreSubMenuUpdate", method = RequestMethod.GET)
+	public String myStoreSubMenuUpdateGet(HttpSession session, int subMenuIdx, Model model) {
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		SubFoodMenuVO sVo = storeService.getSubMenuInfo(subMenuIdx);
+		
+		model.addAttribute("vo",vo);
+		model.addAttribute("sVo",sVo);
+		
+		return "store/myStoreSubMenuUpdate";
+	}
+	
+	// 서브 메뉴 수정 작업
+	@RequestMapping(value = "/myStoreSubMenuUpdate", method = RequestMethod.POST)
+	public String myStoreSubMenuUpdatePost(SubFoodMenuVO vo) throws UnsupportedEncodingException {
+		int res = 0;
+		
+		res = storeService.setSubMenuUpdateOk(vo);
+		
+		if(res == 1) return "redirect:/msg/subMenuUpdateOk?foodTag="+URLEncoder.encode(vo.getFoodTag(), "UTF-8");
+		else return "redirect:/msg/subMenuUpdateNo?foodTag="+URLEncoder.encode(vo.getFoodTag(), "UTF-8");
+	}
 	
 }
