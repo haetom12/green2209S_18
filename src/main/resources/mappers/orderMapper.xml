@@ -21,9 +21,17 @@
 		insert into wishlist values (default, #{mid},  #{menuIdx}, #{storeName});
 	</insert>
 	
+	<insert id="setAddCartInput">
+		insert into cart values (default, default, #{vo.mid}, #{vo.menuIdx}, #{vo.storeName}, #{vo.foodName}, #{vo.mainPrice}, #{vo.sale}, #{vo.salePrice}, #{vo.thumbImg}, #{vo.optionIdx},#{vo.subMenuName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice} );
+	</insert>
+	
 	
 	<delete id="setDeleteWishList">
 		delete from wishlist where menuIdx = #{menuIdx};
+	</delete>	
+	
+	<delete id="myCartDelete">
+		delete from cart where idx = #{idx};
 	</delete>	
 
 </mapper>

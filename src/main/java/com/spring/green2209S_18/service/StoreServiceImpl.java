@@ -312,6 +312,16 @@ public class StoreServiceImpl implements StoreService {
 		return storeDAO.setSubMenuUpdateOk(vo);
 	}
 
+	@Override
+	public FoodMenuVO getfoodInfo(int menuIdx) {
+		return storeDAO.getfoodInfo(menuIdx);
+	}
+
+	@Override
+	public StoreVO getstoreInfo(String storeName) {
+		return storeDAO.getstoreInfo(storeName);
+	}
+
 
 
 }

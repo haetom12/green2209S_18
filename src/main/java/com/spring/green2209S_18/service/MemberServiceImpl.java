@@ -1,9 +1,12 @@
 package com.spring.green2209S_18.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.green2209S_18.dao.MemberDAO;
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.MemberVO;
 
 @Service
@@ -28,6 +31,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberVO getMemberNickCheck(String memberNickName) {
 		return memberDAO.getMemberNickCheck(memberNickName);
+	}
+
+	@Override
+	public List<CartVO> getMyCartList(String mid) {
+		return memberDAO.getMyCartList(mid);
 	}
 	
 

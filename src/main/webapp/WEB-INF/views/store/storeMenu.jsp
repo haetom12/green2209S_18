@@ -34,6 +34,14 @@
     	'use strict';
     	
     	function fCheck(storeName, menuIdx) {
+    		
+				let sPart = '${sPart}';
+    		
+    		if(sPart == "") {
+    			alert("찜하기는 로그인 후 가능합니다!");
+    			return false;
+    		}
+    		
     		let ans = confirm("선택된 메뉴를 찜하시겠습니까?");
 	    	if(!ans) return false;
 	    	
@@ -95,8 +103,7 @@
 		              <c:forEach var="vo" items="${vos}" varStatus="st">
 										<div class="col-md-12 d-flex ftco-animate">
 					            <div class="blog-entry align-self-stretch d-md-flex">
-					              <a href="blog-single.html" class="block-20" style="background-image: url('${ctp}/data/storeFoodPhoto/${vo.foodPhoto}');">
-					              </a>
+					              <a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}" class="block-20" style="background-image: url('${ctp}/data/storeFoodPhoto/${vo.foodPhoto}');"></a>
 						              <div class="text d-block pl-md-4 ml-3">
 						              	<div class="meta mb-3">
 						                  <div><a href="#">July 20, 2019</a></div>
@@ -113,7 +120,7 @@
 						                </c:if>
 						                <p></p>
 						                <p>
-						                <a href="blog-single.html" class="btn btn-primary py-2 px-3">주문하기</a>
+						                <a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}" class="btn btn-primary py-2 px-3">주문하기</a>
 						                <a href="javascript:fCheck('${vo.storeName}', '${vo.menuIdx}');"><i class="icon-shopping-cart btn btn-warning">찜하기</i></a>
 						                </p>
 						              </div>

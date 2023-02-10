@@ -86,5 +86,9 @@ public interface StoreDAO {
 
 	public int setSubMenuUpdateOk(@Param("vo") SubFoodMenuVO vo);
 
+	public FoodMenuVO getfoodInfo(@Param("menuIdx") int menuIdx);
+
+	public StoreVO getstoreInfo(@Param("storeName") String storeName);
+
 
 }

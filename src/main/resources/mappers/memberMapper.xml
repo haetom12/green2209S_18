@@ -10,6 +10,10 @@
 	<select id="getMemberNickCheck" resultType="com.spring.green2209S_18.vo.MemberVO">
 		select * from member where memberNickName = #{memberNickName};
 	</select>
+	
+	<select id="getMyCartList" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from cart where mid = #{mid};
+	</select>
 
 	<insert id="setMemberJoinOk">
 		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.memberName},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},default,default,default,default,#{vo.memberLatitude},#{vo.memberLongitude},#{vo.memberNickName});

@@ -2,6 +2,7 @@ package com.spring.green2209S_18.service;
 
 import java.util.List;
 
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
@@ -16,6 +17,10 @@ public interface OrderService {
 	public FoodMenuVO getWishListInfo(int menuIdx);
 
 	public void setDeleteWishList(int menuIdx);
+
+	public void setAddCartInput(CartVO vo);
+
+	public void myCartDelete(int idx);
 
 
 }

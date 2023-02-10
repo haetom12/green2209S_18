@@ -1,5 +1,7 @@
 package com.spring.green2209S_18;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.StoreService;
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
 @Controller
@@ -42,7 +45,12 @@ public class MemberController {
 			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
 				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
 				
+				// 장바구니에 있는 리스트, 갯수 가져오기;
+				List<CartVO> vos = memberService.getMyCartList(mid);
+				int myCartCnt = vos.size();
+				
 				session.setAttribute("sMid", mid);
+				session.setAttribute("myCartCnt", myCartCnt);
 				session.setAttribute("sPart", "member");
 				session.setAttribute("sAddress", vo.getAddress());
 				session.setAttribute("sNumber", vo.getTel());

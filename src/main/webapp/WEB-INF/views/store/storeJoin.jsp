@@ -372,6 +372,16 @@
 								</div>
 	            </div>
 	            
+	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">배달 최소 금액</div>
+	            <div class="loginbox-textbox">
+	                <input type="number" class="form-control" id="minPrice" name="minPrice" min="0" style="width: 30%; margin-left: 7%;" required>
+	            </div>
+
+	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">배달비</div>
+	            <div class="loginbox-textbox">
+	                <input type="number" class="form-control" id="deliverCost" name="deliverCost" min="0" style="width: 30%; margin-left: 7%;" required>
+	            </div>
+	            
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">영업시간</div>
 	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
 							  OPEN &nbsp; <input type="time" name="storeTime1" id="storeTime1" value="09:00" class="form-control" />&nbsp;&nbsp;

@@ -109,6 +109,7 @@
 			          <li class="nav-item active dropdown">
 		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지</a>
 		              <div class="dropdown-menu" aria-labelledby="dropdown04">
+		              	<a class="dropdown-item" href="shop.html">내 정보 수정</a>
 		              	<a class="dropdown-item" href="shop.html">주문내역</a>
 		              	<a class="dropdown-item" href="${ctp}/order/myWishList">찜목록</a>
 		                <a class="dropdown-item" href="product-single.html">선물함</a>
@@ -116,7 +117,7 @@
 		                <a class="dropdown-item" href="checkout.html">리뷰관리</a>
 		              </div>
 		            </li>
-			          <li class="nav-item cta cta-colored"><a href="${ctp}/order/myCart" class="nav-link"><span class="icon-shopping_cart"></span>&nbsp;장바구니[0]</a></li>
+			          <li class="nav-item cta cta-colored"><a href="${ctp}/order/myCart" class="nav-link"><span class="icon-shopping_cart"></span>&nbsp;장바구니[${myCartCnt}]</a></li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>
 		          <c:if test="${sMid=='admin'}">

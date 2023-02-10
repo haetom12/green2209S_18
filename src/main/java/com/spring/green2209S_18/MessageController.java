@@ -15,6 +15,7 @@ public class MessageController {
 			@RequestParam(value="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(value="flag", defaultValue = "", required = false) String flag,
 			@RequestParam(value="foodTag", defaultValue = "", required = false) String foodTag,
+			@RequestParam(value="menuIdx", defaultValue = "1", required = false) int menuIdx,
 			@RequestParam(value="brandName", defaultValue = "", required = false) String brandName) {
 		System.out.println("brandName : "+brandName);
 		
@@ -229,6 +230,22 @@ public class MessageController {
 		else if(msgFlag.equals("subMenuUpdateNo")) {
 			model.addAttribute("msg", "추가메뉴 수정에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "store/myStoreSubMenu?foodTag="+foodTag);
+		}
+		else if(msgFlag.equals("cartOrderOk")) {
+			model.addAttribute("msg", "장바구니에 상품이 등록되었습니다.\\n주문창으로 이동합니다.");
+			model.addAttribute("url", "order/myCart");
+		}
+		else if(msgFlag.equals("cartInputOk")) {
+			model.addAttribute("msg", "장바구니에 상품이 등록되었습니다.");
+			model.addAttribute("url", "/store/storeMenuInfo?menuIdx="+menuIdx);
+		}
+		else if(msgFlag.equals("cartEmpty")) {
+			model.addAttribute("msg", "장바구니가 비어있습니다.");
+			model.addAttribute("url", "/h");
+		}
+		else if(msgFlag.equals("cartStoreNo")) {
+			model.addAttribute("msg", "같은 가게의 음식만 장바구니에 담을 수 있습니다.");
+			model.addAttribute("url", "/store/storeMenuInfo?menuIdx="+menuIdx);
 		}
 		
 		

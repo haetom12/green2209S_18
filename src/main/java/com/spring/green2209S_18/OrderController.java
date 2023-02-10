@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.wishListVO;
 @Controller
 @RequestMapping("/order")
@@ -26,6 +30,9 @@ public class OrderController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -57,6 +64,7 @@ public class OrderController {
 		else return "0";
 	}
 
+	// 내 찜목록
 	@RequestMapping(value = "/myWishList", method = RequestMethod.GET)
 	public String myWishListGet(Model model, HttpSession session) {
 		String mid = (String) session.getAttribute("sMid");
@@ -95,10 +103,96 @@ public class OrderController {
 		return res+"";
 	}
 	
+	// 내 장바구니 리스트 이동
 	@RequestMapping(value = "/myCart", method = RequestMethod.GET)
-	public String myCartGet() {
+	public String myCartGet(HttpSession session, Model model) {
+		String mid = (String) session.getAttribute("sMid");
 		
+		MemberVO mVo = memberService.getMemberIdCheck(mid);
+		
+		String[] address = mVo.getAddress().split("/");
+		String address1 = address[0];
+		String address2 = address[1];
+		
+		
+		List<CartVO> vos = memberService.getMyCartList(mid);
+		
+		String storeName = vos.get(0).getStoreName();
+		
+		StoreVO sVo = storeService.getstoreInfo(storeName);
+		
+		if(vos.size() == 0) {
+			return "redirect:/msg/cartEmpty";
+		}
+		
+		model.addAttribute("address1", address1);
+		model.addAttribute("address2", address2);
+		model.addAttribute("mVo", mVo);
+		model.addAttribute("sVo", sVo);
+		model.addAttribute("vos", vos);
 		return "order/myCart";
+	}
+	
+	// 장바구니에 추가
+	@RequestMapping(value = "/addCart", method = RequestMethod.POST)
+	public String addCartPost(CartVO vo ,HttpSession session, String flag) {
+		
+		String mid = (String) session.getAttribute("sMid");
+		List<CartVO> cVos = memberService.getMyCartList(mid);
+		
+		if(cVos.size() == 0) {
+			orderService.setAddCartInput(vo);
+			List<CartVO> vos = memberService.getMyCartList(mid);
+			int myCartCnt = vos.size();
+			
+			session.setAttribute("myCartCnt", myCartCnt);
+			
+			session.setAttribute("cartStore", vo.getStoreName());
+			
+			if(flag.equals("order")) {
+				return "redirect:/msg/cartOrderOk";
+			}
+			else {
+				return "redirect:/msg/cartInputOk?menuIdx="+vo.getMenuIdx();
+			}
+		}
+		else {
+			if(!cVos.get(0).getStoreName().equals(vo.getStoreName())) {
+				return "redirect:/msg/cartStoreNo?menuIdx="+vo.getMenuIdx();
+			}
+			else {
+				orderService.setAddCartInput(vo);
+				List<CartVO> vos = memberService.getMyCartList(mid);
+				int myCartCnt = vos.size();
+				
+				session.setAttribute("myCartCnt", myCartCnt);
+				
+				session.setAttribute("cartStore", vo.getStoreName());
+				
+				if(flag.equals("order")) {
+					return "redirect:/msg/cartOrderOk";
+				}
+				else {
+					return "redirect:/msg/cartInputOk?menuIdx="+vo.getMenuIdx();
+				}
+			}
+		}
+	}
+	
+	// 장바구니에 선택 목록 삭제
+	@ResponseBody
+	@RequestMapping(value = "/myCartDelete", method = RequestMethod.POST)
+	public String myCartDeletePost(int idx, HttpSession session) {
+		orderService.myCartDelete(idx);
+		
+		String mid = (String) session.getAttribute("sMid");
+		
+		List<CartVO> vos = memberService.getMyCartList(mid);
+		int myCartCnt = vos.size();
+		
+		session.setAttribute("myCartCnt", myCartCnt);
+		
+		return "";
 	}
 	
 	

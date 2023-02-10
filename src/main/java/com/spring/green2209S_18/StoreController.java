@@ -674,4 +674,22 @@ public class StoreController {
 		else return "redirect:/msg/subMenuUpdateNo?foodTag="+URLEncoder.encode(vo.getFoodTag(), "UTF-8");
 	}
 	
+	// 선택한 메뉴 상세 정보 창으로
+	@RequestMapping(value = "/storeMenuInfo", method = RequestMethod.GET)
+	public String storeMenuInfoGet(int menuIdx, Model model)  {
+		
+		FoodMenuVO fVo = storeService.getfoodInfo(menuIdx);
+		StoreVO vo = storeService.getstoreInfo(fVo.getStoreName());
+		
+		List<FoodMenuVO> rVos = storeService.getStoreFoodMenuByTag(fVo.getStoreName(), fVo.getFoodTag());
+		List<SubFoodMenuVO> vos = storeService.getstoreSubMenuList(fVo.getStoreName(), fVo.getFoodTag());
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("rVos", rVos);
+		model.addAttribute("fVo", fVo);
+		model.addAttribute("vos", vos);
+		
+		return "store/storeMenuInfo";
+	}
+	
 }

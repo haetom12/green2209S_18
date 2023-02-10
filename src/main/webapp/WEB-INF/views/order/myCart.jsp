@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
@@ -27,76 +28,112 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     
     <script>
-    	'use strict';
-    	
-    	// 음식 브랜드 선택시 리스트에 해당 음식 뿌리기
-        function categoryCheck() {
-        	let brandName = myform.brandName.value;
-        	let storeName = '${vo.storeName}';
-        	
-    			/* location.href="${ctp}/store/adminBrandMenu?brandName="+brandName+"&storeName="+storeName; */
-    			location.href="${ctp}/store/storeMenuInput2?brandName="+brandName+"&storeName="+storeName;
-      	}
-    	 
-    	 
-        
-        
-   	  // 전체선택
-   	  $(function(){
-   	  	$("#checkAll").click(function(){
-   	  		if($("#checkAll").prop("checked")) {
-   		    		$(".chk").prop("checked", true);
-   	  		}
-   	  		else {
-   		    		$(".chk").prop("checked", false);
-   	  		}
-   	  	});
-   	  });
-   	  
-   	  
-   // 선택항목 가게에 저장하기(ajax처리하기)
-	  function deleteCheck() {
-	  	let ans = confirm("선택된 메뉴를 찜목록에서 삭제 하시겠습니까?");
-	  	if(!ans) return false;
-	  	let chkLength = $("input:checkbox[name=chk]").length;
-	  	//alert($("input:checkbox[name=chk]:checked").length);
-	  	
-	  	let delItems = "";
-	  	for(let i=0; i<chkLength; i++) {
-	  		if($('#chk'+i).is(':checked')) {
-	  			delItems += $('#chk'+i).val() + "/";
-	  		}
-	  	}
-	  	
-	  	/* alert("삭제할 idx들 : " + delItems); */
-	  	
-	  	if(delItems == "") {
-	  		alert("저장할 메뉴를 선택하세요.");
-	  		return false;
-	  	}
-	  	
-	  	$.ajax({
-    		type   : "post",
-    		url    : "${ctp}/order/myWishListDelete",
-    		data   : {delItems : delItems},
-    		success:function(res) {
-    			if(res == "0") {
-    				alert("메뉴 삭제에 실패하였습니다. 다시 시도해주세요.");
-    			}
-    			else {
-    				alert("선택한 메뉴가 삭제 되었습니다!");
-    				location.reload();
-    			}
-    		},
-    		error : function() {
-    			alert("전송 오류~~");
-    		}
-    	});
-	  	/* location.href="${ctp}/store/myWishListDelete?delItems="+delItems;  */
-	  }
-   	  
-    	 
-    </script>
+    'use strict';
+    
+    function onTotal(){
+      let total = 0;
+      let maxIdx = document.getElementById("maxIdx").value;
+      for(let i=1;i<=maxIdx;i++){
+        if($("#totalPrice"+i).length != 0 && document.getElementById("idx"+i).checked){  
+          total = total + parseInt(document.getElementById("totalPrice"+i).value); 
+        }
+      }
+      document.getElementById("total").value=numberWithCommas(total);
+      
+      if(total>=50000||total==0){
+        document.getElementById("baesong").value=0;
+      } else {
+        document.getElementById("baesong").value=2500;
+      }
+      let lastPrice=parseInt(document.getElementById("baesong").value)+total;
+      document.getElementById("lastPrice").value = numberWithCommas(lastPrice);
+      document.getElementById("orderTotalPrice").value = numberWithCommas(lastPrice);
+    }
+
+		// 상품 체크박스에 체크했을때 처리하는 함수
+    function onCheck(){
+      let maxIdx = document.getElementById("maxIdx").value;				// 출력되어있는 상품중에서 가장 큰 idx값이 maxIdx변수에 저장된다.
+
+      let cnt=0;
+      for(let i=1;i<=maxIdx;i++){
+        if($("#idx"+i).length != 0 && document.getElementById("idx"+i).checked==false){
+          cnt++;
+          break;
+        }
+      }
+      if(cnt!=0){
+        document.getElementById("allcheck").checked=false;
+      } 
+      else {
+        document.getElementById("allcheck").checked=true;
+      }
+      onTotal();	// 체크박스의 사용후에는 항상 재계산해야 한다.
+    }
+    
+		// allCheck 체크박스를 체크/해제할때 수행하는 함수
+    function allCheck(){
+      let maxIdx = document.getElementById("maxIdx").value;
+      if(document.getElementById("allcheck").checked){
+        for(let i=1;i<=maxIdx;i++){
+          if($("#idx"+i).length != 0){
+            document.getElementById("idx"+i).checked=true;
+          }
+        }
+      }
+      else {
+        for(let i=1;i<=maxIdx;i++){
+          if($("#idx"+i).length != 0){
+            document.getElementById("idx"+i).checked=false;
+          }
+        }
+      }
+      onTotal();	// 체크박스의 사용후에는 항상 재계산해야 한다.
+    }
+    
+		// 장바구니에서 구매한 상품에 대한 '삭제'처리...
+    function cartDelete(idx){
+      let ans = confirm("선택하신 현재상품을 장바구니에서 제거 하시겠습니까?");
+      if(!ans) return false;
+      
+      $.ajax({
+        type : "post",
+        url  : "${ctp}/order/myCartDelete",
+        data : {idx : idx},
+        success:function() {
+          location.reload();
+        },
+        error : function() {
+        	alert("전송에러!");
+        }
+      });
+    }
+    
+		// 장바구니에서 선택한 상품만 '주문'처리하기
+    function order(){
+      let maxIdx = document.getElementById("maxIdx").value;
+      for(let i=1;i<=maxIdx;i++){
+        if($("#idx"+i).length != 0 && document.getElementById("idx"+i).checked){
+          document.getElementById("checkItem"+i).value="1";
+        }
+      }
+
+      document.myform.baesong.value=document.getElementById("baesong").value;
+      
+      if(document.getElementById("lastPrice").value==0){
+        alert("장바구니에서 주문처리할 상품을 선택해주세요!");
+        return false;
+      } 
+      else {
+        document.myform.submit();
+      }
+    }
+    
+		// 천단위마다 쉼표처리
+    function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+		
+  </script>
     
   </head>
   <body class="goto-here">
@@ -120,72 +157,80 @@
 				<div class="row">
     			<div class="col-md-12 ftco-animate">
     				<div class="cart-list">
-	    				<table class="table">
-						    <thead class="thead-primary">
-						      <tr class="text-center">
-						        <th>&nbsp;</th>
-						        <th>&nbsp;</th>
-						        <th>Product name</th>
-						        <th>Price</th>
-						        <th>Quantity</th>
-						        <th>Total</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/product-3.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Bell Pepper</h3>
-						        	<p>Far far away, behind the word mountains, far from the countries</p>
-						        </td>
-						        
-						        <td class="price">$4.90</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">$4.90</td>
-						      </tr><!-- END TR-->
-
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/product-4.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Bell Pepper</h3>
-						        	<p>Far far away, behind the word mountains, far from the countries</p>
-						        </td>
-						        
-						        <td class="price">$15.70</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">$15.70</td>
-						      </tr><!-- END TR-->
-						    </tbody>
-						  </table>
+    					<h2 class="text-center">나의 장바구니</h2><br />
+    					<form name="myform" method="post">
+	    					<input type="button" value="선택삭제" onclick="deleteCheck()" class="btn btn-danger mb-1" style="float: right;"/>
+		    				<table class="table">
+							    <thead class="thead-primary">
+									  <tr class="text-center">
+									    <th><input type="checkbox" id="allcheck" onClick="allCheck()" class="m-2"/></th>
+									    <th colspan="3">상품</th>
+									    <th colspan="2">총상품금액</th>
+									  </tr>
+							    </thead>
+							   <!-- 장바구니 목록출력 -->
+								  <c:set var="maxIdx" value="0"/>
+								  <c:forEach var="vo" items="${vos}">
+								    <tr align="center">
+								      <td><input type="checkbox" name="idxChecked" id="idx${vo.idx}" value="${vo.idx}" onClick="onCheck()" /></td>
+								      <td><a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}"><img src="${ctp}/data/storeFoodPhoto/${vo.thumbImg}" width="150px"/></a></td>
+								      <td align="left">
+								        <p class="contFont"><br/>
+								          메뉴 : <span style="color:orange;font-weight:bold;"><a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}">${vo.foodName}</a></span><br/>
+								        </p>
+								        <c:set var="optionNames" value="${fn:split(vo.subMenuName,',')}"/>
+								        <c:set var="optionPrices" value="${fn:split(vo.optionPrice,',')}"/>
+								        <c:set var="optionNums" value="${fn:split(vo.optionNum,',')}"/>
+								        <p style="font-size:12px">
+								          - 주문 내역
+								          <c:if test="${fn:length(optionNames) > 1}">(기타품목 ${fn:length(optionNames)-1}개 포함)</c:if><br/>
+								          <c:forEach var="i" begin="0" end="${fn:length(optionNames)-1}">
+								            &nbsp;&nbsp;ㆍ${optionNames[i]} / <fmt:formatNumber value="${optionPrices[i]}"/>원 / ${optionNums[i]}개<br/>
+								          </c:forEach> 
+								        </p>
+								      </td>
+								      <td>${vo.storeName}</td>
+								      <td>
+								        <div class="text-center">
+									        <b>총 : <fmt:formatNumber value="${vo.totalPrice}" pattern='#,###원'/></b><br/><br/>
+									        <span style="color:#270;font-size:12px" class="buyFont">주문일자 : ${fn:substring(vo.cartDate,0,10)}</span>
+									        <input type="hidden" id="totalPrice${vo.idx}" value="${vo.totalPrice}"/>
+								        </div>
+								      </td>
+								      <td>
+								        <button type="button" onClick="cartDelete(${vo.idx})" class="btn btn-danger btn-sm m-1" style="border:0px;">구매취소</button>
+								        <input type="hidden" name="checkItem" value="0" id="checkItem${vo.idx}"/>	<!-- 구매체크가 되지 않은 품목은 '0'으로 체크된것은 '1'로 처리하고자 한다. -->
+								        <input type="hidden" name="idx" value="${vo.idx}"/>
+								        <input type="hidden" name="thumbImg" value="${vo.thumbImg}"/>
+								        <input type="hidden" name="foodName" value="${vo.foodName}"/>
+								        <input type="hidden" name="mainPrice" value="${vo.mainPrice}"/>
+								        <input type="hidden" name="subMenuName" value="${optionNames}"/>
+								        <input type="hidden" name="optionPrice" value="${optionPrices}"/>
+								        <input type="hidden" name="optionNum" value="${optionNums}"/>
+								        <input type="hidden" name="totalPrice" value="${vo.totalPrice}"/>
+								        <input type="hidden" name="mid" value="${sMid}"/>
+								      </td>
+								    </tr>
+								    <c:set var="maxIdx" value="${vo.idx}"/>	<!-- 가장 마지막 품목의 idx값이 가장 크다. -->
+								  </c:forEach>
+								</table>
+							  <input type="hidden" id="maxIdx" name="maxIdx" value="${maxIdx}"/>
+							  <input type="hidden" name="orderTotalPrice" id="orderTotalPrice"/>
+						    <input type="hidden" name="baesong"/>
+							</form>
 					  </div>
     			</div>
     		</div>
+    		
+    		
     		<div class="row justify-content-end">
     			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>Coupon Code</h3>
+    					<h3>쿠폰입력</h3>
     					<p>Enter your coupon code if you have one</p>
   						<form action="#" class="info">
 	              <div class="form-group">
-	              	<label for="">Coupon code</label>
+	              	<label for="">쿠폰 코드</label>
 	                <input type="text" class="form-control text-left px-3" placeholder="">
 	              </div>
 	            </form>
@@ -194,20 +239,15 @@
     			</div>
     			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>Estimate shipping and tax</h3>
-    					<p>Enter your destination to get a shipping estimate</p>
-  						<form action="#" class="info">
+    					<h3><b>배달주소지</b></h3>
+  						<form name="addressForm" class="info">
 	              <div class="form-group">
-	              	<label for="">Country</label>
-	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              	<label for="">주소</label>
+	                <input type="text" name="address1" class="form-control text-left px-3" value="${address1}">
 	              </div>
 	              <div class="form-group">
-	              	<label for="country">State/Province</label>
-	                <input type="text" class="form-control text-left px-3" placeholder="">
-	              </div>
-	              <div class="form-group">
-	              	<label for="country">Zip/Postal Code</label>
-	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              	<label for="country">상세주소</label>
+	                <input type="text" name="address2" class="form-control text-left px-3" value="${address2}">
 	              </div>
 	            </form>
     				</div>
@@ -215,14 +255,14 @@
     			</div>
     			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>Cart Totals</h3>
+    					<h3><b>결제 금액</b></h3>
     					<p class="d-flex">
     						<span>Subtotal</span>
     						<span>$20.60</span>
     					</p>
     					<p class="d-flex">
-    						<span>Delivery</span>
-    						<span>$0.00</span>
+    						<span>배달비</span>
+    						<span>${sVo.deliverCost}원</span>
     					</p>
     					<p class="d-flex">
     						<span>Discount</span>
@@ -230,7 +270,7 @@
     					</p>
     					<hr>
     					<p class="d-flex total-price">
-    						<span>Total</span>
+    						<span>총</span>
     						<span>$17.60</span>
     					</p>
     				</div>
@@ -241,10 +281,6 @@
 		</section>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
 
  	<script src="${ctp}/js/jquery.min.js"></script>
   <script src="${ctp}/js/jquery-migrate-3.0.1.min.js"></script>

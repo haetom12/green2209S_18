@@ -255,6 +255,33 @@
         <version>1.1</version>
     </dependency>
 		
+    <!-- Web Socket를 활용한 채팅에 필요한 라이브러리 주입하기(총3개) -->
+    <!-- JSON -->
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>1.1.1</version>
+    </dependency>
+    <!-- WebSocket 을 사용하기위한 라이브러리 주입하기(2개) -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+      <artifactId>spring-websocket</artifactId>
+      <version>${org.springframework-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.websocket</groupId>
+      <artifactId>javax.websocket-api</artifactId>
+        <version>1.1</version>
+    </dependency>
+    
+    <!-- 랜덤 문자열 생성 -->
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.12.0</version>
+    </dependency>
+		
 		
 	</dependencies>
     <build>

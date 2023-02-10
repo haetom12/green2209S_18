@@ -18,6 +18,8 @@ public class StoreVO {
 	private double storeLongitude;
 	private String storeDel;
 	private String storeTime;
+	private int deliverCost;
+	private int minPrice;
 	
 	private String categoryStoreCode;
 	private String categoryPhoto;

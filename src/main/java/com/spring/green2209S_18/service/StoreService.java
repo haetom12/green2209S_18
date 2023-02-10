@@ -87,5 +87,9 @@ public interface StoreService {
 
 	public int setSubMenuUpdateOk(SubFoodMenuVO vo);
 
+	public FoodMenuVO getfoodInfo(int menuIdx);
+
+	public StoreVO getstoreInfo(String storeName);
+
 
 }

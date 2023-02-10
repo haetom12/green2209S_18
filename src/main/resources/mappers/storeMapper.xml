@@ -96,10 +96,18 @@
 		select * from storefoodsubmenu where subMenuIdx = #{subMenuIdx};
 	</select>
 
+	<select id="getfoodInfo" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodMenu where menuIdx = #{menuIdx};
+	</select>
+
+	<select id="getstoreInfo" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from store where storeName = #{storeName};
+	</select>
+
 	
 	
 	<insert id="setStoreJoinOk">
-		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime});
+		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime}, #{vo.storeTime}, #{vo.minPrice});
 	</insert>
 	
 	<insert id="setAdminStoreTag">

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
@@ -18,5 +19,9 @@ public interface OrderDAO {
 	public FoodMenuVO getWishListInfo(@Param("menuIdx") int menuIdx);
 
 	public void setDeleteWishList(@Param("menuIdx") int menuIdx);
+
+	public void setAddCartInput(@Param("vo") CartVO vo);
+
+	public void myCartDelete(@Param("idx") int idx);
 
 }

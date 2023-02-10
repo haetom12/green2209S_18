@@ -122,29 +122,35 @@
     				<div class="cart-list">
     					<h2 class="text-center">나의 찜목록</h2><br />
     					<form name="myform" method="post">
-	    					<input type="button" value="장바구니에 담기" onclick="cartCheck()" class="btn btn-warning mb-1" style="float: right; margin-left: 5px;"/>
 	    					<input type="button" value="선택삭제" onclick="deleteCheck()" class="btn btn-danger mb-1" style="float: right;"/>
 		    				<table class="table">
 							    <thead class="thead-primary">
 							      <tr class="text-center">
 							        <th><input type="checkbox" id="checkAll" />&nbsp;전체선택</th>
-							        <th>카테고리</th>
-							        <th>음식점</th>
 							        <th>음식사진</th>
 							        <th>음식이름</th>
+							        <th>음식점</th>
+							        <th>카테고리</th>
 							        <th>가격</th>
+							        <th>비고</th>
 							      </tr>
 							    </thead>
 							    <!-- <tbody id="demo"></tbody> -->
 							    <c:forEach var="vo" items="${wVos}" varStatus="st">
 							    	<tr class="text-center">
 								    	<td><input type='checkbox' name='chk' class='chk' id="chk${st.index}" value='${vo.menuIdx}'/></td>
-								    	<td class='image-prod'>${vo.foodTag}</td>
-								    	<td class='image-prod'>${vo.storeName}</td>
 								    	<td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/storeFoodPhoto/${vo.foodPhoto});'></div></td>
 								    	<%-- <td><img src="${ctp}/data/adminFoodPhoto/${vo.foodPhoto}" style="width:150px; margin: 0px; padding: 0px;"></td> --%>
-								    	<td class='product-name'>${vo.foodName}</td>
-								    	<td class='total'>${vo.price}</td>
+								    	<td class='product-name'><b>${vo.foodName}</b></td>
+								    	<td class='image-prod'>${vo.storeName}</td>
+								    	<td class='image-prod'>${vo.foodTag}</td>
+								    	<c:if test="${vo.sale == 'O'}">
+								    		<td class='total'><font style="text-decoration: line-through red; font-size: 10pt;">${vo.price}원</font><br /><font style="font-size: 15pt; color: green;">${vo.salePrice}원</font></td>
+								    	</c:if>
+								    	<c:if test="${vo.sale != 'O'}">
+								    		<td class='total'>${vo.price}</td>
+								    	</c:if>
+								    	<td class='image-prod'><input type="button" value="주문하러가기" onclick="location.href='${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}';" class="btn btn-warning mb-1" style="float: right; margin-left: 5px;"/></td>
 							    	</tr>
 							    </c:forEach>
 							  </table>
