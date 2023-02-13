@@ -6,6 +6,7 @@ import lombok.Data;
 public class CartVO {
 	private int idx;
 	private String cartDate;
+	
 	private String mid;
 	private int menuIdx;
 	private String storeName;
@@ -20,6 +21,13 @@ public class CartVO {
 	private String optionNum;
 	private int totalPrice;
 	
-	private int cartCnt;
-	
+	private int baesong;
+	private String orderDate;
+	private String orderIdx;
+	private String orderTotalPrice;
+	private String orderAddress;
+	private String orderMessage;
+  private int cartIdx;  // 장바구니 고유번호.
+  private int maxIdx;   // 주문번호를 구하기위한 기존 최대 비밀번호필드
+  private int orderTotalPrice2;
 }

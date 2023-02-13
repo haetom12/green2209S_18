@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.green2209S_18.service.MemberService;
+import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.MemberVO;
@@ -26,6 +27,9 @@ public class MemberController {
 	
 	@Autowired
 	StoreService storeService;
+	
+	@Autowired
+	OrderService orderService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -179,12 +183,24 @@ public class MemberController {
 	// 로그아웃
 	@RequestMapping(value = "/memberLogout", method = RequestMethod.GET)
 	public String adminLogoutGet(HttpSession session) {
-		String mid = (String) session.getAttribute("sMid");
+//		String mid = (String) session.getAttribute("sMid");
 		session.invalidate();
 		
 		return "redirect:/";
 	}
 	
+	// 내 주문내역 리스트로
+	@RequestMapping(value = "myOrderList", method = RequestMethod.GET)
+	public String myOrderListGet(HttpSession session, Model model) {
+		
+		String mid = (String) session.getAttribute("sMid");
+		
+		List<CartVO> vos = orderService.getMyOrderList(mid);
+		
+		
+		model.addAttribute("vos",vos);
+		return "order/myOrderList";
+	}
 	
 	
 }

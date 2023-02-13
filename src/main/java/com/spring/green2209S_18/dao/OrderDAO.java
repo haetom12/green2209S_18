@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.PayMentVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
 public interface OrderDAO {
@@ -23,5 +24,17 @@ public interface OrderDAO {
 	public void setAddCartInput(@Param("vo") CartVO vo);
 
 	public void myCartDelete(@Param("idx") int idx);
+
+	public CartVO getOrderMaxIdx();
+
+	public CartVO getCartIdx(@Param("idx") int idx);
+
+	public CartVO getCheckOrderIdx(@Param("orderIdx") String orderIdx);
+
+	public void setFoodOrderOK(@Param("vo") CartVO vo);
+
+	public void setFoodOrderOk2(@Param("vo") CartVO vo);
+
+	public List<CartVO> getMyOrderList(@Param("mid") String mid);
 
 }

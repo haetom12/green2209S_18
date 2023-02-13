@@ -248,6 +248,11 @@ public class MessageController {
 			model.addAttribute("url", "/store/storeMenuInfo?menuIdx="+menuIdx);
 		}
 		
+		else if(msgFlag.equals("paymentResultOk")) {
+			model.addAttribute("msg", "결제가 완료되었습니다");
+			model.addAttribute("url", "/h");
+		}
+		
 		
 		return "include/message";
 	}

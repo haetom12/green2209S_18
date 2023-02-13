@@ -182,138 +182,72 @@
       </div>
     </div>
 
-    <section class="ftco-section ftco-cart">
-			<div class="container">
-				<div class="row">
-    			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
-    					<h2 class="text-center">나의 장바구니</h2><br />
-    					<form name="myform" method="post">
-	    					<input type="button" value="선택삭제" onclick="deleteCheck()" class="btn btn-danger mb-1" style="float: right;"/>
-		    				<table class="table">
-							    <thead class="thead-primary">
-									  <tr class="text-center">
-									    <th><input type="checkbox" id="allcheck" onClick="allCheck()" class="m-2"/>전체선택</th>
-									    <th colspan="3">상품</th>
-									    <th colspan="2">총상품금액</th>
-									  </tr>
-							    </thead>
-							   <!-- 장바구니 목록출력 -->
-								  <c:set var="maxIdx" value="0"/>
-								  <c:forEach var="vo" items="${vos}">
-								    <tr align="center">
-								      <td><input type="checkbox" name="idxChecked" id="idx${vo.idx}" value="${vo.idx}" onClick="onCheck()" /></td>
-								      <td><a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}"><img src="${ctp}/data/storeFoodPhoto/${vo.thumbImg}" width="150px"/></a></td>
-								      <td align="left">
-								        <p class="contFont"><br/>
-								          메뉴 : <span style="color:orange;font-weight:bold;"><a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}">${vo.foodName}</a></span><br/>
-								        </p>
-								        <c:set var="optionNames" value="${fn:split(vo.subMenuName,',')}"/>
-								        <c:set var="optionPrices" value="${fn:split(vo.optionPrice,',')}"/>
-								        <c:set var="optionNums" value="${fn:split(vo.optionNum,',')}"/>
-								        <p style="font-size:12px">
-								          - 주문 내역
-								          <c:if test="${fn:length(optionNames) > 1}">(기타품목 ${fn:length(optionNames)-1}개 포함)</c:if><br/>
-								          <c:forEach var="i" begin="0" end="${fn:length(optionNames)-1}">
-								            &nbsp;&nbsp;ㆍ${optionNames[i]} / <fmt:formatNumber value="${optionPrices[i]}"/>원 / ${optionNums[i]}개<br/>
-								          </c:forEach> 
-								        </p>
-								      </td>
-								      <td>${vo.storeName}</td>
-								      <td>
-								        <div class="text-center">
-									        <b>총 : <fmt:formatNumber value="${vo.totalPrice}" pattern='#,###원'/></b><br/><br/>
-									        <span style="color:#270;font-size:12px" class="buyFont">주문일자 : ${fn:substring(vo.cartDate,0,10)}</span>
-									        <input type="hidden" id="totalPrice${vo.idx}" value="${vo.totalPrice}"/>
-								        </div>
-								      </td>
-								      <td>
-								        <button type="button" onClick="cartDelete(${vo.idx})" class="btn btn-danger btn-sm m-1" style="border:0px;">구매취소</button>
-								        <input type="hidden" name="checkItem" value="0" id="checkItem${vo.idx}"/>	<!-- 구매체크가 되지 않은 품목은 '0'으로 체크된것은 '1'로 처리하고자 한다. -->
-								        <input type="hidden" id="idx" name="idx" value="${vo.idx}"/>
-								        <input type="hidden" id="thumbImg" name="thumbImg" value="${vo.thumbImg}"/>
-								        <input type="hidden" id="foodName" name="foodName" value="${vo.foodName}"/>
-								        <input type="hidden" id="mainPrice" name="mainPrice" value="${vo.mainPrice}"/>
-								        
-								        <input type="hidden" id="subMenuName" name="subMenuName" value="${optionNames}"/>
-								        <input type="hidden" id="optionPrice"  name="optionPrice" value="${optionPrices}"/>
-								        <input type="hidden" id="optionNum"  name="optionNum" value="${optionNums}"/>
-								        <input type="hidden" id="totalPrice" name="totalPrice" value="${vo.totalPrice}"/>
-								        <input type="hidden" id="notTotal" name="notTotal" value=""/>
-								        <input type="hidden" id="orderAddress" name="orderAddress" value=""/>
-								        <input type="hidden" id="mid" name="mid" value="${sMid}"/> 
-								      </td>
-								    </tr>
-								    <c:set var="maxIdx" value="${vo.idx}"/>	<!-- 가장 마지막 품목의 idx값이 가장 크다. -->
-								  </c:forEach>
-								</table>
-							  <input type="hidden" id="maxIdx" name="maxIdx" value="${maxIdx}"/>
-							  <input type="hidden" name="orderTotalPrice" id="orderTotalPrice"/>
-						    <input type="hidden" name="baesong" value="${sVo.deliverCost}"/>
-							</form>
-					  </div>
-    			</div>
-    		</div>
-    		
-    		
-    		<div class="row justify-content-end">
-    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
-    					<h3>쿠폰입력</h3>
-    					<p>Enter your coupon code if you have one</p>
-  						<form action="#" class="info">
-	              <div class="form-group">
-	              	<label for="">쿠폰 코드</label>
-	                <input type="text" class="form-control text-left px-3" >
-	              </div>
-	            </form>
-    				</div>
-    				<p><a href="#" class="btn btn-primary py-3 px-4">쿠폰 적용</a></p>
-    			</div>
-    			<%-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
-    					<h3><b>배달주소지</b></h3>
-  						<form name="addressForm" class="info">
-	              <div class="form-group">
-	              	<label for="">주소</label>
-	                <input type="text" name="address1" id="address1" class="form-control text-left px-3" value="${address1}">
-	              </div>
-	              <div class="form-group">
-	              	<label for="country">상세주소</label>
-	                <input type="text" name="address2" id="address2" class="form-control text-left px-3" value="${address2}">
-	              </div>
-	            </form>
-    				</div>
-    				<!-- <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p> -->
-    			</div> --%>
-    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
-    					<h3><b>결제 금액</b></h3>
-    					<p class="d-flex">
-    						<span>메뉴값</span>
-    						<span><input type="text" id="total" value="0" class="totSubBox form-control" style="width: 100px;" readonly/></span>
-    					</p>
-    					<p class="d-flex">
-    						<span>배달비</span>
-    						<span><input type="text" id="baesong" value="${sVo.deliverCost}"  class="totSubBox form-control" style="width: 100px;" readonly/></span>
-    						<%-- <span>${sVo.deliverCost}원</span> --%>
-    					</p>
-    				<!-- 	<p class="d-flex">
-    						<span>Discount</span>
-    						<span>$3.00</span>
-    					</p> -->
-    					<hr>
-    					<p class="d-flex total-price">
-    						<span>총</span>
-    						<span><input type="text" id="lastPrice" value="0" class="totSubBox form-control" style="width: 100px;" readonly/></span>
-    					</p>
-    				</div>
-    				<p><input type="button" value="결제하기" class="btn btn-primary py-3 px-4" onClick="order()"/></p>
-    				<!-- <p><a href="#" onClick="order()" class="btn btn-primary py-3 px-4">결제하기</a></p> -->
-    			</div>
-    		</div>
+		<div class="container" style="width: 2500px; margin-top: 5%;">
+			<div class="ftco-animate">
+				<h2 class="text-center">내 주문 내역</h2><br />
+				<form name="myform" method="post">
+  				<table class="table">
+				    <thead class="thead-primary">
+						  <tr class="text-center">
+						    <th>주문정보</th>
+						    <th>주문정보</th>
+						    <th style="width: 130px;">배달요청사항</th>
+						    <th>총상품금액</th>
+						    <th>배달주소</th>
+						    <th>주문 날짜</th>
+						  </tr>
+				    </thead>
+				   <!-- 장바구니 목록출력 -->
+					  <c:set var="maxIdx" value="0"/>
+					  <c:forEach var="vo" items="${vos}">
+			      	<c:set var="foodNames" value="${fn:split(vo.foodName,'/')}"/>
+			        <c:set var="optionNames" value="${fn:split(vo.subMenuName,'/')}"/>
+			        <c:set var="optionPrices" value="${fn:split(vo.optionPrice,'/')}"/>
+			        <c:set var="optionNums" value="${fn:split(vo.optionNum,'/')}"/>
+			        <c:set var="thumbImgs" value="${fn:split(vo.thumbImg,'/')}"/>
+			        <c:set var="orderAddresses" value="${fn:split(vo.orderAddress,'/')}"/>
+					    <tr align="center">
+					    	<td>
+						    	<c:forEach var="i" begin="0" end="${fn:length(foodNames)-1}">
+						      	<a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}"><img src="${ctp}/data/orderFoodPhoto/${thumbImgs[i]}" width="100px"/></a><br />
+						      </c:forEach>
+					      </td>
+					      <td align="left">
+					        <p class="contFont" style="text-align: left;"><br/>
+					        	<c:forEach var="i" begin="0" end="${fn:length(foodNames)-1}">
+						          <font size="4px;">메뉴 : <span style="color:orange;font-weight:bold;"><a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}">${foodNames[i]}</a></span><br/></font>
+		         				  <span style="color:orange;font-weight:bold;">${optionNames[i]}</span><br/> 
+					          </c:forEach>
+					        </p>
+					      </td>
+					      <td>
+					      	<b>${vo.orderMessage}</b>
+					      </td>
+					      <td>
+					        <div class="text-center">
+						        <b>총 : <fmt:formatNumber value="${vo.orderTotalPrice}" pattern='#,###원'/></b>
+					        </div>
+					      </td>
+					      <td>
+					        <div class="text-center">
+					        	<b>${orderAddresses[0]}<br />${orderAddresses[1]}</b>
+					        </div>
+					      </td>
+					      <td>
+					      	<div class="text-center">
+					     			<b>${fn:substring(vo.orderDate,0,16)}</b>
+					     		</div>
+					      </td>
+					    </tr>
+					    <c:set var="maxIdx" value="${vo.idx}"/>	<!-- 가장 마지막 품목의 idx값이 가장 크다. -->
+					  </c:forEach>
+					</table>
+				  <input type="hidden" id="maxIdx" name="maxIdx" value="${maxIdx}"/>
+				  <input type="hidden" name="orderTotalPrice" id="orderTotalPrice"/>
+			    <input type="hidden" name="baesong" value="${sVo.deliverCost}"/>
+				</form>
 			</div>
-		</section>
+		</div>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 

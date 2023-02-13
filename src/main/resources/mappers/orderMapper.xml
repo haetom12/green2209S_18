@@ -15,6 +15,38 @@
 		select * from storefoodmenu where menuIdx = #{menuIdx};
 	</select>
 	
+	<select id="getOrderMaxIdx" resultType="com.spring.green2209S_18.vo.CartVO">
+		select max(idx) as maxIdx from foodorder;
+	</select>
+	
+	<select id="getCartIdx" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from cart where idx = #{idx};
+	</select>
+	
+	<select id="getCheckOrderIdx" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from foodorder where orderIdx = #{orderIdx};
+	</select>
+	
+	<select id="getMyOrderList" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from foodorder where mid = #{mid};
+	</select>
+	
+	
+	
+	<update id="setFoodOrderOk2">
+		update foodOrder set menuIdx =  concat(menuIdx,'/',#{vo.menuIdx}) , foodName =  concat(foodName,'/',#{vo.foodName}), mainPrice =  concat(mainPrice,'/',#{vo.mainPrice}),
+		thumbImg =  concat(thumbImg,'/',#{vo.thumbImg}), subMenuName =  concat(subMenuName,'/',#{vo.subMenuName}), optionPrice =  concat(optionPrice,'/',#{vo.optionPrice}), 
+		optionNum =  concat(optionNum,'/',#{vo.optionNum}) where orderIdx=#{vo.orderIdx};
+		<!-- update foodOrder set foodName =  foodName + '/' + #{vo.foodName} where orderIdx=#{vo.orderIdx}; -->
+		
+	</update>
+<!-- 	
+	<update id="setFoodOrderOk2">
+		update foodOrder set menuIdx = menuIdx + '/' + #{vo.menuIdx}, foodName =  foodName + '/' + #{vo.foodName}, mainPrice = mainPrice + '/' + #{vo.mainPrice}, thumbImg = thumbImg + '/' + #{vo.thumbImg},
+		subMenuName = subMenuName + '/' + #{vo.subMenuName}, optionPrice = optionPrice + '/' + #{vo.optionPrice}, optionNum = optionNum + '/' + #{vo.optionNum} where orderIdx=#{vo.orderIdx};
+		
+	</update> -->
+	<!-- str1.concat(str2) -->
 	
 	
 	<insert id="setWishListInput">
@@ -25,6 +57,10 @@
 		insert into cart values (default, default, #{vo.mid}, #{vo.menuIdx}, #{vo.storeName}, #{vo.foodName}, #{vo.mainPrice}, #{vo.sale}, #{vo.salePrice}, #{vo.thumbImg}, #{vo.optionIdx},#{vo.subMenuName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice} );
 	</insert>
 	
+	<insert id="setFoodOrderOK">
+		insert into foodorder values (default, #{vo.mid}, default, #{vo.orderIdx}, #{vo.menuIdx}, #{vo.foodName}, #{vo.mainPrice}, #{vo.thumbImg}, #{vo.orderAddress}, #{vo.subMenuName},#{vo.optionPrice},#{vo.optionNum},#{vo.orderMessage},#{vo.orderTotalPrice2} );
+	</insert>
+	
 	
 	<delete id="setDeleteWishList">
 		delete from wishlist where menuIdx = #{menuIdx};
@@ -33,5 +69,5 @@
 	<delete id="myCartDelete">
 		delete from cart where idx = #{idx};
 	</delete>	
-
+	
 </mapper>
