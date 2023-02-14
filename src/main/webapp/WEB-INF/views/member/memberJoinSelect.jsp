@@ -64,7 +64,7 @@
   </head>
 
   <body class="goto-here">
-		<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
+		<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>	
 			<section class="ftco-section">
 				<div class="container2 bg-primary">
 					<div class="row no-gutters ftco-services sectbox">

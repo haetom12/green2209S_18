@@ -335,7 +335,7 @@
 			  	if(memberNickName.trim() == "") {
 			  		alert("닉네임를 입력하세요!");
 			  		JoinForm.memberNickName.focus();
-			  		return false;
+			  		return false;	
 			  	}
 			  	else {
 				  	$.ajax({

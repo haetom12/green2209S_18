@@ -14,6 +14,7 @@ import com.spring.green2209S_18.dao.OrderDAO;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.PayMentVO;
+import com.spring.green2209S_18.vo.WebSocketDbVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
 @Service
@@ -110,6 +111,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<CartVO> getMyOrderList(String mid) {
 		return orderDAO.getMyOrderList(mid);
+	}
+
+	@Override
+	public void setRiderOrder(WebSocketDbVO orderVo) {
+		orderDAO.setRiderOrder(orderVo);
 	}
 
 	

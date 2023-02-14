@@ -112,7 +112,7 @@
 		              	<a class="dropdown-item" href="#">내 정보 수정</a>
 		              	<a class="dropdown-item" href="${ctp}/member/myOrderList">주문내역</a>
 		              	<a class="dropdown-item" href="${ctp}/order/myWishList">찜목록</a>
-		                <a class="dropdown-item" href="product-single.html">선물함</a>
+		                <a class="dropdown-item" href="${ctp}/rider/orderChat">채팅</a>
 		                <a class="dropdown-item" href="cart.html">쿠폰함</a>
 		                <a class="dropdown-item" href="checkout.html">리뷰관리</a>
 		              </div>
@@ -121,6 +121,7 @@
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>
 		          <c:if test="${sMid=='admin'}">
+		          	<li class="nav-item"><a href="${ctp}/rider/orderChat" class="nav-link">채팅</a></li>
 			          <li class="nav-item"><a href="${ctp}/admin/adminMain" class="nav-link">관리자 페이지</a></li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>

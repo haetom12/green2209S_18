@@ -1,5 +1,7 @@
 package com.spring.green2209S_18;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,17 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.green2209S_18.vo.WebSocketDbVO;
+
 @Controller
 public class MessageController {
 	
 	@RequestMapping(value="/msg/{msgFlag}", method=RequestMethod.GET)
-	public String msgGet(@PathVariable String msgFlag, Model model,
+	public String msgGet(@PathVariable String msgFlag, Model model, WebSocketDbVO vo, HttpSession session,
 			@RequestParam(value="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(value="flag", defaultValue = "", required = false) String flag,
 			@RequestParam(value="foodTag", defaultValue = "", required = false) String foodTag,
 			@RequestParam(value="menuIdx", defaultValue = "1", required = false) int menuIdx,
 			@RequestParam(value="brandName", defaultValue = "", required = false) String brandName) {
-		System.out.println("brandName : "+brandName);
 		
 		if(msgFlag.equals("memberLoginNo")) {
 			model.addAttribute("msg", "로그인 실패~~~");
@@ -249,10 +252,16 @@ public class MessageController {
 		}
 		
 		else if(msgFlag.equals("paymentResultOk")) {
-			model.addAttribute("msg", "결제가 완료되었습니다");
-			model.addAttribute("url", "/h");
+			model.addAttribute("msg", "결제가 완료되었습니다!");
+			model.addAttribute("url", "/member/myOrderList");
 		}
-		
+		/*
+		  else if(msgFlag.equals("paymentResultOk")) { String sOrderVo =
+			(String)session.getAttribute("sOrderVo");
+			  
+		  model.addAttribute("sOrderVo",sOrderVo); model.addAttribute("msg",
+		  "결제가 완료되었습니다"); return "include/message"; }
+		 */		
 		
 		return "include/message";
 	}

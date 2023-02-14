@@ -30,4 +30,14 @@ public class CartVO {
   private int cartIdx;  // 장바구니 고유번호.
   private int maxIdx;   // 주문번호를 구하기위한 기존 최대 비밀번호필드
   private int orderTotalPrice2;
+  
+  
+  // 배달 vo
+	private String rider;
+	private String progress;
+	private String assignDate;
+	private String completeDate;
+	private String checkStr;
+  
+  
 }

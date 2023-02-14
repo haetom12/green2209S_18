@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.green2209S_18.common.ChatServerDb;
 import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
@@ -26,6 +27,7 @@ import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.PayMentVO;
 import com.spring.green2209S_18.vo.StoreVO;
+import com.spring.green2209S_18.vo.WebSocketDbVO;
 import com.spring.green2209S_18.vo.wishListVO;
 @Controller
 @RequestMapping("/order")
@@ -224,6 +226,7 @@ public class OrderController {
 			CartVO orderVo = new CartVO();
 			orderVo.setIdx(cartVo.getIdx());
 			orderVo.setMenuIdx(cartVo.getMenuIdx());
+			orderVo.setStoreName(cartVo.getStoreName());
 			orderVo.setFoodName(cartVo.getFoodName());
 			orderVo.setMainPrice(cartVo.getMainPrice());
 			orderVo.setThumbImg(cartVo.getThumbImg());
@@ -265,6 +268,7 @@ public class OrderController {
 	}
 	
   // 결제시스템 연습하기(결제창 호출하기) - API이용
+	@SuppressWarnings("unchecked")
 	@Transactional
 	@RequestMapping(value="/payment", method=RequestMethod.POST)
 	public String paymentPost(PayMentVO payMentVo,CartVO orderVO, HttpSession session, Model model) {
@@ -279,13 +283,28 @@ public class OrderController {
 		int price = 0;
 		
 		price = Integer.parseInt(amount);
+		List<CartVO> orderVos = (List<CartVO>) session.getAttribute("sOrderVos");
+		
+		
+		String food = "";
+		
+		for(int i=0; i<orderVos.size(); i++) {
+			food += orderVos.get(i).getFoodName() + " / ";
+		}
+		food = orderVos.get(0).getOrderIdx() + "@" + orderVos.get(0).getMid() + "@" + food.substring(0, food.length()-1) + "@" 
+					+ orderVos.get(0).getStoreName() + "@" +  price + "@" + orderVos.get(0).getOrderMessage();
+		
+//		System.out.println("vos : " + orderVos);
 		
 		session.setAttribute("sPayMentVo", payMentVo);
 		session.setAttribute("orderMessage", payMentVo.getOrderMessage());
 		model.addAttribute("price", price);
+		model.addAttribute("orderVos", orderVos);
+		model.addAttribute("food", food);
 		
 		return "order/paymentOk";
 	}
+	
 	
 	@Transactional
 	@SuppressWarnings("unchecked")
@@ -324,11 +343,8 @@ public class OrderController {
 				orderService.setFoodOrderOK(vo);                 	// 주문내용을 주문테이블(dbOrder)에 저장.
 			}
 			else {
-				vo.setOrderIdx(vo.getOrderIdx());        				// 주문번호를 주문테이블의 주문번호필드에 지정처리한다.
+				vo.setOrderIdx(vo.getOrderIdx());        				// 남은 메뉴는 처음 메뉴에 / 붙혀서 업데이트
 				vo.setMid(vo.getMid());			
-				vo.setOrderAddress(sOrderAddress);
-				vo.setOrderTotalPrice2(orderTotalPrice);
-				vo.setOrderMessage(orderMessage);
 				orderService.setFoodOrderOk2(vo);
 			}
 			
@@ -337,7 +353,6 @@ public class OrderController {
 			session.removeAttribute("sPayMentVo");
 			session.removeAttribute("orderMessage");
 			session.removeAttribute("sOrderAddress");
-		
 			
 			orderService.myCartDelete(vo.getIdx()); // 주문이 완료되었기에 장바구니(dbCart)테이블에서 주문한 내역을 삭체처리한다.
 			
@@ -348,6 +363,21 @@ public class OrderController {
 			session.setAttribute("myCartCnt", myCartCnt);
 			
 		}
+//		// 배달 테이블에 입력한다.
+//		String foodMenu = "";
+//		for(int i=0; i<orderVos.size(); i++) {
+//			foodMenu += orderVos.get(i).getFoodName() + "/";
+//		}
+//		foodMenu = foodMenu.substring(0,foodMenu.length()-1);
+//		
+//		WebSocketDbVO orderVo = new WebSocketDbVO();
+//		orderVo.setMid(orderVos.get(0).getMid());
+//		orderVo.setFoodMenu(foodMenu);
+//		orderVo.setAddress(orderVos.get(0).getOrderAddress());
+//		orderVo.setPrice(orderTotalPrice);
+//		
+//		orderService.setRiderOrder(orderVo);
+//		session.setAttribute("sOrderVo", orderVo);
 		
 		payMentVo.setImp_uid(receivePayMentVo.getImp_uid());
 		payMentVo.setMerchant_uid(receivePayMentVo.getMerchant_uid());
@@ -365,5 +395,10 @@ public class OrderController {
 		return "redirect:/msg/paymentResultOk";
 	}
 	
+	@RequestMapping(value = "/orderChat", method = RequestMethod.GET)
+	public String orderChatGet() {
+		
+		return "rider/orderChat";
+	}
 	
 }

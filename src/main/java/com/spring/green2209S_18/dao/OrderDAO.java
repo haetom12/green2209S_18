@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.PayMentVO;
+import com.spring.green2209S_18.vo.WebSocketDbVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
 public interface OrderDAO {
@@ -36,5 +37,9 @@ public interface OrderDAO {
 	public void setFoodOrderOk2(@Param("vo") CartVO vo);
 
 	public List<CartVO> getMyOrderList(@Param("mid") String mid);
+
+	public void setRiderOrder(@Param("vo") WebSocketDbVO orderVo);
+
+	public List<CartVO> getOrderChatList();
 
 }

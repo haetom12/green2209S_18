@@ -13,6 +13,11 @@
 	<script>
 		IMP.init('imp46401016');
 		
+    // 소켓 열기 
+    let ws;
+    let url = "ws://localhost:9090/green2209S_18/chatserverDb";
+    /* let url = "ws://192.168.50.23:9090/green2209S_18/chatserverDb"; */
+    
 		IMP.request_pay({
 		    pg : 'html5_inicis.INIpayTest', // version 1.1.0부터 지원.		// 변경된 방침에서는 pg : 'html5_inicis' 로 고쳐준다.
 		    pay_method : 'card',
@@ -33,6 +38,7 @@
 		        msg += '\n결제 금액 : ' + rsp.paid_amount;
 		        msg += '\n카드 승인번호 : ' + rsp.apply_num;
 		        paySw = 'ok';
+		         
 		    } else {
 		        var msg = '결제에 실패하였습니다.';
 		        msg += '에러내용 : ' + rsp.error_msg;
@@ -43,20 +49,33 @@
 		    	location.href='${ctp}/order/myCart';
 		    }
 		    else {
-					var temp = "";
-					temp += '?name=${payMentVo.buyer_name}';
-					temp += '&amount=${payMentVo.amount}';
-					temp += '&buyer_email=${payMentVo.buyer_email}';
-					temp += '&buyer_name=${payMentVo.buyer_name}';
-					temp += '&buyer_tel=${payMentVo.buyer_tel}';
-					temp += '&imp_uid=' + rsp.imp_uid;
-					temp += '&merchant_uid=' + rsp.merchant_uid;
-					temp += '&paid_amount=' + rsp.paid_amount;
-					temp += '&apply_num=' + rsp.apply_num;
-					
-					//temp += '&orderIdx=${orderVo.orderIdx}';
-					
-					location.href='${ctp}/order/paymentResult'+temp;
+		    		ws = new WebSocket(url);
+		        ws.onopen = function (evt) {
+		  	   		console.log('서버 연결 성공');
+		  	   		// 현재 사용자가 입장했다고 서버에게 통지(유저명 전달)
+		  	   		// -> 1#유저명
+		  	   		
+		  	   		let str = '${food}' + '${vos}'
+		  	   		
+		  	   		
+			  			ws.send('4#' + '${payMentVo.buyer_name}' + '#' + '${food}');
+		  	   		
+							var temp = "";
+							temp += '?name=${payMentVo.buyer_name}';
+							temp += '&amount=${payMentVo.amount}';
+							temp += '&buyer_email=${payMentVo.buyer_email}';
+							temp += '&buyer_name=${payMentVo.buyer_name}';
+							temp += '&buyer_tel=${payMentVo.buyer_tel}';
+							temp += '&imp_uid=' + rsp.imp_uid;
+							temp += '&merchant_uid=' + rsp.merchant_uid;
+							temp += '&paid_amount=' + rsp.paid_amount;
+							temp += '&apply_num=' + rsp.apply_num;
+							
+							//temp += '&orderIdx=${orderVo.orderIdx}';
+							
+							location.href='${ctp}/order/paymentResult'+temp;
+			  			
+			  		};
 		    }
 		});
 	</script>

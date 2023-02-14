@@ -31,6 +31,10 @@
 		select * from foodorder where mid = #{mid};
 	</select>
 	
+	<select id="getOrderChatList" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from foodorder where rider = '미배정';
+	</select>
+	
 	
 	
 	<update id="setFoodOrderOk2">
@@ -58,8 +62,12 @@
 	</insert>
 	
 	<insert id="setFoodOrderOK">
-		insert into foodorder values (default, #{vo.mid}, default, #{vo.orderIdx}, #{vo.menuIdx}, #{vo.foodName}, #{vo.mainPrice}, #{vo.thumbImg}, #{vo.orderAddress}, #{vo.subMenuName},#{vo.optionPrice},#{vo.optionNum},#{vo.orderMessage},#{vo.orderTotalPrice2} );
+		insert into foodorder values (default, #{vo.mid}, default, #{vo.orderIdx}, #{vo.menuIdx}, #{vo.foodName},#{vo.storeName}, #{vo.mainPrice}, #{vo.thumbImg}, #{vo.orderAddress}, #{vo.subMenuName},#{vo.optionPrice},#{vo.optionNum},#{vo.orderMessage},#{vo.orderTotalPrice2}, default, default, default, default, default);
 	</insert>
+	
+<!-- 	<insert id="setRiderOrder">
+		insert into weborder values (default, #{vo.mid}, #{vo.foodMenu}, #{vo.address}, #{vo.price}, default, default, default, default, default, default);
+	</insert> -->
 	
 	
 	<delete id="setDeleteWishList">
