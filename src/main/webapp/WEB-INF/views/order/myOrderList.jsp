@@ -28,142 +28,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     
     <script>
-    'use strict';
-    
-    let couponUse = 0;
-    
-    function onTotal(){
-      let total = 0;
-      let maxIdx = document.getElementById("maxIdx").value;
-      
-      for(let i=1;i<=maxIdx;i++){
-        if($("#totalPrice"+i).length != 0 && document.getElementById("idx"+i).checked){  
-          total = total + parseInt(document.getElementById("totalPrice"+i).value); 
-        }
-      }
-      document.getElementById("total").value=numberWithCommas(total);
-      
-      document.getElementById("baesong").value=${sVo.deliverCost};
-      
-      let lastPrice=parseInt(document.getElementById("baesong").value)+total;
-      document.getElementById("lastPrice").value = numberWithCommas(lastPrice);
-      document.getElementById("orderTotalPrice").value = numberWithCommas(lastPrice);
-    }
-
-		// 상품 체크박스에 체크했을때 처리하는 함수
-    function onCheck(){
-      let maxIdx = document.getElementById("maxIdx").value;				// 출력되어있는 상품중에서 가장 큰 idx값이 maxIdx변수에 저장된다.
-
-      let cnt=0;
-      for(let i=1;i<=maxIdx;i++){
-        if($("#idx"+i).length != 0 && document.getElementById("idx"+i).checked==false){
-          cnt++;
-          break;
-        }
-      }
-      if(cnt!=0){
-        document.getElementById("allcheck").checked=false;
-      } 
-      else {
-        document.getElementById("allcheck").checked=true;
-      }
-      onTotal();	// 체크박스의 사용후에는 항상 재계산해야 한다.
-    }
-    
-		// allCheck 체크박스를 체크/해제할때 수행하는 함수
-    function allCheck(){
-      let maxIdx = document.getElementById("maxIdx").value;
-      if(document.getElementById("allcheck").checked){
-        for(let i=1;i<=maxIdx;i++){
-          if($("#idx"+i).length != 0){
-            document.getElementById("idx"+i).checked=true;
-          }
-        }
-      }
-      else {
-        for(let i=1;i<=maxIdx;i++){
-          if($("#idx"+i).length != 0){
-            document.getElementById("idx"+i).checked=false;
-          }
-        }
-      }
-      onTotal();	// 체크박스의 사용후에는 항상 재계산해야 한다.
-    }
-    
-		// 장바구니에서 구매한 상품에 대한 '삭제'처리...
-    function cartDelete(idx){
-      let ans = confirm("선택하신 현재상품을 장바구니에서 제거 하시겠습니까?");
-      if(!ans) return false;
-      
-      $.ajax({
-        type : "post",
-        url  : "${ctp}/order/myCartDelete",
-        data : {idx : idx},
-        success:function() {
-          location.reload();
-        },
-        error : function() {
-        	alert("전송에러!");
-        }
-      });
-    }
-    
-		// 장바구니에서 선택한 상품만 '주문'처리하기
-    function order(){
-			/* let address1 = document.getElementById("address1").value;
-			let address2 = document.getElementById("address2").value;
-			let maxIdx = document.getElementById("maxIdx").value; */
+		function orderCancle(orderIdx) {
+			let ans = confirm("주문을 취소하시겠습니까?");
+			if(!ans) return false;
 			
-			let orderTotalPrice = document.getElementById("orderTotalPrice").value
+			$.ajax({
+			  	type   : "post",
+			  	url    : "${ctp}/member/memberOrderCancle",
+			  	data   : {
+			  		orderIdx : orderIdx
+			  	},
+	    		success:function(res) {
+	    			if(res == "1") {
+	    				alert("주문이 취소되었습니다!");
+	    				location.reload();
+	    			}
+	    			else {
+	    				alert("이미 배달이 접수되어 취소가 불가능합니다.");
+	    			}
+	    		},
+	    		error : function() {
+	    			alert("전송 오류~~");
+	    		}
+	    	});
+			}
 			
-			alert("총합 : " + orderTotalPrice);
-			
-			/* let foodName = document.getElementById("foodName").value;
-			let thumbImg = document.getElementById("thumbImg").value;
-			let mainPrice = document.getElementById("mainPrice").value;
-			let subMenuName = document.getElementById("subMenuName").value;
-			let optionPrice = document.getElementById("optionPrice").value;
-			let optionNum = document.getElementById("optionNum").value;
-			let totalPrice = document.getElementById("totalPrice").value;
-			let orderAddress = document.getElementById("orderAddress").value;
-			let mid = document.getElementById("mid").value;
-			let baesong = document.getElementById("baesong").value;
-			 */
-			
-      
-      for(let i=1; i<=maxIdx; i++){
-        if($("#idx"+i).length != 0 && document.getElementById("idx"+i).checked){
-          document.getElementById("checkItem"+i).value="1";
-        }
-      }
-
-      /* document.myform.baesong.value=document.getElementById("baesong").value; */
-      
-      if(document.getElementById("lastPrice").value==0){
-        alert("장바구니에서 주문처리할 상품을 선택해주세요!");
-        return false;
-      } 
-      else {
-/*         alert("baesong" + baesong);
-    	  console.log("foodName" , foodName);
-    	  console.log("mainPrice" , mainPrice); 
-    	  console.log("subMenuName" , subMenuName); 
-    	  console.log("optionPrice" , optionPrice); 
-    	  console.log("optionNum" , optionNum); 
-    	  console.log("thumbImg" , thumbImg); 
-    	  console.log("totalPrice" , totalPrice); 
-    	  console.log("orderAddress" , orderAddress); 
-    	  console.log("mid" , mid); */
-    	 	
-        document.myform.submit();
-      }
-    }
-    
-		// 천단위마다 쉼표처리
-    function numberWithCommas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-		
   </script>
     
   </head>
@@ -195,6 +84,7 @@
 						    <th>총상품금액</th>
 						    <th>배달주소</th>
 						    <th>주문 날짜</th>
+						    <th>주문 현황</th>
 						  </tr>
 				    </thead>
 				   <!-- 장바구니 목록출력 -->
@@ -221,7 +111,12 @@
 					        </p>
 					      </td>
 					      <td>
-					      	<b>${vo.orderMessage}</b>
+					      	<c:if test="${vo.orderMessage==''}">
+					      		<b>(없음)</b>
+					      	</c:if>
+					      	<c:if test="${vo.orderMessage!=''}">
+					      		<b>${vo.orderMessage}</b>
+					      	</c:if>
 					      </td>
 					      <td>
 					        <div class="text-center">
@@ -236,6 +131,29 @@
 					      <td>
 					      	<div class="text-center">
 					     			<b>${fn:substring(vo.orderDate,0,16)}</b>
+					     		</div>
+					      </td>
+					      <td>
+					      	<div class="text-center">
+										<c:if test="${vo.progress=='배달완료'}">				      		
+					     				<b><font color="blue">${vo.progress}</font></b><br />
+					     				<c:if test="${vo.ratingOk=='NO'}">		
+					     					<input type="button" class="btn btn-primary" value="별점작성" onclick="location.href='${ctp}/order/ratingInput?orderIdx=${vo.orderIdx}';" />
+					     				</c:if>
+					     				<c:if test="${vo.ratingOk!='NO'}">		
+					     					<input type="button" class="btn btn-primary" value="별점보러가기" onclick="location.href='${ctp}/order/myRating?orderIdx=${vo.orderIdx}';" />
+					     				</c:if>
+					     			</c:if>	
+										<c:if test="${vo.progress=='배달채택'}">				      		
+					     				<b><font color="green">${vo.progress}</font></b>
+					     			</c:if>	
+										<c:if test="${vo.progress=='주문취소'}">				      		
+					     				<b><font color="red">${vo.progress}</font></b>
+					     			</c:if>	
+										<c:if test="${vo.progress=='주문완료'}">				      		
+					     				<b><font color="orange">${vo.progress}</font></b><br />
+					     				<input type="button" value="주문취소" onclick="orderCancle('${vo.orderIdx}')" class="btn btn-warning" />
+					     			</c:if>	
 					     		</div>
 					      </td>
 					    </tr>

@@ -73,8 +73,6 @@ public class ChatServerDb {
 			for (Session s : list) {
 				if (s != session) { // 현재 접속자(메세지를 보낸 접속자)가 아닌 나머지 접속자들한테 아래 메세지를 보낼 수 있도록 한다.
 					try {
-						System.out.println("유져2 : " + user);
-						System.out.println("텍트스2 : " + txt);
 						s.getBasicRemote().sendText("2#" + user + ":" + txt);
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -96,6 +94,23 @@ public class ChatServerDb {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+				//}
+				
+			} 
+		} 
+		else if (no.equals("5")) {  // 접속된 누군가가 '메세지'를 전송할때(대화할때 : '5유저명#메세지' 로 넘어온다.)
+			System.out.println("유져2 : " + user);
+			System.out.println("텍트스2 : " + txt);
+			
+//			String[] order = txt.split("@");
+			
+			for (Session s : list) {
+				//if (s != session) { // 현재 접속자(메세지를 보낸 접속자)가 아닌 나머지 접속자들한테 아래 메세지를 보낼 수 있도록 한다.
+				try {
+					s.getBasicRemote().sendText("5#" + user + ":" + txt);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				//}
 				
 			} 

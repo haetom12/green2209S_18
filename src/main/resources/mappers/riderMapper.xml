@@ -7,5 +7,32 @@
 		select * from foodorder where rider = '미배정';
 	</select>
 
+	<select id="getRiderMidCheck" resultType="com.spring.green2209S_18.vo.RiderVO">
+		select * from rider where riderMid = #{riderMid};
+	</select>
+
+	<select id="getRiderCheck" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from foodorder where orderIdx = #{orderIdx} and progress = #{progress};
+	</select>
+	
+	<select id="getRiderOrderList" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from foodorder where rider = #{rider} and progress = #{progress};
+	</select>
+	
+	
+	
+	<insert id="setRiderJoinOk">
+		insert into rider values (default, #{vo.riderMid}, #{vo.riderPwd}, #{vo.riderName}, #{vo.age}, #{vo.riderPhone}, #{vo.riderEmail}, default, default);	
+	</insert>
+	
+	
+	
+	<update id="setUpdateRider">
+		update foodorder set progress = #{progress}, rider=#{rider}, checkStr=#{checkStr}, assignDate=now() where orderIdx = #{orderIdx};
+	</update>
+	
+	<update id="setRiderOrderConfirm">
+		update foodorder set progress = '배달완료' where orderIdx = #{orderIdx};
+	</update>
 
 </mapper>

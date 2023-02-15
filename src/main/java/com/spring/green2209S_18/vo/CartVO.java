@@ -38,6 +38,7 @@ public class CartVO {
 	private String assignDate;
 	private String completeDate;
 	private String checkStr;
+	private String ratingOk;
   
   
 }

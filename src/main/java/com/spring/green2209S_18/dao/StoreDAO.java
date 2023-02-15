@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -89,6 +90,8 @@ public interface StoreDAO {
 	public FoodMenuVO getfoodInfo(@Param("menuIdx") int menuIdx);
 
 	public StoreVO getstoreInfo(@Param("storeName") String storeName);
+
+	public List<RatingVO> getRatingList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("storeName") String storeName);
 
 
 }

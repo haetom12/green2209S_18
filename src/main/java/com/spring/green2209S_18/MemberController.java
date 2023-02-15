@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.OrderService;
+import com.spring.green2209S_18.service.RiderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 @Controller
 @RequestMapping("/member")
@@ -30,6 +32,9 @@ public class MemberController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	RiderService riderService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -54,6 +59,7 @@ public class MemberController {
 				int myCartCnt = vos.size();
 				
 				session.setAttribute("sMid", mid);
+				session.setAttribute("sNickName", vo.getMemberNickName());
 				session.setAttribute("myCartCnt", myCartCnt);
 				session.setAttribute("sPart", "member");
 				session.setAttribute("sAddress", vo.getAddress());
@@ -70,16 +76,16 @@ public class MemberController {
 		}
 		// 라이더 로그인
 		else if(part.equals("rider")) {
-			MemberVO vo = memberService.getMemberIdCheck(mid);
-			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
+			RiderVO vo = riderService.getRiderMidCheck(mid);
+			
+			if(vo != null && passwordEncoder.matches(pwd, vo.getRiderPwd()) && vo.getDeleteRequest().equals("NO")) {
 				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
 				
 				session.setAttribute("sMid", mid);
 				session.setAttribute("sPart", "rider");
-				session.setAttribute("sAddress", vo.getAddress());
 				model.addAttribute("vo",vo);
 				
-				return "redirect:/member/memberLoginOk";
+				return "redirect:/rider/riderMain";
 			}
 			// 로그인 실패
 			else {
@@ -150,8 +156,6 @@ public class MemberController {
 		// 비밀번호 암호화
 		vo.setPwd(passwordEncoder.encode(vo.getPwd())); 
 		
-		System.out.println("vo : " + vo);
-		
 		int res = memberService.setMemberJoinOk(vo);
 		
 		if(res == 1) return "redirect:/msg/memberJoinOk"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
@@ -200,6 +204,23 @@ public class MemberController {
 		
 		model.addAttribute("vos",vos);
 		return "order/myOrderList";
+	}
+	
+	// 내 주문내역 리스트로
+	@ResponseBody
+	@RequestMapping(value = "memberOrderCancle", method = RequestMethod.POST)
+	public String memberOrderCancleGet(String orderIdx) {
+		
+		int res = 0;
+		CartVO vo = memberService.getMyOrderInfo(orderIdx);
+		
+		System.out.println("vo : " + vo);
+		
+		if(!vo.getProgress().equals("주문완료")) return "0";
+		
+		res = memberService.setMemberOrderCancle(orderIdx);
+		
+		return res+"";
 	}
 	
 	

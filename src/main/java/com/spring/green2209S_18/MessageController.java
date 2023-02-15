@@ -255,13 +255,16 @@ public class MessageController {
 			model.addAttribute("msg", "결제가 완료되었습니다!");
 			model.addAttribute("url", "/member/myOrderList");
 		}
-		/*
-		  else if(msgFlag.equals("paymentResultOk")) { String sOrderVo =
-			(String)session.getAttribute("sOrderVo");
-			  
-		  model.addAttribute("sOrderVo",sOrderVo); model.addAttribute("msg",
-		  "결제가 완료되었습니다"); return "include/message"; }
-		 */		
+		
+		else if(msgFlag.equals("ratingInputOk")) {
+			model.addAttribute("msg", "별점이 등록되었습니다!");
+			model.addAttribute("url", "/member/myOrderList");
+		}
+		
+		else if(msgFlag.equals("ratingInputNo")) {
+			model.addAttribute("msg", "별점 등록에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/member/myOrderList");
+		}
 		
 		return "include/message";
 	}

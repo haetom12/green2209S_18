@@ -2,9 +2,12 @@ package com.spring.green2209S_18.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.PayMentVO;
+import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.WebSocketDbVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
@@ -37,6 +40,13 @@ public interface OrderService {
 	public List<CartVO> getMyOrderList(String mid);
 
 	public void setRiderOrder(WebSocketDbVO orderVo);
+
+	public void imgCheck(String content);
+
+	public int setRatingInput(RatingVO vo);
+
+	public void setRaingInputOk(String orderIdx);
+
 
 
 

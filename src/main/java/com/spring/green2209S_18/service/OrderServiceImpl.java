@@ -1,5 +1,10 @@
 package com.spring.green2209S_18.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +18,7 @@ import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.OrderDAO;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
-import com.spring.green2209S_18.vo.PayMentVO;
+import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.WebSocketDbVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
@@ -116,6 +121,77 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void setRiderOrder(WebSocketDbVO orderVo) {
 		orderDAO.setRiderOrder(orderVo);
+	}
+
+	@Override
+	public void imgCheck(String content) {
+			//	 0         1         2         3         4         5         6         7         8         
+		//     012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+		//<img src="/green2209S_18/data/ckeditor/230111121412_4.jpg" style="height:183px; width:275px" />
+		
+		// content안에 그림파일이 존재할때만 작업을 수행 할 수 있도록 한다.
+		if(content.indexOf("src=\"/") == -1) return;
+		
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/");
+		
+		int position = 34;
+		String nextImg = content.substring(content.indexOf("src=\"/") + position);
+		boolean sw =true;
+		
+		while(sw) {
+			String imgFile = nextImg.substring(0,nextImg.indexOf("\""));
+			
+			System.out.println("사진이름 : " + imgFile);
+			
+			String origFilePath = uploadPath + imgFile;
+			System.out.println("오리지날 : " + origFilePath);
+			String copyFilePath = uploadPath + "rating/" + imgFile;
+			
+			fileCopyCheck(origFilePath,copyFilePath); // board 폴더에 파일을 복사하고자 한다.
+			
+			if(nextImg.indexOf("src=\"/") == -1) {
+				sw = false;
+			}
+			else {
+				nextImg = nextImg.substring(nextImg.indexOf("src=\"/") + position);
+			}
+		}
+	}
+	
+	private void fileCopyCheck(String originalFilePath, String copyFilePath) {
+		File origFile = new File(originalFilePath);
+		File copyFile = new File(copyFilePath);
+		
+		try {
+			FileInputStream fis = new FileInputStream(origFile);
+			FileOutputStream fos = new FileOutputStream(copyFile);
+			
+			byte[] buffer = new byte[2048];
+			int cnt = 0;
+			while((cnt = fis.read(buffer)) != -1) {
+				fos.write(buffer, 0, cnt);
+			}
+			fos.flush();
+			fos.close();
+			fis.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public int setRatingInput(RatingVO vo) {
+		return orderDAO.setRatingInput(vo);
+	}
+
+	@Override
+	public void setRaingInputOk(String orderIdx) {
+		orderDAO.setRaingInputOk(orderIdx);
 	}
 
 	

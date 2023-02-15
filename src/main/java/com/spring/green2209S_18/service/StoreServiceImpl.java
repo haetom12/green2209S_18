@@ -19,6 +19,7 @@ import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.StoreDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -320,6 +321,11 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public StoreVO getstoreInfo(String storeName) {
 		return storeDAO.getstoreInfo(storeName);
+	}
+
+	@Override
+	public List<RatingVO> getRatingList(int startIndexNo, int pageSize, String storeName) {
+		return storeDAO.getRatingList(startIndexNo, pageSize, storeName);
 	}
 
 

@@ -82,9 +82,11 @@
 	          </div>
 	          <div class="col-md-4 text-center d-flex align-self-stretch ftco-animate choose2" style="padding-top: 16%;">
 	            <div class="media block-6 services mb-md-0 mb-4">
-	              <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
-	            		<span class="flaticon-shipped"></span>
-	              </div>
+	              <a href="${ctp}/rider/riderJoin">
+		              <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
+		            		<span class="flaticon-shipped"></span>
+		              </div>
+	              </a>
 	              <div class="media-body">
 	                <font size="6pt" color="#bc4749">라이더 가입</font>
 	              </div>

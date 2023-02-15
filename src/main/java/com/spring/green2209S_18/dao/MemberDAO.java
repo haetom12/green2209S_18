@@ -17,5 +17,11 @@ public interface MemberDAO {
 
 	public List<CartVO> getMyCartList(@Param("mid") String mid);
 
+	public void setOrderCntUpdate(@Param("mid") String mid);
+
+	public CartVO getMyOrderInfo(@Param("orderIdx") String orderIdx);
+
+	public int setMemberOrderCancle(@Param("orderIdx") String orderIdx);
+
 
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <html>
   <head>
@@ -70,6 +71,37 @@
     
     </script>
     
+      <style>
+        
+    	fieldset{
+		    display: inline-block;
+		    direction: rtl;
+		    border:0;
+			}
+			fieldset legend{
+		    text-align: right;
+			}
+			input[type=radio]{
+		    display: none;
+			}
+			label{
+		    font-size: 1em;
+		    color: transparent;
+		    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+/* 		    text-shadow: 0 0 0 #808080; */
+		    /* text-shadow: 0 0 0 #f0f0f0; */
+			}
+/* 			label:hover{
+		    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+			}
+			label:hover ~ label{
+		    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+			}
+			input[type=radio]:checked ~ label{
+		    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+			} */
+
+    </style>
     
   </head>
   <body class="goto-here">
@@ -153,29 +185,61 @@
 		            </div>
 		
 		            <div class="sidebar-box ftco-animate">
-		              <h3 class="heading">최근 리뷰</h3>
-		              <div class="block-21 mb-4 d-flex">
-		                <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
-		                <div class="text">
-		                  <h3 class="heading-1"><a href="#">리뷰창 나올곳</a></h3>
-		                  <div class="meta">
-		                    <div><a href="#"><span class="icon-calendar"></span> 리뷰날짜</a></div>
-		                    <div><a href="#"><span class="icon-person"></span> 아이디</a></div>
-		                    <div><a href="#"><span class="icon-chat"></span> 댓글수</a></div>
-		                  </div>
-		                </div>
-		              </div>
-		              <div class="block-21 mb-4 d-flex">
-		                <a class="blog-img mr-4" style="background-image: url(images/image_3.jpg);"></a>
-		                <div class="text">
-		                  <h3 class="heading-1"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-		                  <div class="meta">
-		                    <div><a href="#"><span class="icon-calendar"></span> April 09, 2019</a></div>
-		                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-		                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-		                  </div>
-		                </div>
-		              </div>
+		              <h3 class="heading">최근 별점&nbsp;<font size="2pt"><a href="">(모든 별점)</a></font></h3>
+		              <c:forEach var="rVo" items="${rVos}">
+			              <div class="block-21 mb-4 d-flex">
+			                <!-- <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a> -->
+			                <div class="text">
+			                <fieldset style="margin: 0 auto">
+			                <c:if test="${rVo.reviewStar == 5}">
+												<input type="radio" name="reviewStar" value="5" id="rate1"><label
+													for="rate1">★</label>
+												<input type="radio" name="reviewStar" value="4" id="rate2"><label
+													for="rate2">★</label>
+												<input type="radio" name="reviewStar" value="3" id="rate3"><label
+													for="rate3">★</label>
+												<input type="radio" name="reviewStar" value="2" id="rate4"><label
+													for="rate4">★</label>
+												<input type="radio" name="reviewStar" value="1" id="rate5"><label
+													for="rate5">★</label>
+											</c:if>
+			                <c:if test="${rVo.reviewStar == 4}">
+												<input type="radio" name="reviewStar" value="4" id="rate2"><label
+													for="rate2">★</label>
+												<input type="radio" name="reviewStar" value="3" id="rate3"><label
+													for="rate3">★</label>
+												<input type="radio" name="reviewStar" value="2" id="rate4"><label
+													for="rate4">★</label>
+												<input type="radio" name="reviewStar" value="1" id="rate5"><label
+													for="rate5">★</label>
+											</c:if>
+			                <c:if test="${rVo.reviewStar == 3}">
+												<input type="radio" name="reviewStar" value="3" id="rate3"><label
+													for="rate3">★</label>
+												<input type="radio" name="reviewStar" value="2" id="rate4"><label
+													for="rate4">★</label>
+												<input type="radio" name="reviewStar" value="1" id="rate5"><label
+													for="rate5">★</label>
+											</c:if>
+			                <c:if test="${rVo.reviewStar == 2}">
+												<input type="radio" name="reviewStar" value="2" id="rate4"><label
+													for="rate4">★</label>
+												<input type="radio" name="reviewStar" value="1" id="rate5"><label
+													for="rate5">★</label>
+											</c:if>
+			                <c:if test="${rVo.reviewStar == 1}">
+												<input type="radio" name="reviewStar" value="1" id="rate5"><label
+													for="rate5">★</label>
+											</c:if>
+											</fieldset>
+			                  <h3 class="heading-1"><a href="#">${rVo.title}</a></h3>
+			                  <div class="meta">
+			                    <div><a href="#"><span class="icon-calendar"></span></a>&nbsp;${fn:substring(rVo.ratingDate,0,fn:length(rVo.ratingDate)-5)}</div>
+			                    <div><a href="#"><span class="icon-person"></span></a>&nbsp;${rVo.mid}</div>
+			                  </div>
+			                </div>
+			              </div>
+		              </c:forEach>
 		            </div>
 		
 		            <div class="sidebar-box ftco-animate">

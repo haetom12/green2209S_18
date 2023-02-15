@@ -28,11 +28,15 @@
 	</select>
 	
 	<select id="getMyOrderList" resultType="com.spring.green2209S_18.vo.CartVO">
-		select * from foodorder where mid = #{mid};
+		select * from foodorder where mid = #{mid} order by idx desc;
 	</select>
 	
 	<select id="getOrderChatList" resultType="com.spring.green2209S_18.vo.CartVO">
 		select * from foodorder where rider = '미배정';
+	</select>
+	
+	<select id="totRatingCnt" resultType="int">
+		select count(*) from rating where storeName = #{storeName};
 	</select>
 	
 	
@@ -62,12 +66,21 @@
 	</insert>
 	
 	<insert id="setFoodOrderOK">
-		insert into foodorder values (default, #{vo.mid}, default, #{vo.orderIdx}, #{vo.menuIdx}, #{vo.foodName},#{vo.storeName}, #{vo.mainPrice}, #{vo.thumbImg}, #{vo.orderAddress}, #{vo.subMenuName},#{vo.optionPrice},#{vo.optionNum},#{vo.orderMessage},#{vo.orderTotalPrice2}, default, default, default, default, default);
+		insert into foodorder values (default, #{vo.mid}, default, #{vo.orderIdx}, #{vo.menuIdx}, #{vo.foodName},#{vo.storeName}, #{vo.mainPrice}, #{vo.thumbImg}, #{vo.orderAddress}, #{vo.subMenuName},#{vo.optionPrice},#{vo.optionNum},#{vo.orderMessage},#{vo.orderTotalPrice2}, default, default, default, default, default, default);
+	</insert>
+	
+	<insert id="setRatingInput">
+		insert into rating values (default, #{vo.orderIdx}, #{vo.mid}, #{vo.storeName},#{vo.reviewStar},#{vo.title},#{vo.content}, default, #{vo.memberNickName}, default);
 	</insert>
 	
 <!-- 	<insert id="setRiderOrder">
 		insert into weborder values (default, #{vo.mid}, #{vo.foodMenu}, #{vo.address}, #{vo.price}, default, default, default, default, default, default);
 	</insert> -->
+	
+	
+	<update id="setRaingInputOk">
+		update foodorder set ratingOk = 'OK' where orderIdx = #{orderIdx};
+	</update>
 	
 	
 	<delete id="setDeleteWishList">

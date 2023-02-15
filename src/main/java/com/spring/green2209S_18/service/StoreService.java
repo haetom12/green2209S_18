@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -90,6 +91,8 @@ public interface StoreService {
 	public FoodMenuVO getfoodInfo(int menuIdx);
 
 	public StoreVO getstoreInfo(String storeName);
+
+	public List<RatingVO> getRatingList(int startIndexNo, int pageSize, String storeName);
 
 
 }

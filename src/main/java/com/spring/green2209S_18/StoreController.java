@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.green2209S_18.pagenation.PageProcess;
+import com.spring.green2209S_18.pagenation.PageVO;
 import com.spring.green2209S_18.service.AdminService;
 import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 @Controller
@@ -40,6 +43,9 @@ public class StoreController {
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	PageProcess pageProcess;
 	
 	// 가게 등록 폼 이동
 	@RequestMapping(value = "/storeJoin", method = RequestMethod.GET)
@@ -140,19 +146,30 @@ public class StoreController {
 	@RequestMapping(value = "/storeMenu", method = RequestMethod.GET)
 	public String storeMenuGet(Model model, 
 			@RequestParam(name = "idx" , defaultValue = "1", required = false) int idx,
-			@RequestParam(name = "foodTag" , defaultValue = "", required = false) String foodTag) {
+			@RequestParam(name = "foodTag" , defaultValue = "", required = false) String foodTag,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "3", required = false) int pageSize) {
 		
 		StoreVO vo = storeService.getStoreMenu(idx);
+
+		// 해당 가게의 평점 총 갯수 구하기
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "rating", vo.getStoreName(), "");
+		
+		// 평점 가져오기
+		List<RatingVO> rVos = storeService.getRatingList(pageVo.getStartIndexNo(), pageSize, vo.getStoreName());
+		
 		// 메뉴 리스트
 		List<FoodMenuVO> vos = storeService.getStoreFoodMenuByTag(vo.getStoreName(),foodTag);
+		
 		// 음식 태그 리스트
 		List<FoodMenuVO> tVos = storeService.getstoreTagList(vo.getStoreName());
+		
 		model.addAttribute("vo", vo);
 		model.addAttribute("vos",vos);
 		model.addAttribute("vSize",vos.size());
 		model.addAttribute("tVos",tVos);
+		model.addAttribute("rVos",rVos);
 		
-		System.out.println("vSize : " + vos.size());
 		return "store/storeMenu";
 	}
 	

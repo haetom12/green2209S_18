@@ -58,17 +58,19 @@ insert into member values (default, 'haetom12', '1454', '해찬들','천해찬',
 /* 가게 리뷰/평점 */
 create table rating (
 	idx int not null auto_increment,						/* 평점 고유번호 */
-	storeIdx int not null,											/* 가게 고유번호 */
-	rating int not null,												/* 평점 */
-	rateComment text not null, 									/* 평점 내용 */
+	orderIdx  varchar(15) not null,
+	mid  varchar(20) not null,
+	storeName varchar(30) not null,											/* 가게 고유번호 */
+	reviewStar int not null,												/* 평점 */
+	content text not null, 									/* 평점 내용 */
 	reportRating int not null default 0,				/* 신고횟수 */
-	foreign key(storeIdx) references store(idx),
+	foreign key(storeName) references store(storeName),
 	primary key(idx)     
 );
 
 insert into rating values (default, 5, 2, "마싯어요", 0);
 
---drop table rating;
+drop table rating;
 
 --alter table member add level int default 0;
 --ALTER TABLE store DROP COLUMN rateAvg;

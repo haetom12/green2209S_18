@@ -15,4 +15,10 @@ public interface MemberService {
 
 	public List<CartVO> getMyCartList(String mid);
 
+	public void setOrderCntUpdate(String mid);
+
+	public CartVO getMyOrderInfo(String orderIdx);
+
+	public int setMemberOrderCancle(String orderIdx);
+
 }

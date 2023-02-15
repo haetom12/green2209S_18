@@ -14,9 +14,30 @@
 	<select id="getMyCartList" resultType="com.spring.green2209S_18.vo.CartVO">
 		select * from cart where mid = #{mid};
 	</select>
+	
+	<select id="getMyOrderInfo" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from foodorder where orderIdx = #{orderIdx};
+	</select>
+
+
+
 
 	<insert id="setMemberJoinOk">
 		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.memberName},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},default,default,default,default,#{vo.memberLatitude},#{vo.memberLongitude},#{vo.memberNickName});
 	</insert>
+	
+	
+	
+	
+	<update id="setOrderCntUpdate">
+		update member set orderCnt = orderCnt + 1 where mid = #{mid};
+	</update>
+	
+	
+	<update id="setMemberOrderCancle">
+		update foodorder set progress = '주문취소' where orderIdx = #{orderIdx};
+	</update>
+	
+	
 
 </mapper>

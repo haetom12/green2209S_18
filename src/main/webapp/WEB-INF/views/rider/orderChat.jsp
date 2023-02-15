@@ -101,15 +101,6 @@
 		  			//alert("user : " + user);
 		  			let txt = evt.data.substring(evt.data.indexOf(":")+1);
 		  			
-		  			const arr = txt.split("@");
-		  			
-		  			let idx = arr[0];
-		  			let mid = arr[1];
-		  			let food = arr[2];
-		  			let store = arr[3];
-		  			let orderPrice = arr[4];
-		  			
-		  			
 		  			//alert("txt : " + txt);
 		  	   				
 		  			if (no == '1') {		// 처음 접속시에는 'user'명만 들어온다.
@@ -121,7 +112,24 @@
 		  			} 
 		  			else if (no == '4') {	
 		  				//alert("txt : " + txt);
+			  			const arr = txt.split("@");
+			  			let idx = arr[0];
+			  			let mid = arr[1];
+			  			let food = arr[2];
+			  			let store = arr[3];
+			  			let orderPrice = arr[4];
+			  			
 		  				if (txt != '') print4(idx, mid, food, store, orderPrice);	
+					 /* 	if (txt != '') print4(user, txt);	 */
+		  			} 
+		  			else if (no == '5') {	
+		  				
+		  				const arr = txt.split("_")
+			  			let idx = arr[0];
+			  			let riderMid = arr[1];
+			  			let time = arr[2];
+			  			
+		  				if (txt != '') print5(idx, riderMid, time);	
 					 /* 	if (txt != '') print4(user, txt);	 */
 		  			} 
 		  			else if (no == '3') {	// 채팅중 또 다른 사용자가 접속했을때.. '3#user'명  으로 접속된다.
@@ -168,9 +176,13 @@
 		  	temp += '</li>';
 			  temp = temp.replace(/\n/gi,"<br/>");	// replaceAll함수가 없기에 정규식으로 대체함.
 		  	
-		  	$('#list').append(temp);
 			  
+			  /* const element = document.getElementById("box");
+				element.scrollIntoView();	 */
+		  	$('#list').append(temp);
+				$('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기
 		  }
+		  
 		
 		  // 배달 시킨 정보를 채팅창에 입력
 		  function print4(idx, mid, food, store, orderPrice) {
@@ -179,12 +191,13 @@
 	  		temp += '<li class="clearfix">';
 	  		temp += '<div class="chat-body clearfix" style="max-width:300px;">';
 	  		temp += '<p>';
+	  		temp += '주문이 접수되었습니다!<br />';
 	  		temp += '배달번호 : '+idx+'<br />';
 	  		temp += '주문자 : '+mid+'<br />';
 	  		temp += '메뉴명 : '+food+'<br />';
 	  		temp += '음식점 : '+store+'<br />';
 	  		temp += '금액 : '+orderPrice+'<br />';
-	  		temp += '<input type="button" value="배달받기" class="btn btn-success" />';
+	  		temp += '<input type="button" value="배달받기" class="btn btn-success" onclick="riderCheck(\''+idx+'\',\''+mid+'\',\''+store+'\',\''+food+'\')" />';
 	  		temp += '</p>';
 	  		temp += '<div class="chat_time">' + new Date().toLocaleTimeString() + '</div>';
 	  		temp += '</div>';
@@ -192,31 +205,31 @@
 			  temp = temp.replace(/\n/gi,"<br/>");	// replaceAll함수가 없기에 정규식으로 대체함.
 		  	
 		  	$('#list').append(temp);
+			  $('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기
 		  }
 		  
-			/*
- 			// 메세지 전송 및 아이디
-		  function print(user, txt) {
+		
+		  // 배달 접수 받은 배달원의 정보를 뿌림
+		  function print5(idx, riderMid, time) {
 		  	let temp = '';
-		  	if('${sMid}'!=user) {
-		  		temp += '<div style="margin-bottom:3px;margin-right:100px">';
-		  	}
-		  	else {
-		  		temp += '<div style="margin-bottom:3px;margin-left:100px" class="text-right">';
-		  	}
-		  	temp += '<font size="0.9em">[' + user + ']</font> ';
-		  	temp += '<span style="font-size:11px;color:#777;">' + new Date().toLocaleTimeString() + '</span><br/>';
-		  	if('${sNickName}'!=user) {
-		  		temp += '<div style="background-color:#CEF6EC;border:1px solid #fff; border-radius:4px; padding:5px; text-align:left;width:auto;">'+txt+'</div>';
-		  	}
-		  	else {
-		  		temp += '<div style="background-color:#ff0;border:1px solid #ccc;border-radius:4px;padding:5px;text-align:left;width:auto;">'+txt+'</div>';
-		  	}
-		  	temp += '</div>';
+		  		/* temp += '<div style="margin-bottom:3px;" class="text-right ml-5">'; */
+	  		temp += '<li class="clearfix">';
+	  		temp += '<div class="chat-body clearfix" style="max-width:300px;">';
+	  		temp += '<p>';
+	  		temp += '배달이 접수되었습니다!<br />';
+	  		temp += '배달번호 : '+idx+'<br />';
+	  		temp += '배달원 : '+riderMid+'<br />';
+	  		temp += '예상배달시간 : '+time+'분<br />';
+	  		temp += '</p>';
+	  		temp += '<div class="chat_time">' + new Date().toLocaleTimeString() + '</div>';
+	  		temp += '</div>';
+		  	temp += '</li>';
 			  temp = temp.replace(/\n/gi,"<br/>");	// replaceAll함수가 없기에 정규식으로 대체함.
-		  			
+		  	
 		  	$('#list').append(temp);
-		  } */
+			  $('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기
+		  }
+		  
 		  
 		  // 다른 client 접속		
 		  function print2(user) {
@@ -229,6 +242,7 @@
 		  	temp += '</li>';
 		  	
 		  	$('#list').append(temp);
+		  	$('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기
 		  }
 		
 		  // client 접속 종료
@@ -242,7 +256,9 @@
 		  	temp += '</li>';
 		  			
 		  	$('#list').append(temp);
+		  	$('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기
 		  }
+		  
 	
 		  // user명 입력후 연결버튼 누를때 수행
 		  $('#user').keydown(function() {
@@ -250,6 +266,7 @@
 		  		$('#btnConnect').click();
 		  	}
 		  });
+		  
 		  
 		  // 메세지 입력후 엔터키를 누를때 수행(Shift Enter키는 다음줄로 이동)
 		  $('#msg').keydown(function() {
@@ -290,58 +307,6 @@
 		  
 	  });
 	  
-	  function productCheck() {
-		  let product = myform.product.value;
-		  if(product == "") {
-			  alert("상품을 선택하세요.");
-			  return false;
-		  }
-		  let products = product.split(":");
-		  product = products[0];
-		  let price = products[1];
-		  myform.price.value = price;
-	  }
-	  
-	  // 주문하기
-	  function productSubmit() {
-		  let product = myform.product.value;
-		  if(product == "") {
-			  alert("상품을 선택하세요.");
-			  return false;
-		  }
-		  let products = product.split(":");
-		  product = products[0];
-		  let price = products[1];
-		  
-		  $.ajax({
-			  type : "post",
-			  url  : "${ctp}/webSocket/webSocketDb/productInput",
-			  data : {
-				  product : product,
-				  price : price
-			  },
-			  success : function(idx) {
-				  alert("주문이 완료되었습니다.");
-				  
-		  		let chatColor = "#AE00FF";
-		  		//서버에게 메시지 전달
-		  		//2#유저명#메시지
-		  		//let imsi = idx + '_' + product;
-		  		product = "(" + idx + ")"+ product;
-		  		ws.send('2#${sNickName}#주문완료:'+product+' <a href="javascript:riderSelect(\''+idx+'\',\''+product+'\')">배달미정</a>@' + chatColor); //서버에게 'user명'과 '메세지'와 '컬러' 전달
-		  		let msg = '<font color="'+chatColor+'">주문완료:'+product+' : <a href="javascript:riderSelect(\''+idx+'\',\''+product+'\')">배달미정</a></font>';
-		  		print1('${sNickName}', msg); //본인 대화창에 'user명'과 '메세지'와 '색상' 출력하기
-		  		
-		  		//event.preventDefault();	// 커서를 원래 위치로 복원하기
-		      //$('#msg').val('');  		// 메세지창 청소하고 다음메세지를 준비
-		  		//$('#msg').focus();
-		  		$('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기
-			  },
-			  error : function() {
-				  alert('전송오류');
-			  }
-		  });
-	  }
 	  
 	  // 주문완료후 호출되는 함수..print1
 	  function print1(user, txt) {
@@ -368,31 +333,6 @@
 	  			
 	  	$('#list').append(temp);
 	  }
-		/* 	  
- 			// 주문완료후 호출되는 함수..print1
-	  function print1(user, txt) {
-	  	let temp = '';
-	  	if('${sNickName}'!=user) {
-	  		temp += '<div style="margin-bottom:3px;margin-right:100px">';
-	  	}
-	  	else {
-	  		temp += '<div style="margin-bottom:3px;margin-left:100px" class="text-right">';
-	  	}
-	  	
-	  	temp += '<font size="0.9em">[' + user + ']</font> ';
-	  	temp += '<span style="font-size:11px;color:#777;">' + new Date().toLocaleTimeString() + '</span><br/>';
-	  	if('${sNickName}'!=user) {
-	  		temp += '<div style="background-color:#CEF6EC;border:1px solid #fff; border-radius:4px; padding:5px; text-align:left;width:auto;">'+txt+'</div>';
-	  	}
-	  	else {
-	  		temp += '<div style="background-color:#ff0;border:1px solid #ccc;border-radius:4px;padding:5px;text-align:left;width:auto;">'+txt+'</div>';
-	  	}
-	  	temp += '</div>';
-		  temp = temp.replace(/\n/gi,"<br/>");	// replaceAll함수가 없기에 정규식으로 대체함.
-	  			
-	  	$('#list').append(temp);
-	  } 
-	  */
 	  
 	  // 라이더가 배달미정인 물품 선택하기
 	  function riderSelect(idx, product) {
@@ -492,6 +432,52 @@
 	  		$('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기
 		}
 		
+		function riderCheck(idx,mid,store,food) {
+			let riderMid = '${sMid}';
+      let ans = confirm("선택하신 주문을 배달하시겠습니까?");
+      if(!ans) return false;
+			
+			$.ajax({
+			  	type   : "post",
+			  	url    : "${ctp}/rider/riderOrderCheck",
+			  	data   : {
+			  		idx : idx,
+			  		mid : mid,
+			  		store : store,
+			  		food : food,
+			  		riderMid : riderMid
+			  	},
+		  		success:function(user) {
+			  		if(user == "") {
+						  alert("이미 배달선정이 완료된 주문이거나 취소된 주문입니다!");
+						  return false;
+				  	}
+			  		else if(user == "1") {
+			  			alert("라이더님이 아직 배달중인 주문이 있습니다!");
+						  return false;
+			  		}
+ 					  let temp = user.split("_");
+					  idx = temp[0];
+					  riderMid = temp[1];
+					  time = temp[2];
+					  alert("배달자("+riderMid+") 채택완료!");
+					  
+					  let chatColor = "#0000FF";
+			  		//서버에게 메시지 전달
+			  		//2#유저명#메시지
+			  		ws.send('5#${sMid}#'+user); //서버에게 'user명'과 '메세지'와 '컬러' 전달
+			  		let msg = '배달채택완료:'+product+' : 라이더:<b>'+user+'</b>';
+			  		print1(riderMid, msg); //본인 대화창에 'user명'과 '메세지'와 '색상' 출력하기
+			  		
+			  		$('#list').scrollTop($('#list').prop('scrollHeight'));	// 스크롤바 가장 아래쪽으로 내리기 	
+			  	},
+			  	error : function() {
+			  		alert("전송 오류~~");
+			  	}
+			  });	
+		}
+	
+	
 	</script>
 </head>
 <body>
@@ -710,65 +696,7 @@
 		</div>
 	</div>
 
-	<div class="left-side-bar">
-		<div class="brand-logo">
-			<a href="index.html">
-				<img src="${ctp}/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
-				<img src="${ctp}/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
-			</a>
-			<div class="close-sidebar" data-toggle="left-sidebar-close">
-				<i class="ion-close-round"></i>
-			</div>
-		</div>
-		<div class="menu-block customscroll">
-			<div class="sidebar-menu">
-				<ul id="accordion-menu">
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="index.html">Dashboard style 1</a></li>
-							<li><a href="index2.html">Dashboard style 2</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="calendar.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar1"></span><span class="mtext">Calendar</span>
-						</a>
-					</li>
-					
-					<!-- 경계선  -->
-					<li>
-						<div class="dropdown-divider"></div>
-					</li>
-					
-					
-					<li>
-						<div class="sidebar-small-cap">Extra</div>
-					</li>
-					<li>
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit-2"></span><span class="mtext">Documentation</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="introduction.html">Introduction</a></li>
-							<li><a href="getting-started.html">Getting Started</a></li>
-							<li><a href="color-settings.html">Color Settings</a></li>
-							<li><a href="third-party-plugins.html">Third Party Plugins</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-paper-plane1"></span>
-							<span class="mtext">Landing Page <img src="${ctp}/vendors/images/coming-soon.png" alt="" width="25"></span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="mobile-menu-overlay"></div>
+	<jsp:include page="/WEB-INF/views/include/riderNav.jsp"></jsp:include>
 	
 	<div class="main-container">
 		<div class="pd-ltr-20 xs-pd-20-10">
@@ -797,7 +725,7 @@
 										<div class="clearfix">
 											<div class="chat-profile-name">
 												<h3>주문 배달 현황</h3>
-												<span>현재 접속자수()</span>
+												<!-- <span>현재 접속자수()</span> -->
 											</div>
 										</div>
 									</div>
@@ -811,36 +739,11 @@
 								</div>
 								
 								<div class="chat-box">
-									<div class="chat-desc customscroll" >
-										<ul id="list">
-											<li class="clearfix admin_chat">
-												<div class="chat-body clearfix">
-													<p>Maybe you already have additional info?</p>
-													<div class="chat_time">09:40PM</div>
-												</div>
-											</li>
-											
-											<li class="clearfix">
-												<span class="chat-img">
-													<img src="${ctp}/vendors/images/chat-img1.jpg" alt="">
-												</span>
-												<div class="chat-body clearfix">
-													<p>We are just writing up the user stories now so will have requirements for you next week. We are just writing up the user stories now so will have requirements for you next week.</p>
-													<div class="chat_time">09:40PM</div>
-												</div>
-											</li>
-											
-											<li class="clearfix admin_chat">
-												<span class="chat-img">
-													<img src="${ctp}/vendors/images/chat-img2.jpg" alt="">
-												</span>
-												<div class="chat-body clearfix">
-													<p>Maybe you already have additional info?</p>
-													<div class="chat_time">09:40PM</div>
-												</div>
-											</li>
+									<div class="chat-desc" > <!-- customscroll -->
+										<ul id="list" style="overflow: auto; height: 440px;">
 											<li id="list2"></li>
 										</ul>
+										<div id="box"></div>
 									</div>
 									<div class="chat-footer">
 										<div class="file-upload"><a href="#"><i class="fa fa-paperclip"></i></a></div>

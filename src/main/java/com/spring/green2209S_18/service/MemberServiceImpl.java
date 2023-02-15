@@ -37,6 +37,21 @@ public class MemberServiceImpl implements MemberService {
 	public List<CartVO> getMyCartList(String mid) {
 		return memberDAO.getMyCartList(mid);
 	}
+
+	@Override
+	public void setOrderCntUpdate(String mid) {
+		memberDAO.setOrderCntUpdate(mid);
+	}
+
+	@Override
+	public CartVO getMyOrderInfo(String orderIdx) {
+		return memberDAO.getMyOrderInfo(orderIdx);
+	}
+
+	@Override
+	public int setMemberOrderCancle(String orderIdx) {
+		return memberDAO.setMemberOrderCancle(orderIdx);
+	}
 	
 
 
