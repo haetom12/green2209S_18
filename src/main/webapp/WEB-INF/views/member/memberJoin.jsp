@@ -195,6 +195,7 @@
 			'use strict';
 		  let idCheckSw = 0;
 		  let nickCheckSw = 0;
+		  let emailCheckSw = 0;
 		  
 			function JoinCheck() {
 		    	// 폼의 유효성 검사~~~~
@@ -283,6 +284,11 @@
 		    			document.getElementById("memberNickName").focus();
 		    			return false;
 		    		}
+		    		else if(emailCheckSw == 0) {
+		    			alert("이메일 인증은 필수입니다!");
+		    			document.getElementById("email1").focus();
+		    			return false;
+		    		}
 		    		else {
 			  			// 묶여진 필드(email/tel)를 폼태그안에 hidden태그의 값으로 저장시켜준다.
 			  			JoinForm.email.value = email;
@@ -360,6 +366,63 @@
 			    }
 			  }
 			
+			// 이메일로 인증문자보내기
+			function mailCheck() {
+				let email1 = JoinForm.email1.value;
+	    	let email2 = JoinForm.email2.value;
+	      let email = email1 + '@' + email2;
+	      
+				
+				if(email1.trim()=="") {
+					alert("이메일을 먼저 입력하세요.");
+					return false;	
+				}
+				else {
+				  	$.ajax({
+					  	type   : "post",
+					  	url    : "${ctp}/member/memberEmailCheck",
+					  	data   : {email : email} ,
+					  	async  : false ,
+					  	success:function(res) {
+					  		if(res == "1") {
+					  			alert("인증 메일이 전송되었습니다.(제한시간 5분)")
+									document.getElementById("mCheck").style.display = 'block';
+					  		}
+					  		else {
+					  			alert("다시 시도해주세요");
+					  		}								
+					  	},
+					  	error : function() {
+					  		alert("전송 오류~~");
+					  	}
+					  });	
+			    }
+			}
+			
+			// 이메일 인증확인
+			function mailCheckOk() {
+				
+				let emailCode = JoinForm.emailCode.value;
+			      
+				$.ajax({
+				  	type   : "post",
+				  	url    : "${ctp}/member/memberEmailCheckOk",
+				  	data   : {emailCode : emailCode} ,
+				  	async  : false ,
+				  	success:function(res) {
+				  		if(res == "0") {
+				  			document.getElementById("demo5").innerHTML = "<font color = 'red'> 인증번호가 틀립니다! </font>"; 
+				  		}
+				  		else {
+				  			document.getElementById("demo5").innerHTML = "<font color = 'blue'> 이메일 인증 성공! </font>"; 
+								emailCheckSw = 1;
+				  		}								
+				  	},
+				  	error : function() {
+				  		alert("전송 오류~~");
+				  	}
+				  });	
+			}
 		</script>
   </head>
 
@@ -367,94 +430,102 @@
     <main class="main" id="top">
 		<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
 		<section class="py-5 overflow-hidden" style="background-color: #f4e285">
-			<div class="login-container animated fadeInDown bootstrap snippets bootdeys">
+			<div class="join-form login-container animated fadeInDown bootstrap snippets bootdeys">
 				<form name="JoinForm" method="post">
-	        <div class="loginbox bg-white">
-	            <div class="fw-bold text-danger fs-3 fs-lg-5 lh-sm my-2 mt-2 text-center"><font size="20pt">회원가입</font></div>
-	            <div class="loginbox-or">
-	                <div class="or-line"></div>
-	            </div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">아이디</div>
-	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-	                <input type="text" class="form-control" id="mid" name="mid" placeholder="아이디를 입력하세요" style="width: 100px;" required>&nbsp;
-	                <input type="button" class="btn btn-primary" id="midBtn" onclick="idCheck()" style="width: 20%; text-align: center;"  value="중복체크">
-	            </div>
-	            <div style="font-size: 10px; margin-left: 9%;" id="demo"></div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">비밀번호</div>
-	            <div class="loginbox-textbox">
-	                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요"  style="width: 85%; margin: 0 auto;" required>
-	            </div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">닉네임</div>
-	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-	                <input type="text" class="form-control" id="memberNickName" name="memberNickName" placeholder="닉네임를 입력하세요" style="width: 100px;" required>&nbsp;
-	                <input type="button" class="btn btn-primary" id="midBtn" onclick="nickNameCheck()" style="width: 20%; text-align: center;"  value="중복체크">
-	            </div>
-	            <div style="font-size: 10px; margin-left: 9%;" id="demo3"></div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">성명</div>
-	            <div class="loginbox-textbox">
-	                <input type="text" class="form-control" id="memberName" name="memberName" placeholder="성명을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
-	            </div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">생년월일</div>
-	            <div class="container-fluid px-1 px-sm-5 mx-auto">
-	            	<input type="date" name="birthday" value="<%=java.time.LocalDate.now()%>" class="form-control mb-2" style="width: 30%; margin-left: 3%" >
+	      	<div class="loginbox bg-white">
+            <div class="fw-bold text-danger fs-3 fs-lg-5 lh-sm my-2 mt-2 text-center"><font size="20pt">회원가입</font></div>
+            <div class="loginbox-or">
+                <div class="or-line"></div>
+            </div>
+            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">아이디</div>
+            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+                <input type="text" class="form-control rounded" id="mid" name="mid" placeholder="아이디를 입력하세요" style="width: 100px;" required>&nbsp;
+                <input type="button" class="btn btn-primary" id="midBtn" onclick="idCheck()" style="width: 20%; text-align: center;"  value="중복체크">
+            </div>
+            <div style="font-size: 10px; margin-left: 9%;" id="demo"></div>
+            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">비밀번호</div>
+            <div class="loginbox-textbox">
+                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요"  style="width: 85%; margin: 0 auto;" required>
+            </div>
+            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">닉네임</div>
+            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+                <input type="text" class="form-control" id="memberNickName" name="memberNickName" placeholder="닉네임를 입력하세요" style="width: 100px;" required>&nbsp;
+                <input type="button" class="btn btn-primary" id="midBtn" onclick="nickNameCheck()" style="width: 20%; text-align: center;"  value="중복체크">
+            </div>
+            <div style="font-size: 10px; margin-left: 9%;" id="demo3"></div>
+            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">성명</div>
+            <div class="loginbox-textbox">
+                <input type="text" class="form-control" id="memberName" name="memberName" placeholder="성명을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
+            </div>
+            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">생년월일</div>
+            <div class="container-fluid px-1 px-sm-5 mx-auto">
+            	<input type="date" name="birthday" value="<%=java.time.LocalDate.now()%>" class="form-control mb-2" style="width: 30%; margin-left: 3%" >
+						</div>
+            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">전화번호</div>
+            <div class="loginbox-textbox">
+							<div class="form-group">
+					      <div class="input-group" style="width: 60%;">
+						      <div class="input-group-prepend" style="float: left; margin-left: 12%">
+								      <select name="tel1" class="form-control custom-select">
+										    <option value="010" selected>010</option>
+										    <option value="02">02</option>
+										    <option value="031">031</option>
+										    <option value="032">032</option>
+										    <option value="041">041</option>
+										    <option value="042">042</option>
+										    <option value="043">043</option>
+								        <option value="051">051</option>
+								        <option value="052">052</option>
+								        <option value="061">061</option>
+								        <option value="062">062</option>
+										  </select>
+						      </div>
+								      &nbsp;-&nbsp;<input type="text" name="tel2" maxlength=4 class="form-control" style="width: 50px;" required />&nbsp;-&nbsp;
+								      <input type="text" name="tel3" maxlength=4 class="form-control" style="width: 10px;" required/>
+						    </div> 
+					    </div>
+            </div>
+						<div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">주소지</div>
+            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+							<input type="text" id="sample5_address" placeholder="오른쪽버튼을 눌러 검색하세요" class="form-control" readonly>
+							<input type="button" onclick="sample5_execDaumPostcode()" class="btn btn-secondary ml-2" value="주소 검색"><br>
+						</div>
+            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
+							<input type="text" id="sample5_address2" placeholder="상세주소" class="form-control">
+						</div>
+						
+						<div id="map" style="width:300px;height:300px;margin-top:10px;display:none; margin-left: 10%;"></div>
+						
+            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">이메일</div>
+            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
+             	<div class="input-group mb-3">
+							  <input type="text" class="form-control" placeholder="Email을 입력하세요." id="email1" name="email1" required />&nbsp;<span style="font-size: 1.5rem">@</span>&nbsp;
+							  <div class="input-group-append">
+							    <select name="email2" class="form-control">
+								    <option value="naver.com" selected>naver.com</option>
+								    <option value="hanmail.net">hanmail.net</option>
+								    <option value="hotmail.com">hotmail.com</option>
+								    <option value="gmail.com">gmail.com</option>
+								    <option value="nate.com">nate.com</option>
+								    <option value="yahoo.com">yahoo.com</option>
+								  </select>
+							  </div>
+							  &nbsp;
+							  <input type="button" value="인증문자보내기" onclick="mailCheck()" class="btn btn-secondary" style="width: 150px;"/>
 							</div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">전화번호</div>
-	            <div class="loginbox-textbox">
-								<div class="form-group">
-						      <div class="input-group" style="width: 60%;">
-							      <div class="input-group-prepend" style="float: left; margin-left: 12%">
-									      <select name="tel1" class="form-control custom-select">
-											    <option value="010" selected>010</option>
-											    <option value="02">02</option>
-											    <option value="031">031</option>
-											    <option value="032">032</option>
-											    <option value="041">041</option>
-											    <option value="042">042</option>
-											    <option value="043">043</option>
-									        <option value="051">051</option>
-									        <option value="052">052</option>
-									        <option value="061">061</option>
-									        <option value="062">062</option>
-											  </select>
-							      </div>
-									      &nbsp;-&nbsp;<input type="text" name="tel2" maxlength=4 class="form-control" style="width: 50px;" required />&nbsp;-&nbsp;
-									      <input type="text" name="tel3" maxlength=4 class="form-control" style="width: 10px;" required/>
-							    </div> 
-						    </div>
-	            </div>
-							<div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">주소지</div>
-	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-								<input type="text" id="sample5_address" placeholder="오른쪽버튼을 눌러 검색하세요" class="form-control" readonly>
-								<input type="button" onclick="sample5_execDaumPostcode()" class="btn btn-secondary ml-2" value="주소 검색"><br>
+							<div class="loginbox-textbox input-group" id="mCheck" style="margin: 0 auto; display: none;">
+								<input type="text" placeholder="이메일을 확인하세요" id="emailCode" name="emailCode" style="width: 150px;" required />
+							  <input type="button" value="인증" onclick="mailCheckOk()" class="btn btn-primary" style="width: 70px;"/>
 							</div>
-	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-								<input type="text" id="sample5_address2" placeholder="상세주소" class="form-control">
-							</div>
-							<div id="map" style="width:300px;height:300px;margin-top:10px;display:none; margin-left: 10%;"></div>
-							
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">이메일</div>
-	            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
-	             	<div class="input-group mb-3">
-								  <input type="text" class="form-control" placeholder="Email을 입력하세요." id="email1" name="email1" required />@
-								  <div class="input-group-append">
-								    <select name="email2" class="form-control">
-									    <option value="naver.com" selected>naver.com</option>
-									    <option value="hanmail.net">hanmail.net</option>
-									    <option value="hotmail.com">hotmail.com</option>
-									    <option value="gmail.com">gmail.com</option>
-									    <option value="nate.com">nate.com</option>
-									    <option value="yahoo.com">yahoo.com</option>
-									  </select>
-								  </div>
-								</div>
-	            </div>
-	            
-	            <div class="loginbox-submit text-center">
-	                <input type="button" onclick="JoinCheck()" class="btn btn-success btn-block mt-3" value="회원가입" style="width: 92%">
-	            </div>
-	            <div class="loginbox-submit text-center">
-	                <input type="button" onclick="location.href='${ctp}/member/JoinSelect';" class="btn btn-primary btn-block" value="돌아가기" style="width: 92%">
-	            </div>
+							<div style="font-size: 10px; margin-left: 9%;" id="demo5"></div>
+            </div>
+            
+            <div class="loginbox-submit text-center">
+                <input type="button" onclick="JoinCheck()" class="btn btn-success btn-block mt-3" value="회원가입" style="width: 92%">
+            </div>
+            <div class="loginbox-submit text-center">
+                <input type="button" onclick="location.href='${ctp}/member/JoinSelect';" class="btn btn-primary btn-block" value="돌아가기" style="width: 92%">
+            </div>
 	        </div>
 	        <input type="hidden" name="tel"/>
     			<input type="hidden" name="email"/>

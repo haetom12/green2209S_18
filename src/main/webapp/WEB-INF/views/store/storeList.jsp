@@ -101,22 +101,41 @@
 	    			</div>
 					</c:forEach>
     		</div>
+    		
+    		
+    		<!-- 페이징 처리 시작 -->
     		<div class="row mt-5">
           <div class="col text-center">
             <div class="block-27">
               <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
+              	<c:if test="${pageVo.pag > 1}">
+						      <li><a href="${ctp}/store/storeList?storePart=${storePart}&pageSize=${pageVo.pageSize}&pag=1">&lt;&lt;</a></li>
+						    </c:if>
+                <c:if test="${pageVo.curBlock > 0}">
+						      <li><a class="page-link text-secondary" href="${ctp}/store/storeList?storePart=${storePart}&pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}">&lt;</a></li>
+						    </c:if>
+                <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
+						      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
+						    		<li class="active"><a href="${ctp}/store/storeList?storePart=${storePart}&pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+						    	</c:if>
+						      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
+						    		<li><a href="${ctp}/store/storeList?storePart=${storePart}&pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+						    	</c:if>
+						    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">
+							      <li><a class="page-link text-secondary" href="${ctp}/store/storeList?storePart=${storePart}&pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}">&gt;</a></li>
+							    </c:if>
+						    </c:forEach>
+						     <c:if test="${pageVo.pag < pageVo.totPage}">
+						       <li><a href="${ctp}/store/storeList?storePart=${storePart}&pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}">&gt;&gt;</a></li>
+						     </c:if>
               </ul>
             </div>
           </div>
         </div>
+	    	<!-- 페이징 처리 끝 -->
+        
     	</div>
+    	
     </section>
 
 	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>

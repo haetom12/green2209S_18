@@ -20,6 +20,7 @@ public class MessageController {
 			@RequestParam(value="flag", defaultValue = "", required = false) String flag,
 			@RequestParam(value="foodTag", defaultValue = "", required = false) String foodTag,
 			@RequestParam(value="menuIdx", defaultValue = "1", required = false) int menuIdx,
+			@RequestParam(value="storeName", defaultValue = "", required = false) String storeName,
 			@RequestParam(value="brandName", defaultValue = "", required = false) String brandName) {
 		
 		if(msgFlag.equals("memberLoginNo")) {
@@ -255,6 +256,15 @@ public class MessageController {
 			model.addAttribute("msg", "결제가 완료되었습니다!");
 			model.addAttribute("url", "/member/myOrderList");
 		}
+
+		else if(msgFlag.equals("paymentResultOkAndCoupon")) {
+			model.addAttribute("msg", "결제가 완료되었습니다!");
+			model.addAttribute("url", "/msg/couponGo");
+		}
+		else if(msgFlag.equals("couponGo")) {
+			model.addAttribute("msg", "10회 주문 이벤트로 쿠폰이 발급되었습니다! 이메일을 확인하세요!");
+			model.addAttribute("url", "/member/myOrderList");
+		}
 		
 		else if(msgFlag.equals("ratingInputOk")) {
 			model.addAttribute("msg", "별점이 등록되었습니다!");
@@ -264,6 +274,21 @@ public class MessageController {
 		else if(msgFlag.equals("ratingInputNo")) {
 			model.addAttribute("msg", "별점 등록에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "/member/myOrderList");
+		}
+		
+		else if(msgFlag.equals("ratingUpdateNo")) {
+			model.addAttribute("msg", "해당 별점을 수정할 권한이 없습니다.");
+			model.addAttribute("url", "/store/storeRatingList?storeName="+storeName);
+		}
+		
+		else if(msgFlag.equals("ratingUpdateOk")) {
+			model.addAttribute("msg", "별점을 수정하였습니다!");
+			model.addAttribute("url", "/store/storeRatingList?storeName="+storeName);
+		}
+		
+		else if(msgFlag.equals("ratingUpdateFail")) {
+			model.addAttribute("msg", "별점 수정에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/store/storeRatingList?storeName="+storeName);
 		}
 		
 		return "include/message";

@@ -1,10 +1,16 @@
 package com.spring.green2209S_18;
 
 import java.util.List;
+import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +23,7 @@ import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.RiderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
+import com.spring.green2209S_18.vo.MailVO;
 import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 @Controller
@@ -37,6 +44,9 @@ public class RiderController {
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JavaMailSender mailSender;
 	
 	@RequestMapping(value = "memgin", method = RequestMethod.GET)
 	public String memberLoginGet() {
@@ -143,6 +153,72 @@ public class RiderController {
 		int res = 0;
 		res = riderDAO.setRiderOrderConfirm(orderIdx);
 		return res+"";
+	}
+	
+	
+	// 내 주문내역 리스트로
+	@Async
+	@ResponseBody
+	@RequestMapping(value = "riderEmailCheck", method = RequestMethod.POST)
+	public String memberEmailCheckPost(MailVO vo, String email, HttpSession session) {
+		
+		int res = 0;
+		
+		vo.setToMail(email);
+		
+		Random random = new Random();
+    StringBuffer buffer = new StringBuffer();
+    int num = 0;
+
+    while(buffer.length() < 10) {
+        num = random.nextInt(10);
+        buffer.append(num);
+    }
+    String msg = buffer.toString();
+    
+    session.setAttribute("sCode", msg);
+    
+    session.setMaxInactiveInterval(60*5);
+    
+    String toMail = vo.getToMail();
+    String title = "[저기요] 회원가입 메일 인증";
+    String content = "";
+		
+		try {
+			// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+			
+			content += "<br><hr><h3>메일 인증번호입니다</h3><hr><br/>";
+			content += "인증번호 : " + msg;
+			content += "<p>===============================</p>";
+			content += "<hr>";
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title);
+			messageHelper.setText(content);
+			
+			// 메일 전송하기
+			mailSender.send(message);
+			res = 1;			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return res+"";
+	}
+	
+	// 내 주문내역 리스트로
+	@ResponseBody
+	@RequestMapping(value = "riderEmailCheckOk", method = RequestMethod.POST)
+	public String memberEmailCheckPost(String emailCode, HttpSession session) {
+		String res = "1";
+		
+		String code = (String)session.getAttribute("sCode");
+		
+		if(!code.equals(emailCode)) return "0";
+		
+		else return res;
 	}
 	
 }

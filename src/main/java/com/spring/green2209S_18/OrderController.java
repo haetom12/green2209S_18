@@ -4,16 +4,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +32,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.green2209S_18.pagenation.PageProcess;
+import com.spring.green2209S_18.pagenation.PageVO;
 import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
+import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.PayMentVO;
@@ -49,6 +60,12 @@ public class OrderController {
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	PageProcess pageProcess;
+	
+	@Autowired
+	JavaMailSender mailSender;
 	
 	@RequestMapping(value = "/orderCart", method = RequestMethod.GET)
 	public String orderCartGet() {
@@ -205,10 +222,9 @@ public class OrderController {
 	
 	// 카트에 담겨있는 품목들중에서, 주문한 품목들을 읽어와서 세션에 담아준다. 이때 고객의 정보도 함께 처리하며, 주문번호를 만들어서 다음단계인 '결재'로 넘겨준다.
 	@RequestMapping(value = "/myCart", method = RequestMethod.POST)
-	public String dbCartListPost(HttpServletRequest request, Model model, HttpSession session, CartVO vo,
+	public String dbCartListPost(HttpServletRequest request, Model model, HttpSession session, CartVO vo, 
 			@RequestParam(name="baesong", defaultValue = "0", required = false) int baesong) {
 		String mid = session.getAttribute("sMid").toString();
-		
 		
 		// 주문한 상품에 대하여 '고유번호'를 만들어준다.
 		// 고유주문번호(idx) = 기존에 존재하는 주문테이블의 고유번호 + 1
@@ -276,8 +292,15 @@ public class OrderController {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	@RequestMapping(value="/payment", method=RequestMethod.POST)
-	public String paymentPost(PayMentVO payMentVo,CartVO orderVO, HttpSession session, Model model) {
+	public String paymentPost(PayMentVO payMentVo,CartVO orderVO, HttpSession session, Model model,
+		@RequestParam(name="couponName", defaultValue = "", required = false) String couponName) {
 		model.addAttribute("payMentVo", payMentVo);
+		
+		if(!couponName.equals("")) {
+			session.setAttribute("sCouponName", couponName);
+			System.out.println("넘긴쿠폰 : " + couponName);
+		}
+		
 		
 		String amount = payMentVo.getAmount().replace(",", "");
 		amount = amount.substring(0,amount.length()-1);
@@ -314,7 +337,7 @@ public class OrderController {
 	@Transactional
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/paymentResult", method=RequestMethod.GET)
-	public String paymentResultGet(HttpSession session, PayMentVO receivePayMentVo, Model model) {
+	public String paymentResultGet(HttpSession session,HttpServletRequest request, PayMentVO receivePayMentVo, Model model) {
 		// 주문내역 dbOrder/dbBaesong 테이블에 저장하기(앞에서 저장했던 세션에서 가져왔다.)
 		List<CartVO> orderVos = (List<CartVO>) session.getAttribute("sOrderVos");
 		PayMentVO payMentVo = (PayMentVO) session.getAttribute("sPayMentVo");
@@ -360,17 +383,17 @@ public class OrderController {
 			session.removeAttribute("sOrderAddress");
 			
 			orderService.myCartDelete(vo.getIdx()); // 주문이 완료되었기에 장바구니(dbCart)테이블에서 주문한 내역을 삭체처리한다.
-			
-			// 장바구니 숫자 다시 최신화
-			String mid = (String) session.getAttribute("sMid");
-			List<CartVO> vos = memberService.getMyCartList(mid);
-			int myCartCnt = vos.size();
-			session.setAttribute("myCartCnt", myCartCnt);
-			
-			// 배달횟수 1 증가
-			memberService.setOrderCntUpdate(mid);
-			
 		}
+		
+		// 장바구니 숫자 다시 최신화
+		String mid = (String) session.getAttribute("sMid");
+		List<CartVO> vos = memberService.getMyCartList(mid);
+		int myCartCnt = vos.size();
+		session.setAttribute("myCartCnt", myCartCnt);
+		
+		// 배달횟수 1 증가
+		memberService.setOrderCntUpdate(mid);
+		
 //		// 배달 테이블에 입력한다.
 //		String foodMenu = "";
 //		for(int i=0; i<orderVos.size(); i++) {
@@ -400,6 +423,87 @@ public class OrderController {
 		session.setAttribute("sPayMentVo", payMentVo);
 		
 //		return "dbShop/paymentResult";
+		MemberVO mVo = memberService.getMemberIdCheck(mid);
+    
+    String sCouponName = (String)session.getAttribute("sCouponName");
+    
+    System.out.println("세션 쿠폰 : " + sCouponName);
+    
+    if(sCouponName != null) {
+    	orderService.setCouponUsed(sCouponName, mid);
+    }
+		
+		if(mVo.getOrderCnt() % 10 == 0) {
+			
+			String realPath = request.getSession().getServletContext().getRealPath("/resources/data/qrCode/");
+			CouponVO pVo = new CouponVO();
+			
+			int discount = 0;
+			
+			int randomVal = (int)(Math.random() * 10) + 1;
+			
+			if(randomVal < 6) discount = 5000;
+			else if(randomVal < 9 && randomVal >= 6) discount = 7000;
+			else if(randomVal >= 9) discount = 9000;
+			
+			
+			Calendar cal = Calendar.getInstance();
+	    cal.setTime(new Date());
+	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+	    cal.add(Calendar.MONTH, 1);
+	    String expiration = df.format(cal.getTime());
+			
+	    UUID uid = UUID.randomUUID(); // 기본 32글자
+	    
+	    String couponName = uid.toString().substring(0,8);
+	    
+			String qrCode = orderService.qrCreate(mVo.getMemberNickName(),couponName, discount, expiration, realPath);
+			
+			pVo.setOrderIdx(orderVos.get(0).getOrderIdx());
+			pVo.setMid(mid);
+			pVo.setQrCode(qrCode);
+			pVo.setCouponName(couponName);
+			pVo.setDiscount(discount);
+			pVo.setExpiration(expiration);
+			
+			orderService.setCouponInput(pVo);
+			
+			
+			// 메일로 qr 코드 보내기
+			
+			String toMail = mVo.getEmail();
+	    String title = "[저기요] 이벤트 쿠폰 발급";
+	    String content = "";
+			
+	    try {
+				// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+				MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+				MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+				
+				messageHelper.setTo(toMail);
+				messageHelper.setSubject(title);
+				messageHelper.setText(content);
+				
+				content = content.replace("\n", "<br/>");
+				content += "<br>메일 인증번호입니다<br/>";
+				content += " 이용해주셔서 감사합니다! 첨부파일을 확인해주세요! ";
+				content += "<hr>";
+				
+				// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+				messageHelper.setText(content);
+				
+			// file = new FileSystemResource(request.getRealPath("/resources/images/paris.jpg"));
+				FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/data/qrCode/"+qrCode));
+				messageHelper.addAttachment(qrCode, file);
+				
+				// 메일 전송하기
+				mailSender.send(message);
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+			return "redirect:/msg/paymentResultOkAndCoupon";
+		}
 		return "redirect:/msg/paymentResultOk";
 	}
 	
@@ -462,6 +566,43 @@ public class OrderController {
 		
 		if(res == 1) return "redirect:/msg/ratingInputOk";
 		else return "redirect:/msg/ratingInputNo";
+	}
+	
+	// 쿠폰 확인 후 적용
+	@ResponseBody
+	@RequestMapping(value = "/myCouponCheck", method = RequestMethod.POST)
+	public String myCouponCheckPost(String couponName, HttpSession session) {
+		
+		String mid = (String) session.getAttribute("sMid");
+
+		CouponVO vo = orderService.getCheckCoupon(couponName, mid);
+		
+		System.out.println("쿠폰은 : " + vo);
+		
+		if(vo==null) return "0";
+		
+		int sale = vo.getDiscount();
+		
+		return sale+"";
+	}
+	
+	// 내 쿠폰 리스트 폼으로 이동
+	@RequestMapping(value = "/myCouponList", method = RequestMethod.GET)
+	public String myCouponListGet(HttpSession session, Model model,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		String mid = (String) session.getAttribute("sMid");
+		
+		// 해당 가게의 평점 총 갯수 구하기
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "qrCode", mid, "");
+
+		List<CouponVO> vos = memberService.getMyCouponList(pageVo.getStartIndexNo(), pageSize, mid);
+		
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "order/myCouponList";
 	}
 	
 }

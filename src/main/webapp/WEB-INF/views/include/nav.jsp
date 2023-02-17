@@ -113,7 +113,7 @@
 		              	<a class="dropdown-item" href="${ctp}/member/myOrderList">주문내역</a>
 		              	<a class="dropdown-item" href="${ctp}/order/myWishList">찜목록</a>
 		                <a class="dropdown-item" href="${ctp}/rider/orderChat">채팅</a>
-		                <a class="dropdown-item" href="cart.html">쿠폰함</a>
+		                <a class="dropdown-item" href="${ctp}/order/myCouponList">쿠폰함</a>
 		                <a class="dropdown-item" href="checkout.html">리뷰관리</a>
 		              </div>
 		            </li>

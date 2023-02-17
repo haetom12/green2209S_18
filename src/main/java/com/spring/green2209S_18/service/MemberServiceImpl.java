@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.green2209S_18.dao.MemberDAO;
 import com.spring.green2209S_18.vo.CartVO;
+import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.MemberVO;
 
 @Service
@@ -51,6 +52,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int setMemberOrderCancle(String orderIdx) {
 		return memberDAO.setMemberOrderCancle(orderIdx);
+	}
+
+	@Override
+	public List<CouponVO> getMyCouponList(int startIndexNo, int pageSize, String mid) {
+		return memberDAO.getMyCouponList(startIndexNo, pageSize, mid);
 	}
 	
 

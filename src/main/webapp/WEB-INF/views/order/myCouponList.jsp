@@ -27,34 +27,6 @@
     <link rel="stylesheet" href="${ctp}/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     
-    <script>
-		function orderCancle(orderIdx) {
-			let ans = confirm("주문을 취소하시겠습니까?");
-			if(!ans) return false;
-			
-			$.ajax({
-			  	type   : "post",
-			  	url    : "${ctp}/member/memberOrderCancle",
-			  	data   : {
-			  		orderIdx : orderIdx
-			  	},
-	    		success:function(res) {
-	    			if(res == "1") {
-	    				alert("주문이 취소되었습니다!");
-	    				location.reload();
-	    			}
-	    			else {
-	    				alert("이미 배달이 접수되어 취소가 불가능합니다.");
-	    			}
-	    		},
-	    		error : function() {
-	    			alert("전송 오류~~");
-	    		}
-	    	});
-			}
-			
-  </script>
-    
   </head>
   <body class="goto-here">
   
@@ -73,96 +45,61 @@
 
 		<div class="container" style="width: 2500px; margin-top: 5%;">
 			<div class="ftco-animate">
-				<h2 class="text-center">내 주문 내역</h2><br />
+				<h2 class="text-center">내 쿠폰</h2><br />
 				<form name="myform" method="post">
   				<table class="table">
 				    <thead class="thead-primary">
 						  <tr class="text-center">
-						    <th>메뉴사진</th>
-						    <th>주문정보</th>
-						    <th style="width: 130px;">배달요청사항</th>
-						    <th>총상품금액</th>
-						    <th>배달주소</th>
-						    <th>주문 날짜</th>
-						    <th>주문 현황</th>
+						    <th>QR 코드</th>
+						    <th>쿠폰 코드</th>
+						    <th>획득 날짜</th>
+						    <th>유효 기간</th>
+						    <th>사용 여부</th>
+						    <th>사용 날짜</th>
 						  </tr>
 				    </thead>
 				   <!-- 장바구니 목록출력 -->
-					  <c:set var="maxIdx" value="0"/>
 					  <c:forEach var="vo" items="${vos}">
-			      	<c:set var="foodNames" value="${fn:split(vo.foodName,'/')}"/>
-			        <c:set var="optionNames" value="${fn:split(vo.subMenuName,'/')}"/>
-			        <c:set var="optionPrices" value="${fn:split(vo.optionPrice,'/')}"/>
-			        <c:set var="optionNums" value="${fn:split(vo.optionNum,'/')}"/>
-			        <c:set var="thumbImgs" value="${fn:split(vo.thumbImg,'/')}"/>
-			        <c:set var="orderAddresses" value="${fn:split(vo.orderAddress,'/')}"/>
 					    <tr align="center">
 					    	<td>
-						    	<c:forEach var="i" begin="0" end="${fn:length(foodNames)-1}">
-						      	<a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}"><img src="${ctp}/data/orderFoodPhoto/${thumbImgs[i]}" width="100px"/></a><br />
-						      </c:forEach>
-					      </td>
-					      <td align="left">
-					        <p class="contFont" style="text-align: left;"><br/>
-					        	<c:forEach var="i" begin="0" end="${fn:length(foodNames)-1}">
-						          <font size="4px;">메뉴 : <span style="color:orange;font-weight:bold;"><a href="${ctp}/store/storeMenuInfo?menuIdx=${vo.menuIdx}">${foodNames[i]}</a></span><br/></font>
-		         				  <span style="color:orange;font-weight:bold;">${optionNames[i]}</span><br/> 
-					          </c:forEach>
-					        </p>
+				      		<a href="${ctp}/data/qrCode/${vo.qrCode}" class="image-popup"><img src="${ctp}/data/qrCode/${vo.qrCode}" style="width: 100px;" class="img-fluid" alt="Colorlib Template"></a>
 					      </td>
 					      <td>
-					      	<c:if test="${vo.orderMessage==''}">
-					      		<b>(없음)</b>
-					      	</c:if>
-					      	<c:if test="${vo.orderMessage!=''}">
-					      		<b>${vo.orderMessage}</b>
-					      	</c:if>
+					      	<b>${vo.couponName}</b>
 					      </td>
 					      <td>
 					        <div class="text-center">
-						        <b>총 : <fmt:formatNumber value="${vo.orderTotalPrice}" pattern='#,###원'/></b>
+					        	${fn:substring(vo.receiveDate,0,16)}
 					        </div>
 					      </td>
 					      <td>
 					        <div class="text-center">
-					        	<b>${orderAddresses[0]}<br />${orderAddresses[1]}</b>
+					        	${fn:substring(vo.expiration,0,16)}
 					        </div>
 					      </td>
 					      <td>
 					      	<div class="text-center">
-					     			<b>${fn:substring(vo.orderDate,0,16)}</b>
+					     			<c:if test="${vo.useDate == vo.receiveDate}">
+					      			<b><font color="red">미사용</font></b>
+					      		</c:if>
+					      		<c:if test="${vo.useDate != vo.receiveDate}">
+					      			<b><font color="blue">사용</font></b>
+					      		</c:if>
 					     		</div>
 					      </td>
 					      <td>
 					      	<div class="text-center">
-										<c:if test="${vo.progress=='배달완료'}">				      		
-					     				<b><font color="blue">${vo.progress}</font></b><br />
-					     				<c:if test="${vo.ratingOk=='NO'}">		
-					     					<input type="button" class="btn btn-primary" value="별점작성" onclick="location.href='${ctp}/order/ratingInput?orderIdx=${vo.orderIdx}';" />
-					     				</c:if>
-					     				<c:if test="${vo.ratingOk!='NO'}">		
-					     					<input type="button" class="btn btn-primary" value="별점보러가기" onclick="location.href='${ctp}/order/myRating?orderIdx=${vo.orderIdx}';" />
-					     				</c:if>
-					     			</c:if>	
-										<c:if test="${vo.progress=='배달채택'}">				      		
-					     				<b><font color="green">${vo.progress}</font></b>
-					     			</c:if>	
-										<c:if test="${vo.progress=='주문취소'}">				      		
-					     				<b><font color="red">${vo.progress}</font></b>
-					     			</c:if>	
-										<c:if test="${vo.progress=='주문완료'}">				      		
-					     				<b><font color="orange">${vo.progress}</font></b><br />
-					     				<input type="button" value="주문취소" onclick="orderCancle('${vo.orderIdx}')" class="btn btn-warning" />
-					     			</c:if>	
+					      		<c:if test="${vo.useDate == vo.receiveDate}">
+					      			<b><font color="red">미사용</font></b>
+					      		</c:if>
+					      		<c:if test="${vo.useDate != vo.receiveDate}">
+					      			<b><font color="green">${fn:substring(vo.useDate,0,16)}</font></b>
+					      		</c:if>
 					     		</div>
 					      </td>
 					    </tr>
-					    <c:set var="maxIdx" value="${vo.idx}"/>	<!-- 가장 마지막 품목의 idx값이 가장 크다. -->
 					  </c:forEach>
 					</table>
-				  <input type="hidden" id="maxIdx" name="maxIdx" value="${maxIdx}"/>
-				  <input type="hidden" name="orderTotalPrice" id="orderTotalPrice"/>
-			    <input type="hidden" name="baesong" value="${sVo.deliverCost}"/>
 				</form>
 			</div>
 			
@@ -173,24 +110,24 @@
             <div class="block-27">
               <ul>
               	<c:if test="${pageVo.pag > 1}">
-						      <li><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=1">&lt;&lt;</a></li>
+						      <li><a class="" href="${ctp}/order/myCouponList?pageSize=${pageVo.pageSize}&pag=1">&lt;&lt;</a></li>
 						    </c:if>
                 <c:if test="${pageVo.curBlock > 0}">
-						      <li><a class="page-link text-secondary" href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}">&lt;</a></li>
+						      <li><a class="page-link text-secondary" href="${ctp}/order/myCouponList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}">&lt;</a></li>
 						    </c:if>
                 <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
 						      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-						    		<li class="active"><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+						    		<li class="active"><a href="${ctp}/order/myCouponList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
 						    	</c:if>
 						      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-						    		<li><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+						    		<li><a href="${ctp}/order/myCouponList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
 						    	</c:if>
 						    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">
-							      <li><a class="page-link text-secondary" href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}">&gt;</a></li>
+							      <li><a class="page-link text-secondary" href="${ctp}/order/myCouponList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}">&gt;</a></li>
 							    </c:if>
 						    </c:forEach>
 						     <c:if test="${pageVo.pag < pageVo.totPage}">
-						       <li><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}">&gt;&gt;</a></li>
+						       <li><a class="" href="${ctp}/order/myCouponList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}">&gt;&gt;</a></li>
 						     </c:if>
               </ul>
             </div>

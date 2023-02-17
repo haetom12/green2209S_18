@@ -18,7 +18,7 @@ public interface StoreService {
 
 	public List<StoreVO> getStoreCategory();
 
-	public List<StoreVO> getStoreList(String storePart, String ordered);
+	public List<StoreVO> getStoreList(String storePart, String ordered, int startIndexNo, int pageSize);
 
 	public List<StoreVO> getNearMapStoreList(String storePart);
 
@@ -93,6 +93,14 @@ public interface StoreService {
 	public StoreVO getstoreInfo(String storeName);
 
 	public List<RatingVO> getRatingList(int startIndexNo, int pageSize, String storeName);
+
+	public int setRatingDeleteOk(int idx);
+
+	public RatingVO getRatingInfo(int idx);
+
+	public int setRatingUpdateOk(RatingVO vo);
+
+	public List<FoodMenuVO> getStoreFoodMenu2(String storeName, String foodTag, int startIndexNo, int pageSize);
 
 
 }

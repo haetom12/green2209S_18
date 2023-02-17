@@ -60,8 +60,8 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public List<StoreVO> getStoreList(String storePart, String ordered) {
-		return storeDAO.getStoreList(storePart, ordered);
+	public List<StoreVO> getStoreList(String storePart, String ordered, int startIndexNo, int pageSize) {
+		return storeDAO.getStoreList(storePart, ordered, startIndexNo, pageSize);
 	}
 
 	@Override
@@ -326,6 +326,26 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public List<RatingVO> getRatingList(int startIndexNo, int pageSize, String storeName) {
 		return storeDAO.getRatingList(startIndexNo, pageSize, storeName);
+	}
+
+	@Override
+	public int setRatingDeleteOk(int idx) {
+		return storeDAO.setRatingDeleteOk(idx);
+	}
+
+	@Override
+	public RatingVO getRatingInfo(int idx) {
+		return storeDAO.getRatingInfo(idx);
+	}
+
+	@Override
+	public int setRatingUpdateOk(RatingVO vo) {
+		return storeDAO.setRatingUpdateOk(vo);
+	}
+
+	@Override
+	public List<FoodMenuVO> getStoreFoodMenu2(String storeName, String foodTag, int startIndexNo, int pageSize) {
+		return storeDAO.getStoreFoodMenu2(storeName, foodTag, startIndexNo, pageSize);
 	}
 
 

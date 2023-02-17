@@ -193,6 +193,7 @@
 		<script>
 			'use strict';
 		  let idCheckSw = 0;
+		  let emailCheckSw = 0;
 		  
 			function JoinCheck() {
 		    	// 폼의 유효성 검사~~~~
@@ -257,6 +258,11 @@
 		    			alert("아이디 중복체크버튼을 눌러주세요!");
 		    			document.getElementById("midBtn").focus();
 		    		}
+		    		else if(emailCheckSw == 0) {
+		    			alert("이메일 인증은 필수입니다!");
+		    			document.getElementById("email1").focus();
+		    			return false;
+		    		}
 		    		else {
 			  			// 묶여진 필드(email/tel)를 폼태그안에 hidden태그의 값으로 저장시켜준다.
 			  			JoinForm.riderEmail.value = riderEmail;
@@ -301,6 +307,66 @@
 					  });	
 			    }
 			  }
+			
+			
+
+				// 이메일로 인증문자보내기
+				function mailCheck() {
+					let email1 = JoinForm.email1.value;
+		    	let email2 = JoinForm.email2.value;
+		      let email = email1 + '@' + email2;
+		      
+					
+					if(email1.trim()=="") {
+						alert("이메일을 먼저 입력하세요.");
+						return false;	
+					}
+					else {
+					  	$.ajax({
+						  	type   : "post",
+						  	url    : "${ctp}/rider/riderEmailCheck",
+						  	data   : {email : email} ,
+						  	async  : false ,
+						  	success:function(res) {
+						  		if(res == "1") {
+						  			alert("인증 메일이 전송되었습니다.(제한시간 5분)")
+										document.getElementById("mCheck").style.display = 'block';
+						  		}
+						  		else {
+						  			alert("다시 시도해주세요");
+						  		}								
+						  	},
+						  	error : function() {
+						  		alert("전송 오류~~");
+						  	}
+						  });	
+				    }
+				}
+				
+				// 이메일 인증확인
+				function mailCheckOk() {
+					
+					let emailCode = JoinForm.emailCode.value;
+				      
+					$.ajax({
+					  	type   : "post",
+					  	url    : "${ctp}/rider/riderEmailCheckOk",
+					  	data   : {emailCode : emailCode} ,
+					  	async  : false ,
+					  	success:function(res) {
+					  		if(res == "0") {
+					  			document.getElementById("demo5").innerHTML = "<font color = 'red'> 인증번호가 틀립니다! </font>"; 
+					  		}
+					  		else {
+					  			document.getElementById("demo5").innerHTML = "<font color = 'blue'> 이메일 인증 성공! </font>"; 
+									emailCheckSw = 1;
+					  		}								
+					  	},
+					  	error : function() {
+					  		alert("전송 오류~~");
+					  	}
+					  });	
+				}
 			
 		</script>
   </head>
@@ -353,8 +419,8 @@
 	            </div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">이메일</div>
 	            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
-	             	<div class="input-group mb-3">
-								  <input type="text" class="form-control" placeholder="Email을 입력하세요." id="email1" name="email1" required />@
+             	<div class="input-group mb-3">
+								  <input type="text" class="form-control" placeholder="Email을 입력하세요." id="email1" name="email1" required />&nbsp;<span style="font-size: 1.5rem">@</span>&nbsp;
 								  <div class="input-group-append">
 								    <select name="email2" class="form-control">
 									    <option value="naver.com" selected>naver.com</option>
@@ -365,7 +431,14 @@
 									    <option value="yahoo.com">yahoo.com</option>
 									  </select>
 								  </div>
+								  &nbsp;
+								  <input type="button" value="인증문자보내기" onclick="mailCheck()" class="btn btn-secondary" style="width: 150px;"/>
 								</div>
+								<div class="loginbox-textbox input-group" id="mCheck" style="margin: 0 auto; display: none;">
+									<input type="text" placeholder="이메일을 확인하세요" id="emailCode" name="emailCode" style="width: 150px;" required />
+								  <input type="button" value="인증" onclick="mailCheckOk()" class="btn btn-primary" style="width: 70px;"/>
+								</div>
+								<div style="font-size: 10px; margin-left: 9%;" id="demo5"></div>
 	            </div>
 	            <div class="loginbox-submit text-center">
 	                <input type="button" onclick="JoinCheck()" class="btn btn-success btn-block mt-3" value="회원가입" style="width: 92%">

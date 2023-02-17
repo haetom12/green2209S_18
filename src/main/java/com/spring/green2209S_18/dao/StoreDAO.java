@@ -17,7 +17,7 @@ public interface StoreDAO {
 
 	public List<StoreVO> getStoreCategory();
 
-	public List<StoreVO> getStoreList(@Param("storePart") String storePart, @Param("ordered") String ordered);
+	public List<StoreVO> getStoreList(@Param("storePart") String storePart, @Param("ordered") String ordered,@Param("startIndexNo") int startIndexNo,@Param("pageSize") int pageSize);
 
 	public List<StoreVO> getNearMapStoreList(@Param("storePart") String storePart);
 
@@ -92,6 +92,18 @@ public interface StoreDAO {
 	public StoreVO getstoreInfo(@Param("storeName") String storeName);
 
 	public List<RatingVO> getRatingList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("storeName") String storeName);
+
+	public int totRatingCnt(@Param("storePart") String search);
+
+	public int setRatingDeleteOk(@Param("idx") int idx);
+
+	public RatingVO getRatingInfo(@Param("idx") int idx);
+
+	public int setRatingUpdateOk(@Param("vo") RatingVO vo);
+
+	public int totStoreMenuCnt(@Param("storeName") String search);
+
+	public List<FoodMenuVO> getStoreFoodMenu2(@Param("storeName") String storeName, @Param("foodTag") String foodTag, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
 
 
 }

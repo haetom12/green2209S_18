@@ -71,15 +71,10 @@
     
     function fCheck() {
 			let title = myform.title.value;
-			let reviewStar = myform.reviewStar.value;
 			
 			if(title.trim()=="") {
 				alert("제목 입력은 필수입니다!");
 				myform.title.focus();
-				return false;
-			}
-			else if(reviewStar == "") {
-				alert("점수는 최소 1점입니다!");
 				return false;
 			}
 			else {
@@ -110,19 +105,19 @@
       <div class="container">
         <div class="row block-9">
           <div class="col-md-12 order-md-last d-flex">
-            <form name="myform" id="myform" action="${ctp}/order/ratingInput" method="post" class="bg-light p-5 contact-form">
-	          	<div class="text-primary text-center"><font size="6pt">별점 등록(${vo.storeName})</font></div>
+            <form name="myform" id="myform" action="${ctp}/store/ratingUpdate" method="post" class="bg-light p-5 contact-form">
+	          	<div class="text-primary text-center"><font size="6pt">별점 수정(${vo.storeName})</font></div>
 	          	<font size="5pt">음식은 어떠셨나요?</font>
            	  <fieldset style="margin: 0 auto">
-								<input type="radio" name="reviewStar" value="5" id="rate1"><label
+								<input type="radio" name="reviewStar" ${vo.reviewStar==5  ? "checked" : ""} value="5" id="rate1"><label
 									for="rate1">★</label>
-								<input type="radio" name="reviewStar" value="4" id="rate2"><label
+								<input type="radio" name="reviewStar" ${vo.reviewStar==4  ? "checked" : ""} value="4" id="rate2"><label
 									for="rate2">★</label>
-								<input type="radio" name="reviewStar" value="3" id="rate3"><label
+								<input type="radio" name="reviewStar" ${vo.reviewStar==3  ? "checked" : ""} value="3" id="rate3"><label
 									for="rate3">★</label>
-								<input type="radio" name="reviewStar" value="2" id="rate4"><label
+								<input type="radio" name="reviewStar" ${vo.reviewStar==2  ? "checked" : ""} value="2" id="rate4"><label
 									for="rate4">★</label>
-								<input type="radio" name="reviewStar" value="1" id="rate5"><label
+								<input type="radio" name="reviewStar" ${vo.reviewStar==1  ? "checked" : ""} value="1" id="rate5"><label
 									for="rate5">★</label>
 							</fieldset>
               <div class="form-group">
@@ -130,9 +125,9 @@
 							    <div class="input-group-prepend">
 							      <span class="input-group-text">리뷰제목</span>
 							    </div>
-							    <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요">
+							    <input type="text" name="title" class="form-control" value="${vo.title}">
 							  </div>
-                <textarea rows="6" name="content" id="CKEDITOR" class="form-control" required></textarea>
+                <textarea rows="6" name="content" id="CKEDITOR" class="form-control" required>${vo.content}</textarea>
                 <script>
 				          CKEDITOR.replace("content",{
 				        	  height:500,
@@ -141,11 +136,12 @@
 				          });
 				        </script>
               </div>
-              <input type="hidden" name="mid"  value="${sMid}"/>
-              <input type="hidden" name="storeName"  value="${vo.storeName}"/>
+              <input type="hidden" name="idx"  value="${vo.idx}"/>
               <input type="hidden" name="orderIdx"  value="${vo.orderIdx}"/>
-              <input type="hidden" name="memberNickName"  value="${sNickName}"/>
-          		<input type="button" value="별점 등록" style="float: right;" onclick="fCheck()" class="btn btn-primary mb-1 ml-5" />
+              <input type="hidden" name="mid"  value="${vo.mid}"/>
+              <input type="hidden" name="storeName"  value="${vo.storeName}"/>
+              <input type="hidden" name="memberNickName"  value="${vo.memberNickName}"/>
+          		<input type="button" value="별점 수정" style="float: right;" onclick="fCheck()" class="btn btn-primary mb-1 ml-5" />
             </form>
           </div>
         </div>

@@ -3,11 +3,17 @@ package com.spring.green2209S_18;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +28,10 @@ import com.spring.green2209S_18.pagenation.PageProcess;
 import com.spring.green2209S_18.pagenation.PageVO;
 import com.spring.green2209S_18.service.AdminService;
 import com.spring.green2209S_18.service.MemberService;
+import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.MailVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
@@ -42,10 +50,16 @@ public class StoreController {
 	MemberService memberService;
 	
 	@Autowired
+	OrderService orderService;
+	
+	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	PageProcess pageProcess;
+	
+	@Autowired
+	JavaMailSender mailSender;
 	
 	// 가게 등록 폼 이동
 	@RequestMapping(value = "/storeJoin", method = RequestMethod.GET)
@@ -102,12 +116,17 @@ public class StoreController {
 	// 해당 카테고리 가게 리스트 이동
 	@RequestMapping(value = "/storeList", method = RequestMethod.GET)
 	public String storeListGet(Model model, String storePart,
-			@RequestParam(name = "ordered" , defaultValue = "", required = false) String ordered) {
+			@RequestParam(name = "ordered" , defaultValue = "", required = false) String ordered ,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "12", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "store", storePart, "");
 		
 		// 가게 리스트 가져오기
-		List<StoreVO> vos = storeService.getStoreList(storePart, ordered);
+		List<StoreVO> vos = storeService.getStoreList(storePart, ordered, pageVo.getStartIndexNo(), pageSize);
 		
 		model.addAttribute("vos", vos);
+		model.addAttribute("pageVo", pageVo);
 		model.addAttribute("storePart", storePart);
 		return "store/storeList";
 	}
@@ -148,23 +167,27 @@ public class StoreController {
 			@RequestParam(name = "idx" , defaultValue = "1", required = false) int idx,
 			@RequestParam(name = "foodTag" , defaultValue = "", required = false) String foodTag,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "3", required = false) int pageSize) {
+			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
 		
 		StoreVO vo = storeService.getStoreMenu(idx);
 
 		// 해당 가게의 평점 총 갯수 구하기
-		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "rating", vo.getStoreName(), "");
+		PageVO ratingPageVo = pageProcess.totRecCnt(pag, pageSize, "rating", vo.getStoreName(), "");
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "storeMenu", vo.getStoreName(), "");
 		
 		// 평점 가져오기
-		List<RatingVO> rVos = storeService.getRatingList(pageVo.getStartIndexNo(), pageSize, vo.getStoreName());
+		List<RatingVO> rVos = storeService.getRatingList(ratingPageVo.getStartIndexNo(), pageSize, vo.getStoreName());
 		
 		// 메뉴 리스트
-		List<FoodMenuVO> vos = storeService.getStoreFoodMenuByTag(vo.getStoreName(),foodTag);
+		List<FoodMenuVO> vos = storeService.getStoreFoodMenu2(vo.getStoreName(),foodTag, pageVo.getStartIndexNo(), pageSize);
 		
 		// 음식 태그 리스트
 		List<FoodMenuVO> tVos = storeService.getstoreTagList(vo.getStoreName());
 		
 		model.addAttribute("vo", vo);
+		model.addAttribute("idx", idx);
+		model.addAttribute("foodTag", foodTag);
+		model.addAttribute("pageVo", pageVo);
 		model.addAttribute("vos",vos);
 		model.addAttribute("vSize",vos.size());
 		model.addAttribute("tVos",tVos);
@@ -708,5 +731,161 @@ public class StoreController {
 		
 		return "store/storeMenuInfo";
 	}
+	
+	// 해당 가게의 평점 리스트로
+	@RequestMapping(value = "/storeRatingList", method = RequestMethod.GET)
+	public String storeRatingListGet(Model model, String storeName,
+		@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+		@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+			
+		// 해당 가게의 평점 총 갯수 구하기
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "rating", storeName, "");
+	
+		StoreVO vo = storeService.getstoreInfo(storeName);
+		
+		List<RatingVO> rVos = storeService.getRatingList(pageVo.getStartIndexNo(), pageSize, storeName);
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("pageVo", pageVo);
+		model.addAttribute("rVos", rVos);
+			
+		return "store/storeRatingList";
+	}
+	
+//선택한 별점 삭제
+	@ResponseBody
+	@RequestMapping(value = "/ratingDelete", method = RequestMethod.POST)
+	public String ratingDeletePost(int idx) {
+		
+		RatingVO vo = storeService.getRatingInfo(idx);
+		if(vo.getContent().indexOf("src=\"/") != -1) orderService.imgDelete(vo.getContent());
+		
+		int res = 0;
+		res = storeService.setRatingDeleteOk(idx);
+		
+		return res+"";
+	}
+
+	//선택한 별점 수정 폼 이동
+	@RequestMapping(value = "/ratingUpdate", method = RequestMethod.GET)
+	public String ratingUpdateGet(int idx, HttpSession session, Model model) throws UnsupportedEncodingException {
+		
+		RatingVO vo = storeService.getRatingInfo(idx);
+		
+		String mid = (String) session.getAttribute("sMid");
+		
+		if(!vo.getMid().equals(mid)) return "redirect:/msg/ratingUpdateNo?storeName="+URLEncoder.encode(vo.getStoreName(), "UTF-8");
+		
+		model.addAttribute("vo", vo);
+		
+		return "order/ratingUpdate";
+	}
+	
+	//선택한 별점 수정 작업
+	@RequestMapping(value = "/ratingUpdate", method = RequestMethod.POST)
+	public String ratingUpdateGet(RatingVO vo) throws UnsupportedEncodingException {
+		
+	// 수정된 자료가 원본자료와 완전히 동일하다면 수정할 필요가 없기에, DB에 저장된 원본 자료를 불러와서 비교해준다.
+		RatingVO origVo = storeService.getRatingInfo(vo.getIdx());
+		
+	// content의 내용이 조금이라도 변경된것이 있다면 아래 내용을 수행처리시킨다.
+			if(!origVo.getContent().equals(vo.getContent())) {
+				// 실제로 수정하기버튼을 클릭하게되면 기존의 board폴더에 저장된 현재 content의 그림파일 모두를 삭제 시킨다.
+				if(origVo.getContent().indexOf("src=\"/") != -1) orderService.imgDelete(origVo.getContent());
+				
+				// vo.GetContent()에 들어있는 파일의 경로는 'ckeditor/board'경로를 'ckeditor'변경시켜줘야한다.
+				vo.setContent(vo.getContent().replace("/data/ckeditor/rating/", "/data/ckeditor/"));
+				
+				// 앞의 모든준비가 끝나면, 파일을 처음 업로드한것과 같은 작업을 처리한다.
+				// 이 작업은 처음 게시글을 올릴때의 파일복사 작업과 동일한 작업이다.
+				orderService.imgCheck(vo.getContent());
+				
+				// 파일 업로드가 끝나면 다시 경로를 수정한다.'ckeditor'경로를 'ckeditor/board'변경시켜줘야한다.(즉, 변경된 vo.getContent()를 vo.setContent() 처리한다.)
+				vo.setContent(vo.getContent().replace("/data/ckeditor/", "/data/ckeditor/rating/"));
+			}
+		
+		// 잘 정비된 vo를 DB에 Update시켜준다.
+			int res = storeService.setRatingUpdateOk(vo);
+			
+			if(res == 1) return "redirect:/msg/ratingUpdateOk?storeName="+URLEncoder.encode(vo.getStoreName(), "UTF-8");
+			
+			else return "redirect:/msg/ratingUpdateFail?storeName="+URLEncoder.encode(vo.getStoreName(), "UTF-8");
+	}
+	
+	
+//내 주문내역 리스트로
+	@Async
+	@ResponseBody
+	@RequestMapping(value = "storeEmailCheck", method = RequestMethod.POST)
+	public String memberEmailCheckPost(MailVO vo, String email, HttpSession session) {
+		
+		int res = 0;
+		
+		vo.setToMail(email);
+		
+		Random random = new Random();
+   StringBuffer buffer = new StringBuffer();
+   int num = 0;
+
+   while(buffer.length() < 10) {
+       num = random.nextInt(10);
+       buffer.append(num);
+   }
+   String msg = buffer.toString();
+   
+   session.setAttribute("sCode", msg);
+   
+   session.setMaxInactiveInterval(60*5);
+   
+   System.out.println("=======================================");
+   System.out.println("sCode : " + msg);
+   System.out.println("=======================================");
+   
+   String toMail = vo.getToMail();
+   String title = "[저기요] 회원가입 메일 인증";
+   String content = "";
+		
+		try {
+			// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+			
+			content += "<br><hr><h3>메일 인증번호입니다</h3><hr><br/>";
+			content += "인증번호 : " + msg;
+			content += "<p>===============================</p>";
+			content += "<hr>";
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title);
+			messageHelper.setText(content);
+			
+			// 메일 전송하기
+			mailSender.send(message);
+			res = 1;			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return res+"";
+	}
+	
+	// 내 주문내역 리스트로
+	@ResponseBody
+	@RequestMapping(value = "storeEmailCheckOk", method = RequestMethod.POST)
+	public String memberEmailCheckPost(String emailCode, HttpSession session) {
+		String res = "1";
+		
+		String code = (String)session.getAttribute("sCode");
+		
+		System.out.println("code : " + code);
+		System.out.println("emailCode : " + emailCode);
+		
+		if(!code.equals(emailCode)) return "0";
+		
+		else return res;
+	}
+	
+	
+	
 	
 }

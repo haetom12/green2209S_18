@@ -28,7 +28,7 @@
 	</select>
 	
 	<select id="getMyOrderList" resultType="com.spring.green2209S_18.vo.CartVO">
-		select * from foodorder where mid = #{mid} order by idx desc;
+		select * from foodorder where mid = #{mid} order by idx desc limit #{startIndexNo},#{pageSize};
 	</select>
 	
 	<select id="getOrderChatList" resultType="com.spring.green2209S_18.vo.CartVO">
@@ -37,6 +37,10 @@
 	
 	<select id="totRatingCnt" resultType="int">
 		select count(*) from rating where storeName = #{storeName};
+	</select>
+	
+	<select id="getCheckCoupon" resultType="com.spring.green2209S_18.vo.CouponVO">
+		select * from coupon where couponName = #{couponName} and mid = #{mid} and used = 'NO';
 	</select>
 	
 	
@@ -73,6 +77,10 @@
 		insert into rating values (default, #{vo.orderIdx}, #{vo.mid}, #{vo.storeName},#{vo.reviewStar},#{vo.title},#{vo.content}, default, #{vo.memberNickName}, default);
 	</insert>
 	
+	<insert id="setCouponInput">
+		insert into coupon values (default, #{vo.orderIdx}, #{vo.mid}, #{vo.qrCode},#{vo.couponName},#{vo.discount},'미사용', now(), now(), 'NO', #{vo.expiration});
+	</insert>
+	
 <!-- 	<insert id="setRiderOrder">
 		insert into weborder values (default, #{vo.mid}, #{vo.foodMenu}, #{vo.address}, #{vo.price}, default, default, default, default, default, default);
 	</insert> -->
@@ -80,6 +88,10 @@
 	
 	<update id="setRaingInputOk">
 		update foodorder set ratingOk = 'OK' where orderIdx = #{orderIdx};
+	</update>
+	
+	<update id="setCouponUsed">
+		update coupon set used = 'OK' where couponName = #{couponName} and mid = #{mid};
 	</update>
 	
 	

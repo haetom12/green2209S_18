@@ -18,6 +18,18 @@
 	<select id="getMyOrderInfo" resultType="com.spring.green2209S_18.vo.CartVO">
 		select * from foodorder where orderIdx = #{orderIdx};
 	</select>
+	
+	<select id="getMyCouponList" resultType="com.spring.green2209S_18.vo.CouponVO">
+		select * from coupon where mid = #{mid} order by idx desc limit #{startIndexNo},#{pageSize};
+	</select>
+	
+	<select id="totCouponCnt" resultType="int">
+		select count(*) from coupon where mid = #{mid};
+	</select>
+	
+	<select id="totOderListCnt" resultType="int">
+		select count(*) from foodorder where mid = #{mid};
+	</select>
 
 
 

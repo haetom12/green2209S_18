@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.green2209S_18.vo.CartVO;
+import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.PayMentVO;
 import com.spring.green2209S_18.vo.RatingVO;
@@ -37,7 +38,7 @@ public interface OrderDAO {
 
 	public void setFoodOrderOk2(@Param("vo") CartVO vo);
 
-	public List<CartVO> getMyOrderList(@Param("mid") String mid);
+	public List<CartVO> getMyOrderList(@Param("mid") String mid, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
 
 	public void setRiderOrder(@Param("vo") WebSocketDbVO orderVo);
 
@@ -48,5 +49,11 @@ public interface OrderDAO {
 	public void setRaingInputOk(@Param("orderIdx") String orderIdx);
 
 	public int totRatingCnt(@Param("storeName") String search);
+	
+	public void setCouponInput(@Param("vo") CouponVO pVo);
+	
+	public CouponVO getCheckCoupon(@Param("couponName") String couponName, @Param("mid") String mid);
+
+	public void setCouponUsed(@Param("couponName") String sCouponName,@Param("mid") String mid);
 
 }

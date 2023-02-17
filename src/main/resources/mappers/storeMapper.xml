@@ -27,7 +27,7 @@
 		<!-- select s.*, round(AVG(r.rating),1) as rateAvg from store s, rating r where s.idx = r.storeIdx and s.storePart = #{storePart} 
 		group by s.storeName <if test='ordered !="" '> order by ${ordered} desc</if>; -->
 		
-		select s.*, (select round(AVG(r.reviewStar), 1) from rating r where s.storeName = r.storeName) as rateAvg from store s where s.storePart = #{storePart} <if test='ordered !="" '> order by ${ordered} desc</if>;
+		select s.*, (select round(AVG(r.reviewStar), 1) from rating r where s.storeName = r.storeName) as rateAvg from store s where s.storePart = #{storePart} <if test='ordered !="" '> order by ${ordered} desc</if> limit #{startIndexNo},#{pageSize};
 		
 	</select>
 
@@ -73,7 +73,11 @@
 	</select>
 
 	<select id="getStoreFoodMenuByTag" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from storeFoodMenu where storeName = #{storeName} <if test="foodTag != ''"> and foodTag = #{foodTag} </if>;
+		select * from storeFoodMenu where storeName = #{storeName} <if test="foodTag != ''"> and foodTag = #{foodTag} </if> ;
+	</select>
+
+	<select id="getStoreFoodMenu2" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodMenu where storeName = #{storeName} <if test="foodTag != ''"> and foodTag = #{foodTag} </if> limit #{startIndexNo},#{pageSize} ;
 	</select>
 
 	<select id="storeFoodNameCheck" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
@@ -106,6 +110,18 @@
 
 	 <select id="getRatingList" resultType="com.spring.green2209S_18.vo.RatingVO">
   	select * from rating where storeName = #{storeName} order by idx desc limit #{startIndexNo},#{pageSize};
+  </select>
+
+	 <select id="totRatingCnt" resultType="int">
+  	select count(*) from store where storePart=#{storePart};
+  </select>
+
+	 <select id="getRatingInfo" resultType="com.spring.green2209S_18.vo.RatingVO">
+  	select * from rating where idx=#{idx};
+  </select>
+
+	 <select id="totStoreMenuCnt" resultType="int">
+  	select count(*) from storefoodmenu where storeName=#{storeName};
   </select>
 	
 	
@@ -158,6 +174,10 @@
 		update storefoodsubmenu set subMenuName = #{vo.subMenuName}, price = #{vo.price} where subMenuIdx = #{vo.subMenuIdx};
 	</update>
 	
+	<update id="setRatingUpdateOk">
+		update rating set reviewStar = #{vo.reviewStar}, title = #{vo.title}, content = #{vo.content} where idx = #{vo.idx};
+	</update>
+	
 	
 	
 	<delete id="setStoreSubMenuDeletePost">
@@ -178,6 +198,10 @@
 	
 	<delete id="setStoreSubMenuDelete">
 		delete from storefoodsubmenu where subMenuIdx = #{subMenuIdx};
+	</delete>
+	
+	<delete id="setRatingDeleteOk">
+		delete from rating where idx = #{idx};
 	</delete>
 	
 </mapper>

@@ -47,6 +47,55 @@
 		    	}
 		    }
 		
+			function cCheck() {
+				let cCode = document.getElementById("cCode").value;
+				let orderTotalPrice = document.getElementById("orderTotalPrice").value;
+				orderTotalPrice = orderTotalPrice.replace(",", "");
+	      orderTotalPrice = orderTotalPrice.replace("원", "");
+	       
+				let ans = confirm("입력하신 쿠폰을 적용하시겠습니까?");
+		      if(!ans) return false;
+		      
+		      $.ajax({
+		        type : "post",
+		        url  : "${ctp}/order/myCouponCheck",
+		        data : {couponName : cCode},
+		        success:function(discount) {
+		        	if(discount == "0") {
+			        	document.getElementById("demo5").innerHTML = "<font color = 'red'> 이미 사용했거나 존재하지않는 쿠폰입니다. </font>"; 
+		        	}
+		        	else if(parseInt(discount) > orderTotalPrice) {
+		        		document.getElementById("demo5").innerHTML = "<font color = 'red'> 총 금액보다 높은 쿠폰은 사용 불가능합니다! </font>"; 
+		        		
+		        		console.log("가격",orderTotalPrice);
+		        		console.log("할인",discount);
+		        		
+		        	}
+		        	else {
+		        		
+		        	document.getElementById("demo5").innerHTML = "<font color = 'blue'> 쿠폰이 적용되었습니다! </font>"; 
+		        	
+		        	$("#cCode").attr("readonly","readonly");
+		        	
+		        	document.getElementById("coupon").value =  numberWithCommas(discount)+"원";
+		        	document.getElementById("couponName").value =  cCode;
+		        	
+		        	let totPrice = orderTotalPrice-parseInt(discount);
+		        	document.getElementById("orderTotalPrice").value = numberWithCommas(totPrice)+"원";
+		        	
+		        	}
+		        },
+		        error : function() {
+		        	alert("전송에러!");
+		        }
+		      });
+			 }
+			
+			// 천단위마다 쉼표처리
+		    function numberWithCommas(x) {
+		      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		    }
+			
 		</script>
 		
 		
@@ -115,8 +164,27 @@
 	            </div>
 	            <input type="hidden" id="orderAddress" name="orderAddress" value=""/>
 	            <input type="hidden" id="amount" name="amount" value=""/>
+	            <input type="hidden" id="couponName" name="couponName" value=""/>
 	          </form><!-- END -->
+	          
+	          
+    				<div class="cart-total mb-1">
+    					<h2 class="mb-4 billing-heading">쿠폰 등록</h2>
+    					<p>보유하고 있는 쿠폰 코드를 입력하세요</p>
+  						<form action="couponForm" class="info">
+	              <div class="form-group">
+	              	<label for="">쿠폰 코드</label>
+	                <input type="text" name="cCode" id="cCode" class="form-control text-left px-3" >
+	              </div>
+	              <div style="font-size: 12px; margin-bottom: 7px;" id="demo5"></div>
+    						<p><input type="button" value="쿠폰 적용" class="btn btn-success py-3 px-4" onclick="cCheck()"/></p>
+	            </form>
+    				</div>
+	          
+	          
+	          
 					</div>
+					
 					<div class="col-xl-5">
 	          <div class="row mt-5 pt-3">
 	          	<div class="col-md-12 d-flex mb-5">
@@ -129,6 +197,11 @@
 		    					<p class="d-flex">
 		    						<span>배달비</span>
 		    						<span><input type="text" id="baesong" name="baesong" value="${baesong}원"  class="totSubBox form-control" style="width: 100px;" readonly/></span>
+		    						<%-- <span>${sVo.deliverCost}원</span> --%>
+		    					</p>
+		    					<p class="d-flex">
+		    						<span>쿠폰할인</span>
+		    						<span><input type="text" id="coupon" name="coupon" value="0"  class="totSubBox form-control" style="width: 100px;" readonly/></span>
 		    						<%-- <span>${sVo.deliverCost}원</span> --%>
 		    					</p>
 		    					<!-- <p class="d-flex">
@@ -174,6 +247,7 @@
 										</div>
 									</div>
 									<input type="button" value="결제하기" class="btn btn-primary py-3 px-4" onClick="order()" />
+									<input type="hidden" name="lastPrice" id="lastPrice"/>
 								</div>
 	          	</div>
 	          </div>

@@ -100,6 +100,10 @@
 			input[type=radio]:checked ~ label{
 		    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 			} */
+			
+			.goRating:hover {
+				text-decoration: underline;
+			}
 
     </style>
     
@@ -160,6 +164,38 @@
 					          </div>
 		              </c:forEach>
 								</div>
+								
+								<!-- 페이징 처리 시작 -->
+				    		<div class="row mt-5">
+				          <div class="col text-center">
+				            <div class="block-27">
+				              <ul>
+				              	<c:if test="${pageVo.pag > 1}">
+										      <li><a href="${ctp}/store/storeMenu?foodTag=${foodTag}&idx=${idx}&pageSize=${pageVo.pageSize}&pag=1">&lt;&lt;</a></li>
+										    </c:if>
+				                <c:if test="${pageVo.curBlock > 0}">
+										      <li><a class="page-link text-secondary" href="${ctp}/store/storeMenu?foodTag=${foodTag}&idx=${idx}&pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}">&lt;</a></li>
+										    </c:if>
+				                <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
+										      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
+										    		<li class="active"><a href="${ctp}/store/storeMenu?foodTag=${foodTag}&idx=${idx}&pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+										    	</c:if>
+										      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
+										    		<li><a href="${ctp}/store/storeMenu?foodTag=${foodTag}&idx=${idx}&pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+										    	</c:if>
+										    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">
+											      <li><a class="page-link text-secondary" href="${ctp}/store/storeMenu?foodTag=${foodTag}&idx=${idx}&pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}">&gt;</a></li>
+											    </c:if>
+										    </c:forEach>
+										     <c:if test="${pageVo.pag < pageVo.totPage}">
+										       <li><a href="${ctp}/store/storeMenu?foodTag=${foodTag}&idx=${idx}&pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}">&gt;&gt;</a></li>
+										     </c:if>
+				              </ul>
+				            </div>
+				          </div>
+				        </div>
+					    	<!-- 페이징 처리 끝 -->
+					    	
 		          </div> <!-- .col-md-8 -->
 	          
 		          <div class="col-lg-4 sidebar ftco-animate">
@@ -179,58 +215,58 @@
 		                <li><a href="#">Juice <span>(37)</span></a></li>
 		                <li><a href="#">Dries <span>(42)</span></a></li> -->
 		                <c:forEach var="tVo" items="${tVos}" varStatus="tSt">
-		                	<li><a href="${ctp}/store/storeMenu?idx=${vo.idx}&foodTag=${tVo.foodTag}">${tVo.foodTag}<span>(22)</span></a></li>
+		                	<li><a href="${ctp}/store/storeMenu?idx=${vo.idx}&foodTag=${tVo.foodTag}">${tVo.foodTag}<span></span></a></li>
 		                </c:forEach>
 		              </ul>
 		            </div>
 		
 		            <div class="sidebar-box ftco-animate">
-		              <h3 class="heading">최근 별점&nbsp;<font size="2pt"><a href="">(모든 별점)</a></font></h3>
+		              <h3 class="heading">최근 별점&nbsp;<font size="2pt"><a href="${ctp}/store/storeRatingList?storeName=${vo.storeName}" class="goRating">(모든 별점 보러가기)</a></font></h3>
 		              <c:forEach var="rVo" items="${rVos}">
 			              <div class="block-21 mb-4 d-flex">
 			                <!-- <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a> -->
 			                <div class="text">
 			                <fieldset style="margin: 0 auto">
-			                <c:if test="${rVo.reviewStar == 5}">
-												<input type="radio" name="reviewStar" value="5" id="rate1"><label
-													for="rate1">★</label>
-												<input type="radio" name="reviewStar" value="4" id="rate2"><label
-													for="rate2">★</label>
-												<input type="radio" name="reviewStar" value="3" id="rate3"><label
-													for="rate3">★</label>
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${rVo.reviewStar == 4}">
-												<input type="radio" name="reviewStar" value="4" id="rate2"><label
-													for="rate2">★</label>
-												<input type="radio" name="reviewStar" value="3" id="rate3"><label
-													for="rate3">★</label>
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${rVo.reviewStar == 3}">
-												<input type="radio" name="reviewStar" value="3" id="rate3"><label
-													for="rate3">★</label>
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${rVo.reviewStar == 2}">
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${rVo.reviewStar == 1}">
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
+				                <c:if test="${rVo.reviewStar == 5}">
+													<input type="radio" name="reviewStar" value="5" id="rate1"><label
+														for="rate1">★</label>
+													<input type="radio" name="reviewStar" value="4" id="rate2"><label
+														for="rate2">★</label>
+													<input type="radio" name="reviewStar" value="3" id="rate3"><label
+														for="rate3">★</label>
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${rVo.reviewStar == 4}">
+													<input type="radio" name="reviewStar" value="4" id="rate2"><label
+														for="rate2">★</label>
+													<input type="radio" name="reviewStar" value="3" id="rate3"><label
+														for="rate3">★</label>
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${rVo.reviewStar == 3}">
+													<input type="radio" name="reviewStar" value="3" id="rate3"><label
+														for="rate3">★</label>
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${rVo.reviewStar == 2}">
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${rVo.reviewStar == 1}">
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
 											</fieldset>
 			                  <h3 class="heading-1"><a href="#">${rVo.title}</a></h3>
 			                  <div class="meta">
@@ -239,6 +275,7 @@
 			                  </div>
 			                </div>
 			              </div>
+			              <hr />
 		              </c:forEach>
 		            </div>
 		
@@ -263,6 +300,7 @@
 		          </div>
 						
 	        </div>
+	        
 	      </div>
 	    </section> <!-- .section -->
 		</c:if>

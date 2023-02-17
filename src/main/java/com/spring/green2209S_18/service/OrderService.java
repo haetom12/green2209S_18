@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.green2209S_18.vo.CartVO;
+import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.PayMentVO;
 import com.spring.green2209S_18.vo.RatingVO;
@@ -37,7 +38,7 @@ public interface OrderService {
 
 	public void setFoodOrderOk2(CartVO vo);
 
-	public List<CartVO> getMyOrderList(String mid);
+	public List<CartVO> getMyOrderList(String mid, int startIndexNo, int pageSize);
 
 	public void setRiderOrder(WebSocketDbVO orderVo);
 
@@ -46,6 +47,16 @@ public interface OrderService {
 	public int setRatingInput(RatingVO vo);
 
 	public void setRaingInputOk(String orderIdx);
+
+	public void imgDelete(String content);
+
+	public String qrCreate(String memberNickName, String couponName, int discount, String expiration, String realPath);
+
+	public void setCouponInput(CouponVO pVo);
+
+	public CouponVO getCheckCoupon(String couponName, String mid);
+
+	public void setCouponUsed(String sCouponName, String mid);
 
 
 

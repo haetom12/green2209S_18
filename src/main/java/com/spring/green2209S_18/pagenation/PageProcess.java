@@ -3,12 +3,20 @@ package com.spring.green2209S_18.pagenation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.green2209S_18.dao.MemberDAO;
 import com.spring.green2209S_18.dao.OrderDAO;
+import com.spring.green2209S_18.dao.StoreDAO;
 
 @Service
 public class PageProcess {
 	@Autowired
 	OrderDAO orderDAO;
+	
+	@Autowired
+	StoreDAO storeDAO;
+	
+	@Autowired
+	MemberDAO memberDAO;
 	
 	
 	
@@ -19,6 +27,18 @@ public class PageProcess {
 		
 		if(section.equals("rating")) {
 		 	totRecCnt = orderDAO.totRatingCnt(search);			
+		}
+		else if(section.equals("store")) {
+			totRecCnt = storeDAO.totRatingCnt(search);			
+		}
+		else if(section.equals("storeMenu")) {
+			totRecCnt = storeDAO.totStoreMenuCnt(search);			
+		}
+		else if(section.equals("qrCode")) {
+			totRecCnt = memberDAO.totCouponCnt(search);			
+		}
+		else if(section.equals("memberOderList")) {
+			totRecCnt = memberDAO.totOderListCnt(search);			
 		}
 //		else if(section.equals("webMessage")) {
 //			String mid = search;

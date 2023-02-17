@@ -81,17 +81,15 @@
 	</script>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/include/nav.jsp"/>
-<jsp:include page="/WEB-INF/views/include/slide2.jsp"/>
 <p><br></p>
-<div class="container">
-  <h2>결제처리 연습</h2>
+<div class="container" >
   <hr/>
-  <h3>현재 결제가 진행중입니다.</h3>
-  <p><img src="${ctp}/images/payment.gif" width="200px"/></p>
-  <hr/>
+  <div style="margin: 10% 0; text-align: center;">
+	  <h3>현재 결제가 진행중입니다.</h3>
+	  <img src="${ctp}/images/loading.gif" width="500px"/>
+	  <hr/>
+  </div>
 </div>
 <br/>
-<jsp:include page="/WEB-INF/views/include/footer.jsp"/>
 </body>
 </html>
