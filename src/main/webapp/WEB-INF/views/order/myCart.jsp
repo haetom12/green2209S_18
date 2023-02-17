@@ -259,35 +259,6 @@
     		<div class="row justify-content-end">
     			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>쿠폰입력</h3>
-    					<p>Enter your coupon code if you have one</p>
-  						<form action="#" class="info">
-	              <div class="form-group">
-	              	<label for="">쿠폰 코드</label>
-	                <input type="text" class="form-control text-left px-3" >
-	              </div>
-	            </form>
-    				</div>
-    				<p><a href="#" class="btn btn-primary py-3 px-4">쿠폰 적용</a></p>
-    			</div>
-    			<%-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
-    					<h3><b>배달주소지</b></h3>
-  						<form name="addressForm" class="info">
-	              <div class="form-group">
-	              	<label for="">주소</label>
-	                <input type="text" name="address1" id="address1" class="form-control text-left px-3" value="${address1}">
-	              </div>
-	              <div class="form-group">
-	              	<label for="country">상세주소</label>
-	                <input type="text" name="address2" id="address2" class="form-control text-left px-3" value="${address2}">
-	              </div>
-	            </form>
-    				</div>
-    				<!-- <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p> -->
-    			</div> --%>
-    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
     					<h3><b>결제 금액</b></h3>
     					<p class="d-flex">
     						<span>메뉴값</span>

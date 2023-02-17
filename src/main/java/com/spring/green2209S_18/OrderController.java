@@ -486,9 +486,8 @@ public class OrderController {
 				messageHelper.setText(content);
 				
 				content = content.replace("\n", "<br/>");
-				content += "<br>메일 인증번호입니다<br/>";
-				content += " 이용해주셔서 감사합니다! 첨부파일을 확인해주세요! ";
-				content += "<hr>";
+				content += "[이벤트 쿠폰] \n ";
+				content += "항상 저희 매장을 이용해주셔서 감사합니다! 첨부파일을 확인해주세요! ";
 				
 				// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
 				messageHelper.setText(content);

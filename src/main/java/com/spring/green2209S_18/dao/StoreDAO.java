@@ -8,6 +8,7 @@ import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
+import com.spring.green2209S_18.vo.ratingReplyVO;
 
 public interface StoreDAO {
 
@@ -104,6 +105,10 @@ public interface StoreDAO {
 	public int totStoreMenuCnt(@Param("storeName") String search);
 
 	public List<FoodMenuVO> getStoreFoodMenu2(@Param("storeName") String storeName, @Param("foodTag") String foodTag, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+
+	public int setRatingReplyInput(@Param("vo") ratingReplyVO vo);
+
+	public List<ratingReplyVO> getRatingReply(@Param("idx") int idx);
 
 
 }

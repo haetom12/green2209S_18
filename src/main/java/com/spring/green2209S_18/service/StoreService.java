@@ -9,6 +9,7 @@ import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
+import com.spring.green2209S_18.vo.ratingReplyVO;
 
 public interface StoreService {
 
@@ -101,6 +102,11 @@ public interface StoreService {
 	public int setRatingUpdateOk(RatingVO vo);
 
 	public List<FoodMenuVO> getStoreFoodMenu2(String storeName, String foodTag, int startIndexNo, int pageSize);
+
+	public int setRatingReplyInput(ratingReplyVO vo);
+
+	public List<ratingReplyVO> getRatingReply(int idx);
+
 
 
 }

@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
     <script>
     	'use strict';
     	
@@ -58,6 +60,45 @@
 	    		}
 	    	});
 			}
+    	
+    	// 댓글 달기
+        function replyCheck(idx) {
+        	let content = $("#content"+idx).val();
+        	let storePart = '${vo.storePart}';
+        	
+        	if(content.trim() == "") {
+        		alert("댓글을 입력하세요");
+        		$("#content").focus();
+        		return false;
+        	}
+        	
+        	let query = {
+        			ratingIdx  : ${vo.idx},
+        			mid				: '${sMid}',
+        			nickName  : '${sNickName}',
+        			content   : content
+        	}
+        	
+        	$.ajax({
+        		type : "post",
+        		url  : "${ctp}/store/storeReplyInput",
+        		data : query,
+        		success:function(res) {
+        			if(res == "1") {
+        				alert("댓글이 입력되었습니다.");
+        				location.reload();
+        			}
+        			else {
+        				alert("댓글 입력 실패~~~");
+        			}
+        		},
+      			error  : function() {
+      				alert("전송 오류!!");
+      			}
+        	});
+        }
+    	
+    	
     	
     
     </script>
@@ -106,7 +147,7 @@
     <div class="hero-wrap hero-bread" style="background-image: url('${ctp}/data/store/${vo.logoPhoto}'); width:40%; margin: 0 auto;">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
-          <div class="col-md-9 ftco-animate text-center">
+          <div class="col-md-9 ftco-animate text-center bg-primary">
           	<!-- <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Blog</span></p> -->
             <h1 class="mb-0 bread">${vo.storeName}</h1>
           </div>
@@ -115,9 +156,9 @@
     </div>
 
   	<section class="ftco-section ftco-degree-bg">
-      <div class="container">
+      <div class="container" >
       	<c:forEach var="rVo" items="${rVos}" varStatus="rSt">
-	        <div class="row">
+	        <div class="row" style="background-color:#eee;">
 	          <div class="col-lg-12 ftco-animate">
 							<table class="table border" style="border: soild 1px black;">
 					    <thead class="thead-primary">
@@ -175,6 +216,9 @@
 											</c:if>
 											</fieldset>
 											&nbsp;&nbsp;
+											<c:if test="${sMid == 'admin' && sMid == rVo.mid}">
+												신고하기
+											</c:if>
 											<c:if test="${sMid == 'admin'}">
 												<input type="button" value="삭제" onclick="ratingDelete(${rVo.idx})" class="btn btn-danger"  />
 											</c:if>
@@ -192,7 +236,65 @@
 								    <!-- 상품 상세설명 보여주기 -->
 								    <div id="content" style="background-color:#eee;" class="text-left"><br/>
 								      ${rVo.content}
-								    </div>					    	
+								      <hr />
+								    </div>		
+								    
+								    <form name="replyForm">
+										  <table class="table" style="background-color:#eee;">
+										    <tr>
+										      <td style="width:85%; text-align:left;" >
+										        <textarea rows="4" name="content" id="content${rVo.idx}" class="form-control"></textarea>
+										      </td>
+										      <td style="width:15%">
+										        <br/>
+										        <p>작성자 : ${sNickName}</p>
+										        <p>
+										          <input type="button" value="댓글달기" onclick="replyCheck(${rVo.idx})" class="btn btn-info btn-sm"/>
+										        </p>
+										      </td>
+										    </tr>
+										  </table>
+										</form>
+								    
+								    <div style="text-align: left;" >
+								    	<div class="pt-5 mt-1">
+					              <h3 class="mb-3 ml-1">(~)개 댓글</h3>
+					              <ul class="comment-list" style="background-color:#eee;">
+				                	<c:forEach var="rrVo" items="${rrVos}" varStatus="rst">
+						                <li class="comment">
+							                  <div class="comment-body">
+							                    <h3>${rrVo.rSt.count.nickName}</h3>
+							                    <div class="meta"><b>${rrVo.rSt.index.writeDate}</b></div>
+							                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+							                    <p><a href="#" class="reply">Reply</a></p>
+							                  </div>
+															
+						                  <ul class="children">
+						                    <li class="comment">
+						                      <div class="comment-body">
+						                        <h3>John Doe</h3>
+						                        <div class="meta">June 27, 2018 at 2:21pm</div>
+						                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+						                        <p><a href="#" class="reply">Reply</a></p>
+						                      </div>
+						                    </li>
+						                    <li class="comment">
+						                      <div class="comment-body">
+						                        <h3>John Doe</h3>
+						                        <div class="meta">June 27, 2018 at 2:21pm</div>
+						                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+						                        <p><a href="#" class="reply">Reply</a></p>
+						                      </div>
+						                    </li>
+						                  </ul>
+						                </li>
+					                </c:forEach>
+					              </ul>
+					            </div>
+								    
+								    
+								    
+								    </div>			    	
 					    	  </td>
 						    </tr>
 					    </tbody>

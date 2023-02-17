@@ -123,6 +123,11 @@
 	 <select id="totStoreMenuCnt" resultType="int">
   	select count(*) from storefoodmenu where storeName=#{storeName};
   </select>
+
+	 <select id="getRatingReply" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
+  	select * from ratingreply where ratingIdx=#{idx};
+  </select>
+	
 	
 	
 	
@@ -153,6 +158,11 @@
 	<insert id="setStoreSubMenuInput">
 		insert into storefoodsubmenu values (#{vo.storeName}, default, #{vo.foodTag}, #{vo.subMenuName}, ${vo.price}, default);
 	</insert>
+	
+	<insert id="setRatingReplyInput">
+		insert into ratingreply values (#{vo.ratingIdx}, default, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, default);
+	</insert>
+	
 	
 	
 	

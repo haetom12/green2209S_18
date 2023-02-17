@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
     <script src="${ctp}/ckeditor/ckeditor.js"></script>
     
     <style>

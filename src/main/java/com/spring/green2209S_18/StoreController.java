@@ -2,6 +2,7 @@ package com.spring.green2209S_18;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -36,6 +37,7 @@ import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
+import com.spring.green2209S_18.vo.ratingReplyVO;
 @Controller
 @RequestMapping("/store")
 public class StoreController {
@@ -745,10 +747,24 @@ public class StoreController {
 		
 		List<RatingVO> rVos = storeService.getRatingList(pageVo.getStartIndexNo(), pageSize, storeName);
 		
+//		if(rVos.size() != 0) {
+//			List<ratingReplyVO> rrVos = new ArrayList<ratingReplyVO>();
+//			for(int i=0; i<rVos.size(); i++) {
+//				
+//				List<ratingReplyVO> rrvo = storeService.getRatingReply(rVos.get(i).getIdx());
+//				rrVos.addAll(rrvo);
+//			}
+//			
+//			model.addAttribute("rrVos", rrVos);
+//			System.out.println("rrvos : " + rrVos);
+//		}
+		
+		
 		model.addAttribute("vo", vo);
 		model.addAttribute("pageVo", pageVo);
 		model.addAttribute("rVos", rVos);
 			
+		
 		return "store/storeRatingList";
 	}
 	
@@ -884,6 +900,23 @@ public class StoreController {
 		
 		else return res;
 	}
+	
+	
+	// 평점 댓글 달기
+	@ResponseBody
+	@RequestMapping(value = "storeReplyInput", method = RequestMethod.POST)
+	public String storeReplyInputPost(ratingReplyVO vo) {
+		int res = 0;
+		
+		System.out.println("Vo : " + vo);
+		
+		res = storeService.setRatingReplyInput(vo);
+		
+		if(res == 1) return "1";
+		
+		else return res+"";
+	}
+	
 	
 	
 	

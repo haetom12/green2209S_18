@@ -141,7 +141,8 @@
               <input type="hidden" name="mid"  value="${vo.mid}"/>
               <input type="hidden" name="storeName"  value="${vo.storeName}"/>
               <input type="hidden" name="memberNickName"  value="${vo.memberNickName}"/>
-          		<input type="button" value="별점 수정" style="float: right;" onclick="fCheck()" class="btn btn-primary mb-1 ml-5" />
+          		<input type="button" value="별점 수정" style="float: right;" onclick="fCheck()" class="btn btn-primary mb-1 ml-3" />
+          		<input type="button" value="돌아가기" style="float: right;" onclick="location.href='${ctp}/store/storeRatingList?storeName=${vo.storeName}';" class="btn btn-secondary mb-1 ml-3" />
             </form>
           </div>
         </div>

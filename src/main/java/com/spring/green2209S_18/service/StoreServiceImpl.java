@@ -22,6 +22,7 @@ import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
+import com.spring.green2209S_18.vo.ratingReplyVO;
 
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -346,6 +347,16 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public List<FoodMenuVO> getStoreFoodMenu2(String storeName, String foodTag, int startIndexNo, int pageSize) {
 		return storeDAO.getStoreFoodMenu2(storeName, foodTag, startIndexNo, pageSize);
+	}
+
+	@Override
+	public int setRatingReplyInput(ratingReplyVO vo) {
+		return storeDAO.setRatingReplyInput(vo);
+	}
+
+	@Override
+	public List<ratingReplyVO> getRatingReply(int idx) {
+		return storeDAO.getRatingReply(idx);
 	}
 
 

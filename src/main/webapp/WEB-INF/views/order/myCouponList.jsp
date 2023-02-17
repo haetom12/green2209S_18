@@ -69,7 +69,7 @@
 					      </td>
 					      <td>
 					        <div class="text-center">
-					        	${fn:substring(vo.receiveDate,0,16)}
+					        	${fn:substring(vo.receiveDate,0,10)}
 					        </div>
 					      </td>
 					      <td>
