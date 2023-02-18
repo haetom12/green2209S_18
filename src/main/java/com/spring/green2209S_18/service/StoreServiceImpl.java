@@ -359,6 +359,11 @@ public class StoreServiceImpl implements StoreService {
 		return storeDAO.getRatingReply(idx);
 	}
 
+	@Override
+	public List<ratingReplyVO> getRatingCommentList(int idx) {
+		return storeDAO.getRatingCommentList(idx);
+	}
+
 
 
 }

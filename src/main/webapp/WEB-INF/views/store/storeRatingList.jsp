@@ -73,7 +73,7 @@
         	}
         	
         	let query = {
-        			ratingIdx  : ${vo.idx},
+        			ratingIdx  : idx,
         			mid				: '${sMid}',
         			nickName  : '${sNickName}',
         			content   : content
@@ -98,12 +98,52 @@
         	});
         }
     	
+    	function getCommentList(idx) {
+    		$.ajax({
+        		type : "post",
+        		url  : "${ctp}/store/getCommentList",
+        		data   : {
+			  			idx : idx
+			  		},
+        		success:function(vos) {
+	            let html = "";
+	            console.log("길이", vos.length);
+
+	            if (vos.length > 0) {
+		               for (let i = 0; i < vos.length; i++) {
+		                   html += "<li class='comment'>";
+		                   html += "<div class='mb-2'>";
+		                   html += "<b id='commentWriter_" + vos[i].nickName + "'>" + vos[i].nickName + "</b>";
+		                   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate + " </span>";
+		                   html += "<div class='mb-1 comment_container' >"
+		                   html += "<h5 id='commentText_" + vos[i].nickName + "' style='display: inline'>" + vos[i].content +"</h5>";
+		                   html += "</div>"
+		                   html += "<span style='cursor: pointer; color: blue' class='reCommentBtn' id='reCommentBtn_"+ vos[i].nickName +"'>답글 달기 </span>";
+		                   html += "<span style='display:none; cursor: pointer; color: blue' class='reCommentCloseBtn' id='reCommentCloseBtn_"+ vos[i].nickName +"'>답글 닫기 </span>";
+		                 
+		                   html += "<hr>";
+		                   html += "<div class='mx-4 reCommentDiv' id='reCommentDiv_" + vos[i].nickName + "'></div></div></li>";
+		               }
+		           } else {
+		               html += "<div class='mb-2'>";
+		               html += "<h6><strong>등록된 댓글이 없습니다.</strong></h6>";
+		               html += "</div>";
+		           }
+		           $("#demo").html(html);
+        		},
+      			error  : function() {
+      				alert("전송 오류!!");
+      			}
+        	});
+    		
+    		
+			}
     	
     	
-    
+    	
     </script>
     
-      <style>
+    <style>
         
     	fieldset{
 		    display: inline-block;
@@ -136,7 +176,6 @@
 			.goRating:hover {
 				text-decoration: underline;
 			}
-
     </style>
     
   </head>
@@ -229,7 +268,7 @@
 							    </th>
 							  </tr>
 					    </thead>
-					   <!-- 장바구니 목록출력 -->
+					    
 				   	  <tbody class="m-0 p-0">
 					      <tr align="center">
 					    	  <td class="m-0 p-0" colspan="4">
@@ -258,41 +297,44 @@
 								    
 								    <div style="text-align: left;" >
 								    	<div class="pt-5 mt-1">
-					              <h3 class="mb-3 ml-1">(~)개 댓글</h3>
+					              <input type="button" value="댓글" onclick="getCommentList(${rVo.idx})" class="btn btn-info mb-2"/>
 					              <ul class="comment-list" style="background-color:#eee;">
-				                	<c:forEach var="rrVo" items="${rrVos}" varStatus="rst">
-						                <li class="comment">
-							                  <div class="comment-body">
-							                    <h3>${rrVo.rSt.count.nickName}</h3>
-							                    <div class="meta"><b>${rrVo.rSt.index.writeDate}</b></div>
-							                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-							                    <p><a href="#" class="reply">Reply</a></p>
-							                  </div>
-															
-						                  <ul class="children">
-						                    <li class="comment">
-						                      <div class="comment-body">
-						                        <h3>John Doe</h3>
-						                        <div class="meta">June 27, 2018 at 2:21pm</div>
-						                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-						                        <p><a href="#" class="reply">Reply</a></p>
-						                      </div>
-						                    </li>
-						                    <li class="comment">
-						                      <div class="comment-body">
-						                        <h3>John Doe</h3>
-						                        <div class="meta">June 27, 2018 at 2:21pm</div>
-						                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-						                        <p><a href="#" class="reply">Reply</a></p>
-						                      </div>
-						                    </li>
-						                  </ul>
-						                </li>
-					                </c:forEach>
+					              <div id="demo">
+					              
+					              </div>
+					               <%-- 
+					                <li class="comment">
+					                  <div class="comment-body">
+					                    <h3>${rrVo.rSt.count.nickName}</h3>
+					                    <div class="meta"><b>${rrVo.rSt.index.writeDate}</b></div>
+					                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+					                    <p><a href="#" class="reply">Reply</a></p>
+					                  </div>
+					                  
+						                <!-- 대 댓글 -->
+					                  <ul class="children">
+					                    <li class="comment">
+					                      <div class="comment-body">
+					                        <h3>John Doe</h3>
+					                        <div class="meta">June 27, 2018 at 2:21pm</div>
+					                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+					                        <p><a href="#" class="reply">Reply</a></p>
+					                      </div>
+					                    </li>
+					                    <li class="comment">
+					                      <div class="comment-body">
+					                        <h3>John Doe</h3>
+					                        <div class="meta">June 27, 2018 at 2:21pm</div>
+					                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+					                        <p><a href="#" class="reply">Reply</a></p>
+					                      </div>
+					                    </li>
+					                  </ul> 
+					                </li>
+					                 --%>
 					              </ul>
+					              
 					            </div>
-								    
-								    
 								    
 								    </div>			    	
 					    	  </td>

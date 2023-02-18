@@ -110,5 +110,7 @@ public interface StoreDAO {
 
 	public List<ratingReplyVO> getRatingReply(@Param("idx") int idx);
 
+	public List<ratingReplyVO> getRatingCommentList(@Param("idx") int idx);
+
 
 }

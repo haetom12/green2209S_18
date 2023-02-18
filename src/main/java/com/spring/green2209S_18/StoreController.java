@@ -917,6 +917,20 @@ public class StoreController {
 		else return res+"";
 	}
 	
+	// 평점 댓글 불러오기
+	@ResponseBody
+	@RequestMapping(value = "getCommentList", method = RequestMethod.POST)
+	public List<ratingReplyVO> getCommentListPost(int idx) {
+		int res = 0;
+		
+		System.out.println("int idx : " + idx);
+		
+		List<ratingReplyVO> vos = storeService.getRatingCommentList(idx);
+		
+		
+		return vos;
+	}
+	
 	
 	
 	

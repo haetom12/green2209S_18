@@ -107,6 +107,8 @@ public interface StoreService {
 
 	public List<ratingReplyVO> getRatingReply(int idx);
 
+	public List<ratingReplyVO> getRatingCommentList(int idx);
+
 
 
 }

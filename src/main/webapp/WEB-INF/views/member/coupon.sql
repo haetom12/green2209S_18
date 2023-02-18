@@ -39,6 +39,8 @@ create table ratingReply (
   nickName varchar(20) not null,			/* 댓글 올린이의 닉네임 */
   writeDate		 datetime default now(),		/* 댓글 올린 날짜 */
   content  text not null,							/* 댓글 내용 */
+  replylevel int not null default 0,	/* 댓글 레벨 기본댓글 0 / 대댓글 1 */
+  replyidx int,		/* 대댓글을 달고자하는 댓글의 idx */
   primary key(idx),
   foreign key(ratingIdx) references rating(idx)
   /* on update cascade */
@@ -47,5 +49,5 @@ create table ratingReply (
 
 
 desc ratingReply;
-drop table boardReply2;
+drop table ratingReply;
 select * from boardReply2;

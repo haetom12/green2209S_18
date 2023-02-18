@@ -12,6 +12,8 @@ public class ratingReplyVO {
 	private String content;
 	private String update;
 	
+	private int replylevel;
+	private int replyIdx;
 	private int replyCnt;
 	
 }
