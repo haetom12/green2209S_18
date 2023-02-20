@@ -57,7 +57,7 @@
 		  </div>
     </div>
 
-	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+		<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
 	      <a class="navbar-brand" href="${ctp}/">해 찬 들</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,10 +109,9 @@
 			          <li class="nav-item active dropdown">
 		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지</a>
 		              <div class="dropdown-menu" aria-labelledby="dropdown04">
-		              	<a class="dropdown-item" href="#">내 정보 수정</a>
+		              	<a class="dropdown-item" href="${ctp}/member/myPage">내 정보 보기</a>
 		              	<a class="dropdown-item" href="${ctp}/member/myOrderList">주문내역</a>
 		              	<a class="dropdown-item" href="${ctp}/order/myWishList">찜목록</a>
-		                <a class="dropdown-item" href="${ctp}/rider/orderChat">채팅</a>
 		                <a class="dropdown-item" href="${ctp}/order/myCouponList">쿠폰함</a>
 		                <a class="dropdown-item" href="checkout.html">리뷰관리</a>
 		              </div>
@@ -203,3 +202,4 @@
   <script src="${ctp}/js/bootstrap-datepicker.js"></script>
   <script src="${ctp}/js/scrollax.min.js"></script>
   <script src="${ctp}/js/main.js"></script>
+  

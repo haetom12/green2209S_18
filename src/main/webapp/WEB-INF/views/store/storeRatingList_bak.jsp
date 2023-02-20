@@ -14,11 +14,15 @@
 
     <link rel="stylesheet" href="${ctp}/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="${ctp}/css/animate.css">
+    
     <link rel="stylesheet" href="${ctp}/css/owl.carousel.min.css">
     <link rel="stylesheet" href="${ctp}/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="${ctp}/css/magnific-popup.css">
+
     <link rel="stylesheet" href="${ctp}/css/aos.css">
+
     <link rel="stylesheet" href="${ctp}/css/ionicons.min.css">
+
     <link rel="stylesheet" href="${ctp}/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="${ctp}/css/jquery.timepicker.css">
 
@@ -26,8 +30,6 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
-    
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     
@@ -96,16 +98,13 @@
         	});
         }
     	
-    	var resVos = '';
-    	
-		  let nickName = '${sNickName}';
-    	
-		  function getCommentList(idx) {
+    	function getCommentList(idx) {
     		
     		/* if($("#demo"+idx)[0].style.display = 'none'){ 		
     			$("#demo"+idx)[0].style.display = 'block'; 	
     	  }		
     		 */
+    		 let nickName = '${sNickName}';
     			
 	    		$.ajax({
 	        		type : "post",
@@ -113,37 +112,35 @@
 	        		data   : {
 				  			idx : idx
 				  		},
-				  		//async: false,
 	        		success:function(vos) {
 		            let html = "";
 		            console.log("길이", vos.length);
 		            console.log("idx", idx);
 	
-		            resVos = vos;
-		            
 		            if (vos.length > 0) {
 			               for (let i = 0; i < vos.length; i++) {
 			            	   
 			            	   if(vos[i].replylevel != 3){
 			                   html += "<li class='comment'>";
 			                   html += "<div class='mb-2'>";
-			                /* html += "<b id='commentWriter_" + vos[i].nickName + "'>" + vos[i].nickName + "</b>" + "  " + "<a href='javascript:replydelete("+vos[i].idx+", \'"+vos[i].nickName+"\')'><font color='red'>(X)</font></a>"; */
+			                /*    html += "<b id='commentWriter_" + vos[i].nickName + "'>" + vos[i].nickName + "</b>" + "  " + "<a href='javascript:replydelete("+vos[i].idx+", \'"+vos[i].nickName+"\')'><font color='red'>(X)</font></a>"; */
 			                   html += "<b id='commentWriter_" + vos[i].nickName + "'>" + vos[i].nickName + "</b>";
+		                	   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate  +  "  s<a href='#'  onclick='modalView(\'"+vos[i].idx+"\',\'"+vos[i].nickName+"\',\'"+vos[i].content+"\')' data-toggle='modal' data-target='#myModal'><font color='orange'>(수정)</font></a> / <a href='javascript:replydelete("+vos[i].idx+")'><font color='red'>(삭제)</font></a></span>";
+			                  
 			                   
-			                   /* html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '  <a href="#"  onclick="modalView('+i+')" data-toggle="modal" data-target="#myModal"><font color="orange">(수정)</font></a> / <a href="javascript:replydelete('+vos[i].idx+')"><font color="red">(삭제)</font></a></span>'; */
-			                   
-			                   if(nickName != vos[i].nickName) {
-				                   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate + "</span>";
+			                   /* if(nickName != vos[	i].nickName) {
+				                   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate  +" "+ "<a href='#'  onclick='modalView(\'"+vos[i].idx+"\',\'"+vos[i].nickName+"\',\'"+vos[i].content+"\')' data-toggle='modal' data-target='#myModal'><font color='orange'>(수정)</font></a> / <a href='javascript:replydelete("+vos[i].idx+")'><font color='red'>(삭제)</font></a></span>";
 			                   }
 			                   else {
-			                	   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '  <a href="#"  onclick="modalView('+i+')" data-toggle="modal" data-target="#myModal"><font color="orange">(수정)</font></a> / <a href="javascript:replydelete('+vos[i].idx+')"><font color="red">(삭제)</font></a></span>';
-			                   } 
+			                	   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate  +" "+ "<a href='#'  onclick='modalView(\'"+vos[i].idx+"\',\'"+vos[i].nickName+"\',\'"+vos[i].content+"\')' data-toggle='modal' data-target='#myModal'><font color='orange'>(수정)</font></a> / <a href='javascript:replydelete("+vos[i].idx+")'><font color='red'>(삭제)</font></a></span>";
+			                   } */
+			                   
 			                   
 			                   
 			                   html += "<div class='mb-1 comment_container' >"
 			                   html += "<h5 id='commentText_" + vos[i].nickName + "' style='display: inline'>" + vos[i].content +"</h5>";
 			                   html += "</div>"
-			                   html += "<span style='cursor: pointer; color: blue' onclick='rereply("+ idx +","+ vos[i].idx +")'; class='reCommentBtn' id='reCommentBtn_"+ vos[i].idx +"'>댓글 보기 </span>";
+			                   html += "<span style='cursor: pointer; color: blue' onclick='rereply("+ idx +","+ vos[i].idx +")'; class='reCommentBtn' id='reCommentBtn_"+ vos[i].idx +"'>답글 보기 </span>";
 			                   html += "<span style='display:none; cursor: pointer;' onclick='rereplyClose("+ vos[i].idx +")';  color: blue' class='reCommentCloseBtn' id='reCommentCloseBtn_"+ vos[i].idx +"'>답글 닫기 </span>";
 			                   
 			                   html += "<hr>";
@@ -156,7 +153,7 @@
 				                   html += "<div class='mb-1 comment_container' >"
 				                   html += "<h5 id='commentText_" + vos[i].nickName + "' style='display: inline; color=\"blue\"; '>" + vos[i].content +"</h5>";
 				                   html += "</div>"
-				                   html += "<span style='cursor: pointer; color: blue' onclick='rereply("+ idx +","+ vos[i].idx +")'; class='reCommentBtn' id='reCommentBtn_"+ vos[i].idx +"'>댓글 보기 </span>";
+				                   html += "<span style='cursor: pointer; color: blue' onclick='rereply("+ idx +","+ vos[i].idx +")'; class='reCommentBtn' id='reCommentBtn_"+ vos[i].idx +"'>답글 보기 </span>";
 				                   html += "<span style='display:none; cursor: pointer;' onclick='rereplyClose("+ vos[i].idx +")';  color: blue' class='reCommentCloseBtn' id='reCommentCloseBtn_"+ vos[i].idx +"'>답글 닫기 </span>";
 				                   
 				                   html += "<hr>";
@@ -217,6 +214,7 @@
       	});
 			}
     	
+    	
     	function rereply(ratingIdx, idx) {
     		$.ajax({
         		type : "post",
@@ -226,9 +224,6 @@
 			  			idx : idx
 			  		},
         		success:function(vos) {
-        			
-        			resVos = vos;
-        			
 	            let html = "";
 	            console.log("대댓글길이", vos.length);
 	            console.log("idx", idx);
@@ -242,15 +237,7 @@
 		                   html += "<li class='comment'>";
 		                   html += "<div class='mb-2'>";
 		                   html += "<b id='commentWriter_" + vos[i].nickName + "'>" + vos[i].nickName + "</b>";
-		                   
-		                   if(nickName != vos[i].nickName) {
-			                   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '</span>';
-		                   }
-		                   else {
-			                   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '  <a href="#"  onclick="modalView('+i+')" data-toggle="modal" data-target="#myModal"><font color="orange">(수정)</font></a> / <a href="javascript:replydelete('+vos[i].idx+')"><font color="red">(삭제)</font></a></span>';
-		                   }
-		                   
-		                   
+		                   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate +" "+ "<a href='javascript:replydelete("+vos[i].idx+")'><font color='red'>(삭제)</font></a></span>";
 		                   html += "<div class='mb-1 comment_container' >"
 		                   html += "<h5 id='commentText_" + vos[i].nickName + "' style='display: inline'>" + vos[i].content +"</h5>";
 		                   html += "</div></div></li>"
@@ -294,7 +281,7 @@
         			nickName  : '${sNickName}',
         			content   : content,
         			replyIdx  : replyIdx
-        }
+        	}
     		
     		if(nickName == ""){
     			alert("로그인 후 이용가능합니다.");
@@ -340,85 +327,16 @@
     	
     	
     	// 모달창
-    	function modalView(i) {
-    			/* console.log("시파" , idx);
-    			console.log("name" , name); */
-    			
-    			let strVos = JSON.stringify(resVos[i]);
-    			let jsonVos = JSON.parse(strVos);
-    			
+    	function modalView(idx, nickName, content) {
+    			console.log("시파" , idx);
+    		
         	$("#myModal").on("show.bs.modal", function(e){
-        		$(".modal-body #mNickName").val(jsonVos.nickName);
-        		$(".modal-body #content").val(jsonVos.content);
-        		$(".modal-body #idx").val(jsonVos.idx);
+        		$(".modal-body #mid").html(nickName);
+        		$(".modal-body #context").html(content);
+        		$(".modal-body #idx").val(idx);
         	});
-        	
-      }
+        }
     	
-	  	function replyUpdate() {
-				
-	  		let nickName = $(".modal-body #mNickName").val();
-	  		let content = $(".modal-body #content").val();
-	  		let idx = $(".modal-body #idx").val();
-	  		
-	  		let query = {
-	  			nickName  : nickName,
-	  			content  : content,
-	  			idx  : idx
-    		}
-	  		
-	  		if(content == "") {
-	  			alert("수정할 내용을 입력하세요.");
-	  			return false;
-	  		}
-	  		
-	  		$.ajax({
-        		type : "post",
-        		url  : "${ctp}/store/storeReplyUpdate",
-        		data : query,
-        		success:function(res) {
-        			if(res == "1") {
-        				alert("댓글이 수정되었습니다.");
-        				location.reload();
-        			}
-        			else {
-        				alert("댓글 수정에 실패하였습니다. 다시 시도해주세요. ");
-        			}
-        		},
-      			error  : function() {
-      				alert("전송 오류!!");
-      			}
-      	});
-			}
-		function reportRating(idx) {
-			let ans = confirm("선택한 리뷰를 신고하시겠습니까? 허위 신고는 불이익이 생길수 있습니다.");
-			if(!ans) return false;
-			
-			$.ajax({
-        		type : "post",
-        		url  : "${ctp}/store/reportRating",
-        		data : {
-    	  			idx  : idx
-        		},
-        		success:function(res) {
-        			if(res == "1") {
-        				alert("리뷰를 신고하였습니다.");
-        				location.reload();
-        			}
-        			else if(res == "3") {
-        				alert("이미 신고하였습니다.");
-        			}
-        			else {
-        				alert("리뷰 신고에 실패하였습니다. 다시 시도해주세요. ");
-        			}
-        		},
-      			error  : function() {
-      				alert("전송 오류!!");
-      			}
-      	});
-			
-			
-		}    	
     	
     </script>
     
@@ -534,8 +452,8 @@
 											</c:if>
 											</fieldset>
 											&nbsp;&nbsp;
-											<c:if test="${sMid != 'admin' && sMid != rVo.mid}">
-												<a href="javascript:reportRating(${rVo.idx})"><font color="red">신고하기</font></a>
+											<c:if test="${sMid == 'admin' && sMid == rVo.mid}">
+												신고하기
 											</c:if>
 											<c:if test="${sMid == 'admin'}">
 												<input type="button" value="삭제" onclick="ratingDelete(${rVo.idx})" class="btn btn-danger"  />
@@ -637,16 +555,14 @@
 		      <!-- Modal body -->
 		      <form>
 			      <div class="modal-body">
-			        - 올린이 : 	<input type="text" id="mNickName" name="mNickName" class="form-control" readonly/>	<!-- <span id="nickName"></span> -->
+			        - 올린이 : <span id="mid"></span>
 			        <hr/>
 			        - 작성내용 : <span id="context"></span><br/>
 				      <textarea rows="3" name="content" id="content" class="form-control mt-2 mb-2"></textarea>
 				      <input type="hidden" name="idx" id="idx"/>
 				      <button type="button" class="btn btn-danger w3-right" data-dismiss="modal">닫기</button>
-				      <button type="button" class="btn btn-primary w3-right w3-margin-right" onclick="replyUpdate()">댓글 수정</button>
+				      <button type="button" class="btn btn-primary w3-right w3-margin-right" onclick="replyCheck()">답변</button>
 			      </div>
-			      
-			      
 			      
 		      </form>
 		      <!-- Modal footer -->

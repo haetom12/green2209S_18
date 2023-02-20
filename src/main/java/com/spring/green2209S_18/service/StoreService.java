@@ -109,6 +109,23 @@ public interface StoreService {
 
 	public List<ratingReplyVO> getRatingCommentList(int idx);
 
+	public List<ratingReplyVO> getRatingCommentList2(int ratingIdx, int idx);
+
+	public int setRatingReReplyInput(ratingReplyVO vo);
+
+	public ratingReplyVO getReplyComment(int idx);
+
+	public int setReplyDeleteUpdate(int idx);
+
+	public int setReplyDelete(int idx);
+
+	public List<ratingReplyVO> getReplyParent(int idx);
+
+	public int setRatingReplyUpdate(ratingReplyVO vo);
+
+	public void setRatingReplyDeleteAll(int idx);
+
+	public int setReportRating(int idx, String mid);
 
 
 }

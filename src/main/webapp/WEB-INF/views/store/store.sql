@@ -144,5 +144,9 @@ create table storeTag (
 	select * from adminfoodmenu a, storeFoodMenu s  where a.brandName = 'BBQ' and s.foodName != a.foodName;
 	select * from adminfoodmenu a, storeFoodMenu s  where a.brandName = 'BBQ' and s.storeName = 'BBQ치킨 세종충남병원점'  group by a.foodName having a.foodName != s.foodName;
 --	drop table storeFoodSubMenu
+
+	select s.*, (select round(AVG(r.rating), 1) from rating r where s.idx = r.storeIdx) as rateAvg from store s where s.storePart = '치킨';
 	
+	select *, (select count(*) from ratingreply where ratingIdx=12) as replyCnt from ratingreply where ratingIdx=12 and replylevel = 0 or replylevel = 3;
+	select * from rating where storeName = #{storeName} order by idx desc limit #{startIndexNo},#{pageSize};
 	

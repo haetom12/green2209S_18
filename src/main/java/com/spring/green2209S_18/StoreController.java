@@ -382,8 +382,6 @@ public class StoreController {
 //		System.out.println("storeName :" + storeName);
 		delItems = delItems.substring(0, delItems.length()-1);
 		
-		System.out.println("값 : " + delItems);
-		
 		String[] menuIdxs = delItems.split("/");
 //		System.out.println("menuIdxs :" + menuIdxs[0]);
 //		System.out.println("menuIdxs :" + Arrays.toString(menuIdxs));
@@ -396,8 +394,6 @@ public class StoreController {
 			subFoodVo = storeService.getAdminStoreSubMenu(foodVo.getBrandName());
 			
 			FoodMenuVO checkTagVo = storeService.getCheckStoreTagList(foodVo.getFoodTag(), storeName);
-			
-			System.out.println("vo : " + foodVo);
 			
 			// 태그가 없으면 가게 테이블에 생성
 			if(checkTagVo == null) {
@@ -498,8 +494,6 @@ public class StoreController {
 		List<FoodMenuVO> vos = storeService.getstoreTagList(vo.getStoreName());
 		
 		FoodMenuVO fVo = storeService.storeFoodNameCheck(vo.getStoreName(), foodName);
-		
-		System.out.println("fVo : " + fVo);
 		
 		model.addAttribute("vos", vos);
 		model.addAttribute("fVo", fVo);
@@ -773,10 +767,12 @@ public class StoreController {
 	@RequestMapping(value = "/ratingDelete", method = RequestMethod.POST)
 	public String ratingDeletePost(int idx) {
 		
+		
 		RatingVO vo = storeService.getRatingInfo(idx);
 		if(vo.getContent().indexOf("src=\"/") != -1) orderService.imgDelete(vo.getContent());
 		
 		int res = 0;
+		storeService.setRatingReplyDeleteAll(idx);
 		res = storeService.setRatingDeleteOk(idx);
 		
 		return res+"";
@@ -853,10 +849,6 @@ public class StoreController {
    
    session.setMaxInactiveInterval(60*5);
    
-   System.out.println("=======================================");
-   System.out.println("sCode : " + msg);
-   System.out.println("=======================================");
-   
    String toMail = vo.getToMail();
    String title = "[저기요] 회원가입 메일 인증";
    String content = "";
@@ -893,9 +885,6 @@ public class StoreController {
 		
 		String code = (String)session.getAttribute("sCode");
 		
-		System.out.println("code : " + code);
-		System.out.println("emailCode : " + emailCode);
-		
 		if(!code.equals(emailCode)) return "0";
 		
 		else return res;
@@ -907,8 +896,6 @@ public class StoreController {
 	@RequestMapping(value = "storeReplyInput", method = RequestMethod.POST)
 	public String storeReplyInputPost(ratingReplyVO vo) {
 		int res = 0;
-		
-		System.out.println("Vo : " + vo);
 		
 		res = storeService.setRatingReplyInput(vo);
 		
@@ -923,16 +910,116 @@ public class StoreController {
 	public List<ratingReplyVO> getCommentListPost(int idx) {
 		int res = 0;
 		
-		System.out.println("int idx : " + idx);
-		
 		List<ratingReplyVO> vos = storeService.getRatingCommentList(idx);
 		
+		System.out.println("vos : " + vos );
+		
+		return vos;
+	}
+	
+	// 평점 대댓글 불러오기
+	@ResponseBody
+	@RequestMapping(value = "getCommentList2", method = RequestMethod.POST)
+	public List<ratingReplyVO> getCommentListPost2(int ratingIdx, int idx) {
+		int res = 0;
+		
+		List<ratingReplyVO> vos = storeService.getRatingCommentList2(ratingIdx, idx);
 		
 		return vos;
 	}
 	
 	
+	// 평점 댓글 달기
+	@ResponseBody
+	@RequestMapping(value = "storeReReplyInput", method = RequestMethod.POST)
+	public String storeReReplyInputPost(ratingReplyVO vo) {
+		int res = 0;
+		
+		res = storeService.setRatingReReplyInput(vo);
+		
+		if(res == 1) return "1";
+		
+		else return res+"";
+	}
 	
+	// 댓글 수정
+	@ResponseBody
+	@RequestMapping(value = "storeReplyUpdate", method = RequestMethod.POST)
+	public String storeReplyUpdatePost(ratingReplyVO vo) {
+		int res = 0;
+		
+		res = storeService.setRatingReplyUpdate(vo);
+		
+		if(res == 1) return "1";
+		
+		else return res+"";
+	}
 	
+	// 댓글 삭제 처리
+	@ResponseBody
+	@RequestMapping(value = "storeReplydelete", method = RequestMethod.POST)
+	public String storeReplydeletePost(int idx) {
+		int res = 0;
+		
+		ratingReplyVO vo = storeService.getReplyComment(idx);
+		
+		if(vo.getReplylevel()==0) {
+			List<ratingReplyVO> vos = storeService.getReplyParent(idx);
+			if(vos.size() == 0) {
+				res = storeService.setReplyDelete(idx);
+			}
+			else {
+				res = storeService.setReplyDeleteUpdate(idx);
+			}
+			
+		}
+		else {
+			res = storeService.setReplyDelete(idx);
+			List<ratingReplyVO> vos = storeService.getReplyParent(vo.getReplyIdx());
+			ratingReplyVO vo2 = storeService.getReplyComment(vo.getReplyIdx());
+			
+			if(vos.size()==0 && vo2.getReplylevel()==3) {
+				res = storeService.setReplyDelete(vo.getReplyIdx());
+				return "1";
+			}
+		}
+		
+		if(res == 1) return "1";
+		
+		else return res+"";
+	}
+	
+	// 평점 신고
+	@ResponseBody
+	@RequestMapping(value = "reportRating", method = RequestMethod.POST)
+	public String reportRatingPost(int idx, HttpSession session) {
+		int res = 0;
+		String mid = (String)session.getAttribute("sMid");
+		
+		RatingVO vo = storeService.getRatingInfo(idx);
+		
+		if(vo.getReportRatingMid()!=null) {
+			
+			String[] report = vo.getReportRatingMid().split("/");
+			
+			for(int i = 0; i<report.length; i++) {
+				if(report[i].equals(mid)) {
+					
+					return "3";
+				}
+			}
+			
+		}
+		
+		String rMid = vo.getMid();
+		
+		
+		res = storeService.setReportRating(idx, mid);
+		res = memberService.setReportRating(rMid);
+		
+		if(res == 1) return "1";
+		
+		else return res+"";
+	}
 	
 }

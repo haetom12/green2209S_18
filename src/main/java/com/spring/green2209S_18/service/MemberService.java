@@ -24,4 +24,10 @@ public interface MemberService {
 
 	public List<CouponVO> getMyCouponList(int startIndexNo, int pageSize, String mid);
 
+	public int setReportRating(String rMid);
+
+	public int setMemberUpdate(MemberVO vo);
+
+	public int setMemberPwdUpdate(String newPwd, String mid);
+
 }

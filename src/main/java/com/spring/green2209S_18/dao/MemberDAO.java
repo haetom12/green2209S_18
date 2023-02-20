@@ -30,5 +30,11 @@ public interface MemberDAO {
 
 	public int totOderListCnt(@Param("mid") String search);
 
+	public int setReportRating(@Param("mid") String rMid);
+
+	public int setMemberUpdate(@Param("vo") MemberVO vo);
+
+	public int setMemberPwdUpdate(@Param("pwd") String newPwd, @Param("mid") String mid);
+
 
 }

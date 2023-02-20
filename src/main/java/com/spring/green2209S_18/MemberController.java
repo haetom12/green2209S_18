@@ -6,7 +6,6 @@ import java.util.Random;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -56,13 +55,13 @@ public class MemberController {
 	@Autowired
 	PageProcess pageProcess;
 	
-	@RequestMapping(value = "memberLogin", method = RequestMethod.GET)
+	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
 	public String memberLoginGet() {
 
 		return "member/memberLogin";
 	}
 
-	@RequestMapping(value = "memberLogin", method = RequestMethod.POST)
+	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
 	public String memberLoginPost(HttpSession session,String mid, String pwd, String part, Model model) {
 		
 		// 일반회원 로그인
@@ -150,22 +149,22 @@ public class MemberController {
 		}
 	}
 	
-	@RequestMapping(value = "memberLoginOk", method = RequestMethod.GET)
+	@RequestMapping(value = "/memberLoginOk", method = RequestMethod.GET)
 	public String memberLoginOkGet() {
 		return "redirect:/h";
 	}
 	
-	@RequestMapping(value = "JoinSelect", method = RequestMethod.GET)
+	@RequestMapping(value = "/JoinSelect", method = RequestMethod.GET)
 	public String JoinSelectGet() {
 		return "member/memberJoinSelect";
 	}
-	@RequestMapping(value = "memberJoin", method = RequestMethod.GET)
+	@RequestMapping(value = "/memberJoin", method = RequestMethod.GET)
 	public String memberJoinGet() {
 		return "member/memberJoin";
 	}
 
 	// 회원가입처리
-	@RequestMapping(value = "memberJoin", method = RequestMethod.POST)
+	@RequestMapping(value = "/memberJoin", method = RequestMethod.POST)
 	public String memberJoinPost(MemberVO vo) {
 		// 아이디 체크
 		if(memberService.getMemberIdCheck(vo.getMid()) != null) {
@@ -212,7 +211,7 @@ public class MemberController {
 	}
 	
 	// 내 주문내역 리스트로
-	@RequestMapping(value = "myOrderList", method = RequestMethod.GET)
+	@RequestMapping(value = "/myOrderList", method = RequestMethod.GET)
 	public String myOrderListGet(HttpSession session, Model model,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
@@ -232,7 +231,7 @@ public class MemberController {
 	
 	// 내 주문 취소
 	@ResponseBody
-	@RequestMapping(value = "memberOrderCancle", method = RequestMethod.POST)
+	@RequestMapping(value = "/memberOrderCancle", method = RequestMethod.POST)
 	public String memberOrderCancleGet(String orderIdx) {
 		
 		int res = 0;
@@ -250,7 +249,7 @@ public class MemberController {
 	// 이메일 인증
 	@Async
 	@ResponseBody
-	@RequestMapping(value = "memberEmailCheck", method = RequestMethod.POST)
+	@RequestMapping(value = "/memberEmailCheck", method = RequestMethod.POST)
 	public String memberEmailCheckPost(MailVO vo, String email, HttpSession session) {
 		
 		int res = 0;
@@ -304,7 +303,7 @@ public class MemberController {
 	
 	// 내 주문내역 리스트로
 	@ResponseBody
-	@RequestMapping(value = "memberEmailCheckOk", method = RequestMethod.POST)
+	@RequestMapping(value = "/memberEmailCheckOk", method = RequestMethod.POST)
 	public String memberEmailCheckPost(String emailCode, HttpSession session) {
 		String res = "1";
 		
@@ -313,6 +312,192 @@ public class MemberController {
 		if(!code.equals(emailCode)) return "0";
 		
 		else return res;
+	}
+	
+	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
+	public String myPageGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		model.addAttribute("vo", vo);
+		
+		return "member/myPage";
+	}
+	
+	@RequestMapping(value = "/memberUpdate", method = RequestMethod.GET)
+	public String memberUpdateGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		String[] address = vo.getAddress().split("/");
+		String address1 = address[0];
+		String address2 = address[1];
+		
+		String[] tel = vo.getTel().split("-");
+		String tel1 = tel[0];
+		String tel2 = tel[1];
+		String tel3 = tel[2];
+		
+		String[] email = vo.getEmail().split("@");
+		String email1 = email[0];
+		String email2 = email[1];
+
+		model.addAttribute("vo", vo);
+		model.addAttribute("address1", address1);
+		model.addAttribute("address2", address2);
+		model.addAttribute("tel1", tel1);
+		model.addAttribute("tel2", tel2);
+		model.addAttribute("tel3", tel3);
+		model.addAttribute("email1", email1);
+		model.addAttribute("email2", email2);
+		
+		return "member/memberUpdate";
+	}
+	
+	@RequestMapping(value = "/memberUpdate", method = RequestMethod.POST)
+	public String memberUpdatePost(MemberVO vo) {
+		int res = memberService.setMemberUpdate(vo);
+		
+		if(res == 1) return "redirect:/msg/memberUpdateOk"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "redirect:/msg/memberUpdateNo";
+	}
+	
+	@RequestMapping(value = "/memberPwdUpdate", method = RequestMethod.GET)
+	public String memberPwdUpdateGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		model.addAttribute("vo", vo);
+		
+		return "member/memberPwdUpdate";
+	}
+	
+	@RequestMapping(value = "/memberUpdateOk", method = RequestMethod.POST)
+	public String memberUpdateOkPost(String pwd, String options, HttpSession session) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		if(passwordEncoder.matches(pwd, vo.getPwd())) {
+			if(options.equals("mid")) {
+				
+				return "redirect:/msg/memberPwdCheckOk";
+			}
+			else {
+				return "redirect:/msg/memberPwdCheckOk2";
+			}
+		}
+		else {
+			return "redirect:/msg/memberPwdCheckNo";
+		}
+	}
+	
+	// 비밀번호 업데이트
+	@RequestMapping(value = "/memberPwdUpdate", method = RequestMethod.POST)
+	public String memberPwdUpdateGet(String oldPwd, String newPwd, HttpSession session) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		if(passwordEncoder.matches(oldPwd, vo.getPwd())) {
+			
+			newPwd = passwordEncoder.encode(newPwd);
+			
+			int res = memberService.setMemberPwdUpdate(newPwd , mid);
+			
+			if(res==1) return "redirect:/msg/memberUpdatePwdOk";
+			else return "redirect:/msg/memberUpdatePwdNo";
+		}
+		else {
+			return "redirect:/msg/memberPwdCheckNo2";
+		}
+	}
+
+	// 회원탈퇴 폼 이동
+	@RequestMapping(value = "/memberDelete", method = RequestMethod.GET)
+	public String memberDeleteGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		model.addAttribute("vo", vo);
+		
+		return "member/memberDelete";
+	}
+	
+	
+	// 이메일 인증
+	@ResponseBody
+	@RequestMapping(value = "/memberDeleteCheck", method = RequestMethod.POST)
+	public String memberDeleteCheckPost(String mid, String pwd, HttpSession session) {
+		int res = 0;
+		
+		MemberVO vo = memberService.getMemberIdCheck(mid);
+		
+		if(vo==null || !passwordEncoder.matches(pwd, vo.getPwd())) {
+			return "2";
+		}
+		
+		Random random = new Random();
+    StringBuffer buffer = new StringBuffer();
+    int num = 0;
+
+    while(buffer.length() < 10) {
+        num = random.nextInt(10);
+        buffer.append(num);
+    }
+    String msg = buffer.toString();
+    
+    session.setAttribute("sCode", msg);
+    
+    System.out.println("==============================");
+    System.out.println("코드는 : " + msg);
+    System.out.println("==============================");
+    
+    session.setMaxInactiveInterval(60*5);
+    
+    String toMail = vo.getEmail();
+    String title = "[저기요] 회원 탈퇴 인증";
+    String content = "";
+		
+		try {
+			// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title);
+			messageHelper.setText(content);
+			
+			content = content.replace("<br/>", "\n");
+			content += "<br>메일 인증번호입니다<br/>";
+			content += "인증번호 : " + msg;
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setText(content);
+			
+			// 메일 전송하기
+			mailSender.send(message);
+			res = 1;			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return res+"";
+	}
+	
+	
+	// 이메일 인증
+	@ResponseBody
+	@RequestMapping(value = "/memberDeleteCodeCheck", method = RequestMethod.POST)
+	public String memberDeleteCodeCheckPost(String code, HttpSession session) {
+		String sCode = (String) session.getAttribute("sCode");
+		
+		if(sCode.equals(code)) return "1";
+		
+		else return "2";
 	}
 	
 	

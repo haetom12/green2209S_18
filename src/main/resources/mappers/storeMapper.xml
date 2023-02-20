@@ -129,7 +129,20 @@
   </select>
 
 	 <select id="getRatingCommentList" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
-  	select * from ratingreply where ratingIdx=#{idx} and replylevel = 0;
+  	<!-- select *, (count(*) from ratingreply where ratingIdx=#{idx}) as replyCnt from ratingreply where ratingIdx=#{idx} and replylevel = 0 or replylevel = 3; -->
+  	select *, (select count(*) from ratingreply where replyIdx=#{idx}) as replyCnt from ratingreply where ratingIdx=#{idx} and replylevel = 0 or replylevel = 3;
+  </select>
+
+	 <select id="getRatingCommentList2" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
+  	select * from ratingreply where ratingIdx=#{ratingIdx} and replylevel = 1 and replyIdx=#{idx};
+  </select>
+
+	 <select id="getReplyComment" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
+  	select * from ratingreply where idx=#{idx};
+  </select>
+
+	 <select id="getReplyParent" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
+  	select * from ratingreply where replyIdx=#{idx};
   </select>
 	
 	
@@ -168,6 +181,10 @@
 		insert into ratingreply (idx, ratingIdx, mid, nickName, writeDate, content, replylevel) values (default, #{vo.ratingIdx}, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, default) ;
 	</insert>
 	
+	<insert id="setRatingReReplyInput">
+		insert into ratingreply values (default, #{vo.ratingIdx}, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, 1, #{vo.replyIdx});
+	</insert>
+	
 	
 	
 	
@@ -191,6 +208,18 @@
 	
 	<update id="setRatingUpdateOk">
 		update rating set reviewStar = #{vo.reviewStar}, title = #{vo.title}, content = #{vo.content} where idx = #{vo.idx};
+	</update>
+	
+	<update id="setReplyDeleteUpdate">
+		update ratingreply set content = '[삭제된 댓글입니다.]', replylevel = 3 where idx = #{idx};
+	</update>
+	
+	<update id="setRatingReplyUpdate">
+		update ratingreply set content = #{vo.content}  where idx = #{vo.idx};
+	</update>
+	
+	<update id="setReportRating">
+		update rating set reportRating = reportRating + 1, reportRatingMid = concat(#{mid},'/')  where idx = #{idx};
 	</update>
 	
 	
@@ -217,6 +246,14 @@
 	
 	<delete id="setRatingDeleteOk">
 		delete from rating where idx = #{idx};
+	</delete>
+	
+	<delete id="setReplyDelete">
+		delete from ratingreply where idx = #{idx};
+	</delete>
+	
+	<delete id="setRatingReplyDeleteAll">
+		delete from ratingreply where ratingIdx = #{idx};
 	</delete>
 	
 </mapper>

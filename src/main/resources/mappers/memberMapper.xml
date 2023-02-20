@@ -50,6 +50,17 @@
 		update foodorder set progress = '주문취소' where orderIdx = #{orderIdx};
 	</update>
 	
+	<update id="setReportRating">
+		update member set reportCnt = reportCnt+1 where mid = #{mid};
+	</update>
+	
+	<update id="setMemberUpdate">
+		update member set memberName = #{vo.memberName}, birthday = #{vo.birthday}, tel = #{vo.tel}, address = #{vo.address}, email = #{vo.email}, memberLatitude = #{vo.memberLatitude}, memberLongitude = #{vo.memberLongitude}, memberNickName = #{vo.memberNickName} where mid = #{vo.mid};
+	</update>
+	
+	<update id="setMemberPwdUpdate">
+		update member set pwd = #{pwd} where mid = #{mid};
+	</update>
 	
 
 </mapper>

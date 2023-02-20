@@ -81,19 +81,29 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("memberUpdatePwdOk")) {
 			model.addAttribute("msg", "비밀번호 변경이 성공하였습니다");
-			model.addAttribute("url", "member/memberMain");
+			model.addAttribute("url", "member/myPage");
 		}
 		else if(msgFlag.equals("memberUpdatePwdNo")) {
 			model.addAttribute("msg", "비밀번호 변경 실패!!");
-			model.addAttribute("url", "member/memUpdatePwd");
+			model.addAttribute("url", "member/memberPwdUpdate");
 		}
+		
 		else if(msgFlag.equals("memberPwdCheckOk")) {
 			model.addAttribute("msg", "비밀번호가 확인되었습니다!");
 			model.addAttribute("url", "member/memberUpdate");
 		}
+		else if(msgFlag.equals("memberPwdCheckOk2")) {
+			model.addAttribute("msg", "비밀번호가 확인되었습니다!");
+			model.addAttribute("url", "member/memberPwdUpdate");
+		}
+		
 		else if(msgFlag.equals("memberPwdCheckNo")) {
 			model.addAttribute("msg", "비밀번호가 틀립니다!");
-			model.addAttribute("url", "member/memberPwdCheck");
+			model.addAttribute("url", "member/myPage");
+		}
+		else if(msgFlag.equals("memberPwdCheckNo2")) {
+			model.addAttribute("msg", "기존 비밀번호가 틀립니다!");
+			model.addAttribute("url", "member/memberPwdUpdate");
 		}
 		else if(msgFlag.equals("memberUpdateNickNameCheckNo")) {
 			model.addAttribute("msg", "이미 존재하는 닉네임입니다!!");
@@ -101,7 +111,7 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("memberUpdateOk")) {
 			model.addAttribute("msg", "회원수정이 완료되었습니다!");
-			model.addAttribute("url", "member/memberMain");
+			model.addAttribute("url", "member/myPage");
 		}
 		else if(msgFlag.equals("memberUpdateNo")) {
 			model.addAttribute("msg", "회원수정 실패!!");

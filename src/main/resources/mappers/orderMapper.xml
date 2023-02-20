@@ -74,7 +74,7 @@
 	</insert>
 	
 	<insert id="setRatingInput">
-		insert into rating values (default, #{vo.orderIdx}, #{vo.mid}, #{vo.storeName},#{vo.reviewStar},#{vo.title},#{vo.content}, default, #{vo.memberNickName}, default);
+		insert into rating (idx, orderIdx, mid, storeName, reviewStar, title, content, reportRating, memberNickName, ratingDate) values (default, #{vo.orderIdx}, #{vo.mid}, #{vo.storeName},#{vo.reviewStar},#{vo.title},#{vo.content}, default, #{vo.memberNickName}, default);
 	</insert>
 	
 	<insert id="setCouponInput">

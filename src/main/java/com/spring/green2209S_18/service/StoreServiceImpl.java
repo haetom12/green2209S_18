@@ -364,6 +364,51 @@ public class StoreServiceImpl implements StoreService {
 		return storeDAO.getRatingCommentList(idx);
 	}
 
+	@Override
+	public List<ratingReplyVO> getRatingCommentList2(int ratingIdx,int idx) {
+		return storeDAO.getRatingCommentList2(ratingIdx, idx);
+	}
+
+	@Override
+	public int setRatingReReplyInput(ratingReplyVO vo) {
+		return storeDAO.setRatingReReplyInput(vo);
+	}
+
+	@Override
+	public ratingReplyVO getReplyComment(int idx) {
+		return storeDAO.getReplyComment(idx);
+	}
+
+	@Override
+	public int setReplyDeleteUpdate(int idx) {
+		return storeDAO.setReplyDeleteUpdate(idx);
+	}
+
+	@Override
+	public int setReplyDelete(int idx) {
+		return storeDAO.setReplyDelete(idx);
+	}
+
+	@Override
+	public List<ratingReplyVO> getReplyParent(int idx) {
+		return storeDAO.getReplyParent(idx);
+	}
+
+	@Override
+	public int setRatingReplyUpdate(ratingReplyVO vo) {
+		return storeDAO.setRatingReplyUpdate(vo);
+	}
+
+	@Override
+	public void setRatingReplyDeleteAll(int idx) {
+		storeDAO.setRatingReplyDeleteAll(idx);
+	}
+
+	@Override
+	public int setReportRating(int idx, String mid) {
+		return storeDAO.setReportRating(idx, mid);
+	}
+
 
 
 }

@@ -11,7 +11,11 @@ public class RatingVO {
 	private int reviewStar;
 	private String content;
 	private int reportRating;
+	private String reportRatingMid;
 	private String memberNickName;
 	private String ratingDate;
 	private String title;
+	
+	
+	private int replyCnt;
 }

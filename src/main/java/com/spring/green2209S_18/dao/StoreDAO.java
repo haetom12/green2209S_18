@@ -112,5 +112,23 @@ public interface StoreDAO {
 
 	public List<ratingReplyVO> getRatingCommentList(@Param("idx") int idx);
 
+	public List<ratingReplyVO> getRatingCommentList2(@Param("ratingIdx") int ratingIdx, @Param("idx")  int idx);
+
+	public int setRatingReReplyInput(@Param("vo") ratingReplyVO vo);
+
+	public ratingReplyVO getReplyComment(@Param("idx") int idx);
+
+	public int setReplyDeleteUpdate(@Param("idx") int idx);
+
+	public int setReplyDelete(@Param("idx") int idx);
+
+	public List<ratingReplyVO> getReplyParent(@Param("idx") int idx);
+
+	public int setRatingReplyUpdate(@Param("vo") ratingReplyVO vo);
+
+	public void setRatingReplyDeleteAll(@Param("idx") int idx);
+
+	public int setReportRating(@Param("idx") int idx, @Param("mid") String mid);
+
 
 }

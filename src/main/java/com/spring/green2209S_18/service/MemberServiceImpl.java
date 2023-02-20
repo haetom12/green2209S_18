@@ -58,6 +58,21 @@ public class MemberServiceImpl implements MemberService {
 	public List<CouponVO> getMyCouponList(int startIndexNo, int pageSize, String mid) {
 		return memberDAO.getMyCouponList(startIndexNo, pageSize, mid);
 	}
+
+	@Override
+	public int setReportRating(String rMid) {
+		return memberDAO.setReportRating(rMid);
+	}
+
+	@Override
+	public int setMemberUpdate(MemberVO vo) {
+		return memberDAO.setMemberUpdate(vo);
+	}
+
+	@Override
+	public int setMemberPwdUpdate(String newPwd, String mid) {
+		return memberDAO.setMemberPwdUpdate(newPwd, mid);
+	}
 	
 
 

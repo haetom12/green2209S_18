@@ -14,7 +14,7 @@ public class MemberVO {
 	private String address;
 	private String email;
 	private String userDel;
-	private int point;
+	private int reportCnt;
 	private int orderCnt;
 	private double memberLatitude;
 	private double memberLongitude;
