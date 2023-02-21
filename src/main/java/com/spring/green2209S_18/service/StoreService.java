@@ -45,8 +45,6 @@ public interface StoreService {
 
 	public FoodMenuVO getAdminStoreTag(String foodName);
 
-	public SubFoodMenuVO getAdminStoreSubMenu(String brandName);
-
 	public void setAdminStoreMenu(FoodMenuVO foodVo, String storeName);
 
 	public void setAdminStoreSubMenu(SubFoodMenuVO subFoodVo, String storeName);
@@ -126,6 +124,16 @@ public interface StoreService {
 	public void setRatingReplyDeleteAll(int idx);
 
 	public int setReportRating(int idx, String mid);
+
+	public StoreVO getCheckStoreName(String storeName);
+
+	public int setStoreUpdate(StoreVO vo, MultipartFile fName, String pastPhoto);
+
+	public int setStorePwdUpdate(String newPwd, String mid);
+
+	public int setStoreDelete(String mid);
+
+	public List<FoodMenuVO> getSaleFoodList();
 
 
 }

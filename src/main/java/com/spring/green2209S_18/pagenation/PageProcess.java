@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.green2209S_18.dao.MemberDAO;
 import com.spring.green2209S_18.dao.OrderDAO;
+import com.spring.green2209S_18.dao.RiderDAO;
 import com.spring.green2209S_18.dao.StoreDAO;
 
 @Service
@@ -18,6 +19,8 @@ public class PageProcess {
 	@Autowired
 	MemberDAO memberDAO;
 	
+	@Autowired
+	RiderDAO riderDAO;
 	
 	
 	public PageVO totRecCnt(int pag, int pageSize, String section, String search, String searchString) {
@@ -40,6 +43,10 @@ public class PageProcess {
 		else if(section.equals("memberOderList")) {
 			totRecCnt = memberDAO.totOderListCnt(search);			
 		}
+		else if(section.equals("riderOrderList")) {
+			totRecCnt = riderDAO.totOderListCnt(search);			
+		}
+		
 //		else if(section.equals("webMessage")) {
 //			String mid = search;
 //			int mSw = Integer.parseInt(searchString);

@@ -30,4 +30,6 @@ public class StoreVO {
 	private String foodTag;
 	private String admintag;
 	
+	private int cnt;
+	
 }

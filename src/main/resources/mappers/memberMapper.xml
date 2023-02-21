@@ -62,5 +62,9 @@
 		update member set pwd = #{pwd} where mid = #{mid};
 	</update>
 	
+	<update id="setMemberDelete">
+		update member set userDel = 'OK' where mid = #{mid};
+	</update>
+	
 
 </mapper>

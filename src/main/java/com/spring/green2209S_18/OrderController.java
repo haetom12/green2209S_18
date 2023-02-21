@@ -394,32 +394,11 @@ public class OrderController {
 		// 배달횟수 1 증가
 		memberService.setOrderCntUpdate(mid);
 		
-//		// 배달 테이블에 입력한다.
-//		String foodMenu = "";
-//		for(int i=0; i<orderVos.size(); i++) {
-//			foodMenu += orderVos.get(i).getFoodName() + "/";
-//		}
-//		foodMenu = foodMenu.substring(0,foodMenu.length()-1);
-//		
-//		WebSocketDbVO orderVo = new WebSocketDbVO();
-//		orderVo.setMid(orderVos.get(0).getMid());
-//		orderVo.setFoodMenu(foodMenu);
-//		orderVo.setAddress(orderVos.get(0).getOrderAddress());
-//		orderVo.setPrice(orderTotalPrice);
-//		
-//		orderService.setRiderOrder(orderVo);
-//		session.setAttribute("sOrderVo", orderVo);
-		
 		payMentVo.setImp_uid(receivePayMentVo.getImp_uid());
 		payMentVo.setMerchant_uid(receivePayMentVo.getMerchant_uid());
 		payMentVo.setPaid_amount(receivePayMentVo.getPaid_amount());
 		payMentVo.setApply_num(receivePayMentVo.getApply_num());
 		
-		// 오늘 주문에 들어간 정보들을 확인해주기위해 다시 session에 담아서 넘겨주고 있다.
-//		model.addAttribute("orderVos", orderVos);
-//		model.addAttribute("payMentVo", payMentVo);
-//		model.addAttribute("orderTotalPrice", baesongVo.getOrderTotalPrice());
-//		session.setAttribute("sOrderVos", orderVos);
 		session.setAttribute("sPayMentVo", payMentVo);
 		
 //		return "dbShop/paymentResult";

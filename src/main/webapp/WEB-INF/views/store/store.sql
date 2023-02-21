@@ -150,3 +150,9 @@ create table storeTag (
 	select *, (select count(*) from ratingreply where ratingIdx=12) as replyCnt from ratingreply where ratingIdx=12 and replylevel = 0 or replylevel = 3;
 	select * from rating where storeName = #{storeName} order by idx desc limit #{startIndexNo},#{pageSize};
 	
+
+	-- 많이 팔린 상점 뽑기
+	SELECT storeName, COUNT(*) as cnt FROM foodorder GROUP BY storeName order by cnt desc limit 4;
+	
+	select * from storefoodmenu order by salePrice desc limit 8;	
+	

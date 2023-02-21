@@ -391,8 +391,6 @@ public class StoreController {
 			foodVo = storeService.getAdminStoreMenu(Integer.parseInt(menuIdxs[i]));
 //			tagVo = storeService.getAdminStoreTag(foodVo.getFoodName());
 			
-			subFoodVo = storeService.getAdminStoreSubMenu(foodVo.getBrandName());
-			
 			FoodMenuVO checkTagVo = storeService.getCheckStoreTagList(foodVo.getFoodTag(), storeName);
 			
 			// 태그가 없으면 가게 테이블에 생성
@@ -401,11 +399,6 @@ public class StoreController {
 			}
 			// 음식 생성
 			storeService.setAdminStoreMenu(foodVo, storeName);
-			
-			// 추가 옵션이 있으면 생성
-			if(subFoodVo != null) {
-				storeService.setAdminStoreSubMenu(subFoodVo, storeName);
-			}
 		}
 		res = 1;
 		
@@ -730,10 +723,15 @@ public class StoreController {
 	
 	// 해당 가게의 평점 리스트로
 	@RequestMapping(value = "/storeRatingList", method = RequestMethod.GET)
-	public String storeRatingListGet(Model model, String storeName,
+	public String storeRatingListGet(Model model, HttpSession sesstion,
+			@RequestParam(name="storeName", defaultValue = "", required = false) String storeName,
 		@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 		@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
-			
+
+		if(storeName.equals("")) {
+			storeName = (String)sesstion.getAttribute("sbrandName");
+		}
+		
 		// 해당 가게의 평점 총 갯수 구하기
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "rating", storeName, "");
 	
@@ -850,7 +848,7 @@ public class StoreController {
    session.setMaxInactiveInterval(60*5);
    
    String toMail = vo.getToMail();
-   String title = "[저기요] 회원가입 메일 인증";
+   String title = "[저기요] 메일 인증";
    String content = "";
 		
 		try {
@@ -1012,14 +1010,228 @@ public class StoreController {
 		}
 		
 		String rMid = vo.getMid();
-		
-		
 		res = storeService.setReportRating(idx, mid);
 		res = memberService.setReportRating(rMid);
 		
 		if(res == 1) return "1";
 		
 		else return res+"";
+	}
+	
+	// 댓글 수정
+	@ResponseBody
+	@RequestMapping(value = "storeNameCheckOk", method = RequestMethod.POST)
+	public String storeNameCheckOkPost(String storeName) {
+		int res = 0;
+		
+		StoreVO vo = storeService.getCheckStoreName(storeName);
+		
+		if(vo == null) return "1";
+		else return res+"";
+	}
+	
+	// 가게 수정
+	@RequestMapping(value = "storeUpdate", method = RequestMethod.POST)
+	public String storeUpdatePost(HttpSession session ,String options, String pwd) {
+		
+		String storeMid = (String) session.getAttribute("sMid"); 
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		if(passwordEncoder.matches(pwd, vo.getStorePwd())) {
+			if(options.equals("mid")) {
+				
+				return "redirect:/msg/storePwdCheckOk";
+			}
+			else {
+				return "redirect:/msg/storePwdCheckOk2";
+			}
+		}
+		else {
+			return "redirect:/msg/storePwdCheckNo";
+		}
+	}
+	
+	@RequestMapping(value = "/storeUpdateOk", method = RequestMethod.GET)
+	public String memberUpdateGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		StoreVO vo = storeService.getStoreIdCheck(mid);
+		
+		System.out.println("vo : " + vo);
+		
+		String[] address = vo.getStoreAddress().split("/");
+		String address1 = address[0];
+		String address2 = address[1];
+		
+		String[] tel = vo.getStoreNumber().split("-");
+		String tel1 = tel[0];
+		String tel2 = tel[1];
+		String tel3 = tel[2];
+		
+		String[] email = vo.getStoreEmail().split("@");
+		String email1 = email[0];
+		String email2 = email[1];
+		
+		String[] storeTime = vo.getStoreTime().split("~");
+		String storeTime1 = storeTime[0];
+		String storeTime2 = storeTime[1];
+		
+		String hostname = vo.getHostName();
+		
+		// 음식 카테고리 가져오기
+		List<StoreVO> vos = storeService.getStoreCategory();
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("hostname", hostname);
+		model.addAttribute("vos", vos);
+		model.addAttribute("address1", address1);
+		model.addAttribute("address2", address2);
+		model.addAttribute("storeTime1", storeTime1);
+		model.addAttribute("storeTime2", storeTime2);
+		model.addAttribute("tel1", tel1);
+		model.addAttribute("tel2", tel2);
+		model.addAttribute("tel3", tel3);
+		model.addAttribute("email1", email1);
+		model.addAttribute("email2", email2);
+		
+		return "store/storeUpdate";
+	}
+	
+	@RequestMapping(value = "/storeUpdateOk", method = RequestMethod.POST)
+	public String memberUpdatePost(StoreVO vo, MultipartFile fName, String pastPhoto) {
+		
+		int res = storeService.setStoreUpdate(vo, fName, pastPhoto);
+		
+		if(res == 1) return "redirect:/msg/storeUpdateOk";
+		
+		else return "redirect:/msg/storeUpdateNo";
+	}
+	
+	@RequestMapping(value = "/storePwdUpdateOk", method = RequestMethod.GET)
+	public String storePwdUpdateGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		StoreVO vo = storeService.getStoreIdCheck(mid);
+		
+		model.addAttribute("vo", vo);
+		return "store/storePwdUpdate";
+	}
+	
+	
+	// 비밀번호 업데이트
+	@RequestMapping(value = "/storePwdUpdateOk", method = RequestMethod.POST)
+	public String memberPwdUpdateGet(String oldPwd, String newPwd, HttpSession session) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		StoreVO vo = storeService.getStoreIdCheck(mid);
+		
+		if(passwordEncoder.matches(oldPwd, vo.getStorePwd())) {
+			
+			newPwd = passwordEncoder.encode(newPwd);
+			
+			int res = storeService.setStorePwdUpdate(newPwd , mid);
+			
+			if(res==1) return "redirect:/msg/storeUpdatePwdOk";
+			else return "redirect:/msg/storeUpdatePwdNo";
+		}
+		else {
+			return "redirect:/msg/storeUpdatePwdNo2";
+		}
+	}
+	
+	// 회원탈퇴 폼 이동
+	@RequestMapping(value = "/storeDelete", method = RequestMethod.GET)
+	public String memberDeleteGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		StoreVO vo = storeService.getStoreIdCheck(mid);
+		model.addAttribute("vo", vo);
+		
+		return "store/storeDelete";
+	}
+	
+	
+//삭제 전 이메일 인증
+	@ResponseBody
+	@RequestMapping(value = "/storeDeleteCheck", method = RequestMethod.POST)
+	public String memberDeleteCheckPost(String storeMid, String storePwd, HttpSession session) {
+		int res = 0;
+		
+		StoreVO vo = storeService.getStoreIdCheck(storeMid);
+		
+		if(vo==null || !passwordEncoder.matches(storePwd, vo.getStorePwd())) {
+			return "2";
+		}
+		
+		Random random = new Random();
+   StringBuffer buffer = new StringBuffer();
+   int num = 0;
+
+   while(buffer.length() < 10) {
+       num = random.nextInt(10);
+       buffer.append(num);
+   }
+   String msg = buffer.toString();
+   
+   session.setAttribute("sCode", msg);
+   
+   System.out.println("==============================");
+   System.out.println("코드는 : " + msg);
+   System.out.println("==============================");
+   
+   session.setMaxInactiveInterval(60*5);
+   
+   String toMail = vo.getStoreEmail();
+   String title = "[저기요] 회원 탈퇴 인증";
+   String content = "";
+		
+		try {
+			// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title);
+			messageHelper.setText(content);
+			
+			content = content.replace("<br/>", "\n");
+			content += "<br>메일 인증번호입니다<br/>";
+			content += "인증번호 : " + msg;
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setText(content);
+			
+			// 메일 전송하기
+			mailSender.send(message);
+			res = 1;			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return res+"";
+	}
+	
+	// 이메일 인증
+	@ResponseBody
+	@RequestMapping(value = "/storeDeleteCodeCheck", method = RequestMethod.POST)
+	public String memberDeleteCodeCheckPost(String code, HttpSession session) {
+		String sCode = (String) session.getAttribute("sCode");
+		
+		if(sCode.equals(code)) return "1";
+		
+		else return "2";
+	}
+	
+	// 계정 삭제 처리
+	@RequestMapping(value = "/storeDeleteOk", method = RequestMethod.GET)
+	public String memberDeleteOkGet(HttpSession session) {
+		
+		String mid = (String)session.getAttribute("sMid");
+		
+		int res = storeService.setStoreDelete(mid);
+		
+		if(res==1) return "redirect:/msg/riderDeleteOk";
+		else return "redirect:/msg/storeDeleteNo";
 	}
 	
 }

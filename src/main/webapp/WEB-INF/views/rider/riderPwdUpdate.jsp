@@ -24,35 +24,44 @@
 	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/icon-font.min.css">
 	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
 
-	<script>
-		'use strict';
-		
-		function orderConfirm(orderIdx) {
-			let ans = confirm("해당 주문을 배달완료 확정시키겠습니까>");
-      if(!ans) return false;
-      
-		$.ajax({
-		  	type   : "post",
-		  	url    : "${ctp}/rider/riderOrderConfirm",
-		  	data   : {
-		  		orderIdx : orderIdx
-		  	},
-    		success:function(res) {
-    			if(res == "1") {
-    				alert("배달완료 되었습니다!");
-    				location.reload();
-    			}
-    			else {
-    				alert("완료 처리에 실패하였습니다.");
-    			}
-    		},
-    		error : function() {
-    			alert("전송 오류~~");
-    		}
-    	});
-		}
-		
-	</script>
+		<script>
+			'use strict';
+			function pwdCheck() {
+				let oldPwd = myform.oldPwd.value;
+				let newPwd = myform.newPwd.value;
+				let rePwd = myform.rePwd.value;
+				
+				let regPwd = /(?=.*[0-9a-zA-Z]).{4,20}$/;
+				
+				if(oldPwd == "") {
+					alert("기본 비밀번호를 입력하세요.");
+					myform.oldPwd.focus();
+					return false;
+				}
+				else if(newPwd == "") {
+					alert("새 비밀번호를 입력하세요.");
+					myform.newPwd.focus();
+					return false;
+				}
+	      else if(!regPwd.test(newPwd)) {
+	        alert("비밀번호는 1개이상의 문자와 특수문자 조합의 6~24 자리로 작성해주세요.");
+	        myform.pwd.focus();
+	        return false;
+		    }
+				else if(rePwd == "") {
+					alert("새 비밀번호를 다시 입력하세요.");
+					myform.rePwd.focus();
+					return false;
+				}
+				else if(rePwd != newPwd) {
+					alert("새 비밀번호와 동일하지 않습니다!");
+					myform.rePwd.focus();
+					return false;
+				}
+				myform.submit();
+			}
+			
+		</script>
 	
 </head>
 <body>
@@ -61,7 +70,7 @@
 			<div class='loader-progress' id="progress_div">
 				<div class='bar' id='bar1'></div>
 			</div>
-			<div class='percent' id='percent1'>0%</div>
+			<div class='percent' id='percent1'>30%</div>
 			<div class="loading-text">
 				라이더 로딩중...
 			</div>
@@ -215,69 +224,34 @@
 	<!-- =============================================== -->
 
 	<div class="main-container">
-		<div class="pd-ltr-20 xs-pd-20-10">
-			<div class="min-height-200px">
-				<div class="page-header">
-					<div class="row">
-						<div class="col-md-12 col-sm-12">
-							<div class="title">
-								<h4>pricing Table</h4>
-							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">pricing Table</li>
-								</ol>
-							</nav>
-						</div>
+	  <div class="container">
+			<div class="pd-20 card-box mb-30">
+				<div class="clearfix">
+					<h3 class="text-blue h3" style="text-align: center;">비밀번호 변경</h3>
+				</div>
+				<form name="myform" method="post">
+					<div class="form-group">
+						<label>기존 비밀번호</label>
+						<input class="form-control" id="oldPwd" name="oldPwd" placeholder="기존 비밀번호를 입력하세요" type="password">
 					</div>
-				</div>
-
-				<div class="container px-0">
-					<h4 class="mb-30 text-blue h4">내 배달 현황</h4>
-					<div class="row">
-						<c:forEach var="cVo" items="${vos}" varStatus="st">
-							<div class="col-md-4 mb-30">
-								<div class="card-box pricing-card mt-30 mb-30">
-									<div class="pricing-icon">
-										<img src="${ctp}/data/store/${vo.logoPhoto}" >
-									</div>
-									<div class="price-title">
-										${cVo.storeName}
-									</div>
-									<div class="price-title">
-										<b><font color="red">배달중</font></b>
-									</div>
-									<div class="pricing-price">
-										<sup>￦</sup>${cVo.orderTotalPrice}<sub>/원</sub>
-									</div>
-									<div class="text">
-										Card servicing<br> for 1month
-									</div>
-									<div class="cta">
-										<input type="button"  value="배달 완료 확정" onclick="orderConfirm('${cVo.orderIdx}')" class="btn btn-primary btn-rounded btn-lg"/>
-									</div>
-								</div>
-							</div>
-						</c:forEach>
-						<c:if test="${vSize == 0}">
-							<div class="col-md-4 mb-30">
-								<div class="card-box pricing-card mt-30 mb-30">
-									<div class="pricing-price">
-										<i class="icon-copy fa fa-motorcycle" aria-hidden="true"></i><br />
-										<font size="5pt">현재 배달중인 주문이 없습니다.</font>
-									</div>
-								</div>
-							</div>
-						</c:if>
+					<div class="form-group">
+						<label>새 비밀번호</label>
+						<input class="form-control" id="newPwd" name="newPwd" placeholder="새 비밀번호를 입력하세요" type="password">
 					</div>
-				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-				</div>
-			</div>
-		</div>
-	</div>
+					<div class="form-group">
+						<label>새 비밀번호 다시 입력</label>
+						<input class="form-control" id="rePwd" name="rePwd" placeholder="새 비밀번호를 다시 입력하세요" type="password">
+					</div>
+					<div class="form-group">
+					<div class="row">
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/rider/riderMain';"  class="btn btn-secondary ml-3 mr-2" />
+						<input type="button" value="비밀번호 수정" onclick="pwdCheck()"  class="btn btn-success ml-2" />
+					</div>
+					</div>
+				</form>
+	    </div>
+    </div>
+  </div>
 	<!-- js -->
 	<script src="${ctp}/vendors/scripts/core.js"></script>
 	<script src="${ctp}/vendors/scripts/script.min.js"></script>

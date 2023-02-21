@@ -43,6 +43,10 @@
 		select * from coupon where couponName = #{couponName} and mid = #{mid} and used = 'NO';
 	</select>
 	
+	<select id="getMostSellStore" resultType="com.spring.green2209S_18.vo.StoreVO">
+		SELECT storeName, COUNT(*) as cnt FROM foodorder GROUP BY storeName order by cnt desc limit 4;
+	</select>
+	
 	
 	
 	<update id="setFoodOrderOk2">
@@ -91,7 +95,7 @@
 	</update>
 	
 	<update id="setCouponUsed">
-		update coupon set used = 'OK' where couponName = #{couponName} and mid = #{mid};
+		update coupon set used = 'OK', useDate = now() where couponName = #{couponName} and mid = #{mid};
 	</update>
 	
 	

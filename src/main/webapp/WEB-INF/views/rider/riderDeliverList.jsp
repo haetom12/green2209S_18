@@ -270,76 +270,170 @@
 		</div>
 	</div>
 	
-	<jsp:include page="/WEB-INF/views/include/riderNav.jsp"></jsp:include>
+	<!-- ===========사이드바============ -->
+		
+	<div class="left-side-bar">
+		<div class="brand-logo">
+			<a href="index.html">
+				<img src="${ctp}/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
+				<img src="${ctp}/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
+			</a>
+			<div class="close-sidebar" data-toggle="left-sidebar-close">
+				<i class="ion-close-round"></i>
+			</div>
+		</div>
+		<div class="menu-block customscroll">
+			<div class="sidebar-menu">
+				<ul id="accordion-menu">
+					<li>
+						<a href="${ctp}/rider/riderMain" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext">메인으로</span>
+						</a>
+					</li>
+					<li>
+						<a href="${ctp}/rider/orderChat" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-motorcycle"></span><span class="mtext">배달신청</span>
+						</a>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-calendar1"></span><span class="mtext">마이페이지</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="${ctp}/rider/riderUpdate">내 정보 수정</a></li>
+							<li><a href="${ctp}/rider/riderPwdUpdate">비밀번호 변경</a></li>
+							<li><a href="${ctp}/rider/riderDeliverList">내 배달 기록</a></li>
+							<li><a href="${ctp}/rider/riderDelete">라이더 탈퇴</a></li>
+						</ul>
+					</li>
+					
+					<!-- 경계선  -->
+					<li>
+						<div class="dropdown-divider"></div>
+					</li>
+					
+					<li>
+						<div class="sidebar-small-cap">Extra</div>
+					</li>
+					<li>
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-edit-2"></span><span class="mtext">Documentation</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="introduction.html">Introduction</a></li>
+							<li><a href="getting-started.html">Getting Started</a></li>
+							<li><a href="color-settings.html">Color Settings</a></li>
+							<li><a href="third-party-plugins.html">Third Party Plugins</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-paper-plane1"></span>
+							<span class="mtext">Landing Page <img src="${ctp}/vendors/images/coming-soon.png" alt="" width="25"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="mobile-menu-overlay"></div>
+	
+	<!-- =============================================== -->
 
 	<div class="main-container">
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
-				<div class="page-header">
-					<div class="row">
-						<div class="col-md-12 col-sm-12">
-							<div class="title">
-								<h4>pricing Table</h4>
+				<div class="card-box mb-30">
+					<div class="pd-20">
+						<h3 class="h3 text-center"><font color="blue">${vo.riderName}</font> 님의 최근 배달 내역</h3>
+					</div>
+					<div class="pb-20">
+						<table class="data-table table hover multiple-select-row nowrap">
+							<thead>
+								<tr class="text-center">
+									<th class="table-plus datatable-nosort">배달완료시간</th>
+									<th>배달상태</th>
+									<th>주문자</th>
+									<th>배달메뉴</th>
+									<th>배달가격</th>
+									<th>배달주소</th>
+									<th>배달시작시간</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="fVo" items="${vos}" varStatus="st">
+									<tr class="text-center">
+										<td class="table-plus">
+										<c:if test="${fVo.progress == '배달완료'}">
+											${fn:substring(fVo.completeDate,0,16)}
+										</c:if>
+										<c:if test="${fVo.progress != '배달완료'}">
+											<font color="red">배달중</font>
+										</c:if>
+										</td>
+										<td>
+										<c:if test="${fVo.progress == '배달채택'}">
+											<font color="red">배달중</font>
+										</c:if>
+										<c:if test="${fVo.progress == '배달완료'}">
+											<font color="blue">배달완료</font>
+										</c:if>
+										</td>
+										<td>${fVo.mid}</td>
+										<td>${fVo.foodName}</td>
+										<td>${fVo.orderTotalPrice}원</td>
+										<td>${fVo.orderAddress}</td>
+										<td>${fn:substring(fVo.assignDate,0,16)}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+<!-- 						
+						<div class="col-lg-2 col-md-4 col-sm-4" style="margin: 0 auto;">
+							<div class="btn-group mb-15" style="margin: 0 auto;">
+								<button type="button" class="btn btn-light">1</button>
+								<button type="button" class="btn btn-light">2</button>
+								<button type="button" class="btn btn-success">3</button>
+								<button type="button" class="btn btn-light">4</button>
 							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">pricing Table</li>
-								</ol>
-							</nav>
 						</div>
+						 -->
+	          <div class="col-lg-2 col-md-4 col-sm-4" style="margin: 0 auto;">
+	            <div class="btn-group mb-15" style="margin: 0 auto;">
+	              <ul>
+	              	<c:if test="${pageVo.pag > 1}">
+							      <li class="btn btn-light"><a href="${ctp}/rider/riderDeliverList?pageSize=${pageVo.pageSize}&pag=1">&lt;&lt;</a></li>
+							    </c:if>
+	                <c:if test="${pageVo.curBlock > 0}">
+							      <li><a class="page-link text-secondary" href="${ctp}/rider/riderDeliverList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}">&lt;</a></li>
+							    </c:if>
+	                <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
+							      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
+							    		<li class="btn btn-primary"><a href="${ctp}/rider/riderDeliverList?pageSize=${pageVo.pageSize}&pag=${i}"><font color="white">${i}</font></a></li>
+							    	</c:if>
+							      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
+							    		<li class="btn btn-light"><a href="${ctp}/rider/riderDeliverList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+							    	</c:if>
+							    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">
+								      <li><a class="btn btn-light"href="${ctp}/rider/riderDeliverList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}">&gt;</a></li>
+								    </c:if>
+							    </c:forEach>
+							     <c:if test="${pageVo.pag < pageVo.totPage}">
+							       <li class="btn btn-light"><a href="${ctp}/rider/riderDeliverList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}">&gt;&gt;</a></li>
+							     </c:if>
+	              </ul>
+	            </div>
+	          </div>
+					
 					</div>
-				</div>
-
-				<div class="container px-0">
-					<h4 class="mb-30 text-blue h4">내 배달 현황</h4>
-					<div class="row">
-						<c:forEach var="cVo" items="${vos}" varStatus="st">
-							<div class="col-md-4 mb-30">
-								<div class="card-box pricing-card mt-30 mb-30">
-									<div class="pricing-icon">
-										<img src="${ctp}/data/store/${vo.logoPhoto}" >
-									</div>
-									<div class="price-title">
-										${cVo.storeName}
-									</div>
-									<div class="price-title">
-										<b><font color="red">배달중</font></b>
-									</div>
-									<div class="pricing-price">
-										<sup>￦</sup>${cVo.orderTotalPrice}<sub>/원</sub>
-									</div>
-									<div class="text">
-										Card servicing<br> for 1month
-									</div>
-									<div class="cta">
-										<input type="button"  value="배달 완료 확정" onclick="orderConfirm('${cVo.orderIdx}')" class="btn btn-primary btn-rounded btn-lg"/>
-									</div>
-								</div>
-							</div>
-						</c:forEach>
-						<c:if test="${vSize == 0}">
-							<div class="col-md-4 mb-30">
-								<div class="card-box pricing-card mt-30 mb-30">
-									<div class="pricing-price">
-										<i class="icon-copy fa fa-motorcycle" aria-hidden="true"></i><br />
-										<font size="5pt">현재 배달중인 주문이 없습니다.</font>
-									</div>
-								</div>
-							</div>
-						</c:if>
-					</div>
-				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- js -->
-	<script src="vendors/scripts/core.js"></script>
-	<script src="vendors/scripts/script.min.js"></script>
-	<script src="vendors/scripts/process.js"></script>
-	<script src="vendors/scripts/layout-settings.js"></script>
+	<script src="${ctp}/vendors/scripts/core.js"></script>
+	<script src="${ctp}/vendors/scripts/script.min.js"></script>
+	<script src="${ctp}/vendors/scripts/process.js"></script>
+	<script src="${ctp}/vendors/scripts/layout-settings.js"></script>
 </body>
 </html>

@@ -170,7 +170,7 @@
 		              <div class="dropdown-menu" aria-labelledby="dropdown04">
 		              	<a class="dropdown-item" href="shop.html">주문 확인</a>
 		              	<a class="dropdown-item" href="${ctp}/store/myStorePage">내 가게 관리</a>
-		                <a class="dropdown-item" href="checkout.html">리뷰 확인</a>
+		                <a class="dropdown-item" href="${ctp}/store/storeRatingList">리뷰 확인</a>
 		              </div>
 		            </li>
 		            <li class="nav-item"><a href="contact.html" class="nav-link">고객문의</a></li>

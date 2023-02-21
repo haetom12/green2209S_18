@@ -73,6 +73,11 @@ public class MemberServiceImpl implements MemberService {
 	public int setMemberPwdUpdate(String newPwd, String mid) {
 		return memberDAO.setMemberPwdUpdate(newPwd, mid);
 	}
+
+	@Override
+	public int setMemberDelete(String mid) {
+		return memberDAO.setMemberDelete(mid);
+	}
 	
 
 

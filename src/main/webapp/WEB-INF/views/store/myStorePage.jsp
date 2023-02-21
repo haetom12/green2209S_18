@@ -24,6 +24,36 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+		
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/core.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/icon-font.min.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
+    
+    <script>
+			'use strict';
+			function pwdCheck() {
+				let pwd = myform.pwd.value;
+				let options = myform.options.value;
+/* 				let pwd = $(".login-modal #pwd").val();
+				let options = $(".login-modal #options").val(); */
+				
+				if(pwd == "") {
+					alert("비밀번호를 입력하세요.");
+					myform.pwd.focus();
+					return false;
+				}
+				else if(options == "") {
+					alert("수정메뉴을 선택하세요.");
+					return false;
+				}
+				myform.submit();
+			}
+		</script>
+    
   </head>
   <body class="goto-here">
   
@@ -40,7 +70,7 @@
       </div>
     </div>
 
-    <section class="ftco-section testimony-section">
+    <section class="ftco-section testimony-section bg-light">
       <div class="container">
       	<div class="row">
       		<!-- <div class="mouse">
@@ -54,11 +84,12 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">내 가게 정보</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게정보 수정하기</a></li>
+                <li><a href="#" class="btn-block" data-backdrop="static" data-toggle="modal" data-target="#login-modal" type="button">
+              			가게	정보 및 비밀번호 변경	</a></li>
                 <li><a href="${ctp}/store/myStoreTag" class="py-2 d-block">메뉴 태그 추가/수정</a></li>
                 <li><a href="${ctp}/store/myStoreMenu" class="py-2 d-block">메뉴 추가/수정</a></li>
                 <li><a href="${ctp}/store/myStoreSubOption" class="py-2 d-block">서브 메뉴 추가/수정</a></li>
-                <li><a href="#" class="py-2 d-block">가게 삭제 신청</a></li>
+                <li><a href="${ctp}/store/storeDelete" class="py-2 d-block">가게 삭제 신청</a></li>
               </ul>
             </div>
           </div>
@@ -87,6 +118,55 @@
     </section>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+
+
+
+		<!-- Login modal -->
+		<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="login-box bg-white box-shadow border-radius-10">
+						<div class="login-title">
+							<h2 class="text-center text-primary">비밀번호 확인</h2>
+						</div>
+						<form name="myform" method="post" action="${ctp}/store/storeUpdate">
+							<div class="select-role">
+								<div class="btn-group btn-group-toggle" data-toggle="buttons">
+									<label class="btn active">
+										<input type="radio" name="options" value="mid">
+										가게정보<span>변경</span>
+									</label>
+									<label class="btn">
+										<input type="radio" name="options" value="pwd">
+										비밀번호<span>변경</span>
+									</label>
+								</div>
+							</div>
+							<div class="input-group custom">
+								<input type="password" id="pwd" name="pwd" class="form-control form-control-lg" placeholder="비밀번호를 입력하세요">
+								<div class="input-group-append custom">
+									<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="input-group mb-0">
+										<!--
+											use code for form submit
+											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+										-->
+										<input class="btn btn-primary btn-lg btn-block" type="button" onclick="pwdCheck()" value="비밀번호 확인">
+										<input type="button" value="닫기" class="close btn btn-secondary btn-lg btn-block" data-dismiss="modal" aria-hidden="true">
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -143,6 +223,11 @@
 		    
 		});
 	</script>
+	<!-- js -->
+	<script src="${ctp}/vendors/scripts/core.js"></script>
+	<script src="${ctp}/vendors/scripts/script.min.js"></script>
+	<script src="${ctp}/vendors/scripts/process.js"></script>
+	<script src="${ctp}/vendors/scripts/layout-settings.js"></script>
     
   </body>
 </html>

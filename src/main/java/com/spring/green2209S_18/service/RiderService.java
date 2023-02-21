@@ -17,4 +17,12 @@ public interface RiderService {
 
 	public List<CartVO> getRiderOrderList(String riderMid, String string);
 
+	public int setRiderUpdate(RiderVO vo);
+
+	public int setMemberPwdUpdate(String newPwd, String mid);
+
+	public List<CartVO> getRiderOrderListPage(int startIndexNo, int pageSize, String mid);
+
+	public int setRiderDelete(String mid);
+
 }

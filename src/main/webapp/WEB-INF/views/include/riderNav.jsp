@@ -20,11 +20,6 @@
 	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
 
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-	
-
 	<div class="left-side-bar">
 		<div class="brand-logo">
 			<a href="index.html">
@@ -83,7 +78,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="mobile-menu-overlay"></div>
+	
 	
 		<!-- js -->
 	<script src="${ctp}/vendors/scripts/core.js"></script>

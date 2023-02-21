@@ -9,6 +9,7 @@ import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.PayMentVO;
 import com.spring.green2209S_18.vo.RatingVO;
+import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.WebSocketDbVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
@@ -57,6 +58,8 @@ public interface OrderService {
 	public CouponVO getCheckCoupon(String couponName, String mid);
 
 	public void setCouponUsed(String sCouponName, String mid);
+
+	public List<StoreVO> getMostSellStore();
 
 
 

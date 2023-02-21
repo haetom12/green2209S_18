@@ -696,7 +696,76 @@
 		</div>
 	</div>
 
-	<jsp:include page="/WEB-INF/views/include/riderNav.jsp"></jsp:include>
+	<!-- ===========사이드바============ -->
+		
+	<div class="left-side-bar">
+		<div class="brand-logo">
+			<a href="index.html">
+				<img src="${ctp}/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
+				<img src="${ctp}/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
+			</a>
+			<div class="close-sidebar" data-toggle="left-sidebar-close">
+				<i class="ion-close-round"></i>
+			</div>
+		</div>
+		<div class="menu-block customscroll">
+			<div class="sidebar-menu">
+				<ul id="accordion-menu">
+					<li>
+						<a href="${ctp}/rider/riderMain" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext">메인으로</span>
+						</a>
+					</li>
+					<li>
+						<a href="${ctp}/rider/orderChat" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-motorcycle"></span><span class="mtext">배달신청</span>
+						</a>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-calendar1"></span><span class="mtext">마이페이지</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="${ctp}/rider/riderUpdate">내 정보 수정</a></li>
+							<li><a href="${ctp}/rider/riderPwdUpdate">비밀번호 변경</a></li>
+							<li><a href="${ctp}/rider/riderDeliverList">내 배달 기록</a></li>
+							<li><a href="${ctp}/rider/riderDelete">라이더 탈퇴</a></li>
+						</ul>
+					</li>
+					
+					<!-- 경계선  -->
+					<li>
+						<div class="dropdown-divider"></div>
+					</li>
+					
+					
+					<li>
+						<div class="sidebar-small-cap">Extra</div>
+					</li>
+					<li>
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-edit-2"></span><span class="mtext">Documentation</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="introduction.html">Introduction</a></li>
+							<li><a href="getting-started.html">Getting Started</a></li>
+							<li><a href="color-settings.html">Color Settings</a></li>
+							<li><a href="third-party-plugins.html">Third Party Plugins</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-paper-plane1"></span>
+							<span class="mtext">Landing Page <img src="${ctp}/vendors/images/coming-soon.png" alt="" width="25"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="mobile-menu-overlay"></div>
+	
+	<!-- =============================================== -->
 	
 	<div class="main-container">
 		<div class="pd-ltr-20 xs-pd-20-10">

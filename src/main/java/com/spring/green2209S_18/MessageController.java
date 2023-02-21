@@ -24,7 +24,7 @@ public class MessageController {
 			@RequestParam(value="brandName", defaultValue = "", required = false) String brandName) {
 		
 		if(msgFlag.equals("memberLoginNo")) {
-			model.addAttribute("msg", "로그인 실패~~~");
+			model.addAttribute("msg", "존재하지 않는 회원입니다!");
 			model.addAttribute("url", "member/memberLogin");
 		}
 		else if(msgFlag.equals("memberJoinOk")) {
@@ -299,6 +299,82 @@ public class MessageController {
 		else if(msgFlag.equals("ratingUpdateFail")) {
 			model.addAttribute("msg", "별점 수정에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "/store/storeRatingList?storeName="+storeName);
+		}
+		
+		else if(msgFlag.equals("riderUpdateOk")) {
+			model.addAttribute("msg", "라이더 정보를 성공적으로 수정하였습니다!");
+			model.addAttribute("url", "/rider/riderMain");
+		}
+		
+		else if(msgFlag.equals("riderUpdateNo")) {
+			model.addAttribute("msg", "라이더 정보 수정에 실패했습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/rider/riderUpdate");
+		}
+		
+		else if(msgFlag.equals("riderUpdatePwdOk")) {
+			model.addAttribute("msg", "비밀번호 변경이 완료되었습니다!");
+			model.addAttribute("url", "/rider/riderMain");
+		}
+
+		else if(msgFlag.equals("riderUpdatePwdNo")) {
+			model.addAttribute("msg", "비밀번호 수정에 실패했습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/rider/riderPwdUpdate");
+		}
+		
+		else if(msgFlag.equals("riderPwdCheckNo")) {
+			model.addAttribute("msg", "비밀번호가 일치하지 않습니다!");
+			model.addAttribute("url", "/rider/riderPwdUpdate");
+		}
+		
+		else if(msgFlag.equals("storePwdCheckOk")) {
+			model.addAttribute("msg", "비밀번호가 확인되었습니다!");
+			model.addAttribute("url", "/store/storeUpdateOk");
+		}
+		
+		else if(msgFlag.equals("storePwdCheckOk2")) {
+			model.addAttribute("msg", "비밀번호가 확인되었습니다!");
+			model.addAttribute("url", "/store/storePwdUpdateOk");
+		}
+		
+		else if(msgFlag.equals("storePwdCheckNo")) {
+			model.addAttribute("msg", "비밀번호가 일치하지않습니다!");
+			model.addAttribute("url", "/store/myStorePage");
+		}
+		else if(msgFlag.equals("storeUpdateOk")) {
+			model.addAttribute("msg", "가게 정보를 수정하였습니다!");
+			model.addAttribute("url", "/store/myStorePage");
+		}
+		else if(msgFlag.equals("storeUpdateNo")) {
+			model.addAttribute("msg", "가게 수정에 실패했습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/store/storeUpdateOk");
+		}
+		else if(msgFlag.equals("storeUpdatePwdOk")) {
+			model.addAttribute("msg", "비밀번호를 수정하였습니다!");
+			model.addAttribute("url", "/store/myStorePage");
+		}
+		else if(msgFlag.equals("storeUpdatePwdNo")) {
+			model.addAttribute("msg", "비밀번호 수정에 실패했습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/store/storePwdUpdateOk");
+		}
+		else if(msgFlag.equals("storeUpdatePwdNo2")) {
+			model.addAttribute("msg", "비밀번호가 일치하지 않습니다!");
+			model.addAttribute("url", "/store/storePwdUpdateOk");
+		}
+		else if(msgFlag.equals("riderDeleteOk")) {
+			model.addAttribute("msg", "회원탈퇴에 성공했습니다. 로그아웃됩니다.");
+			model.addAttribute("url", "/member/memberLogout");
+		}
+		else if(msgFlag.equals("riderDeleteNo")) {
+			model.addAttribute("msg", "회원탈퇴에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/rider/riderMain");
+		}
+		else if(msgFlag.equals("memberDeleteNo")) {
+			model.addAttribute("msg", "회원탈퇴에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/member/myPage");
+		}
+		else if(msgFlag.equals("storeDeleteNo")) {
+			model.addAttribute("msg", "회원탈퇴에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/store/myStorePage");
 		}
 		
 		return "include/message";

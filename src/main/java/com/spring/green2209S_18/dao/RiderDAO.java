@@ -23,4 +23,14 @@ public interface RiderDAO {
 
 	public int setRiderOrderConfirm(@Param("orderIdx") String orderIdx);
 
+	public int setRiderUpdate(@Param("vo") RiderVO vo);
+
+	public int setMemberPwdUpdate(@Param("riderPwd") String newPwd, @Param("riderMid") String mid);
+
+	public int totOderListCnt(@Param("rider") String search);
+
+	public List<CartVO> getRiderOrderListPage(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("rider") String mid);
+
+	public int setRiderDelete(@Param("riderMid") String mid);
+
 }

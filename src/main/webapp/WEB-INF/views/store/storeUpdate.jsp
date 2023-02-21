@@ -192,11 +192,10 @@
 		
 		<script>
 			'use strict';
-		  let idCheckSw = 0;
 		  let emailCheckSw = 0;
 		  let storeNameCheckSw = 0;
 		  
-			function JoinCheck() {
+			function updateStore() {
 		    	// 폼의 유효성 검사~~~~
 		    	let regMid = /^[a-z0-9_]{4,20}$/;
 		      // let regPwd = /(?=.*[a-zA-Z])(?=.*?[#?!@$%^&*-]).{4,24}/;
@@ -209,8 +208,6 @@
 
 		      // 유효성검사를 위해 폼안의 내용들을 모두 변수에 담는다.
 		    	let storeName = JoinForm.storeName.value;
-		    	let storeMid = JoinForm.storeMid.value;
-		    	let storePwd = JoinForm.storePwd.value;
 		    	let HostName = JoinForm.HostName.value;
 		    	let email1 = JoinForm.email1.value;
 		    	let email2 = JoinForm.email2.value;
@@ -235,33 +232,23 @@
 		        JoinForm.storeName.focus();
 		        return false;
 		      }
-		    	else if(storeMid == "") {
-		        alert("아이디를 입력하세요.");
-		        JoinForm.storeMid.focus();
-		        return false;
-		      }
-		    	else if(!regMid.test(storeMid)) {
-		        alert("아이디는 영문 소문자와 숫자, 언더바(_)만 사용가능합니다.(길이는 4~20자리까지 허용)");
-		        JoinForm.storeMid.focus();
-		        return false;
-		      }
-		      else if(storePwd=="") {
-		        alert("비밀번호를 입력하세요.");
-		        JoinForm.storePwd.focus();
-		        return false;
-		      }
-		      else if(!regPwd.test(storePwd)) {
-		        alert("비밀번호는 1개이상의 문자와 특수문자 조합의 6~24 자리로 작성해주세요.");
-		        JoinForm.storePwd.focus();
-		        return false;
-		      }
-		      else if(!regName.test(HostName)) {
-		        alert("성명은 한글과 영문대소문자만 사용가능합니다.");
+		      else if(HostName == "") {
+		        alert("지점명을 입력하세요.");
 		        JoinForm.HostName.focus();
 		        return false;
-		      }
+		      } 
+		      else if(!regName.test(HostName)) {
+		        alert("지점명을 한글과 영문대소문자만 사용가능합니다.");
+		        JoinForm.HostName.focus();
+		        return false;
+		      } 
 		      else if(!regEmail.test(storeEmail)) {
 		        alert("이메일 형식에 맞지않습니다.");
+		        JoinForm.email1.focus();
+		        return false;
+		      }
+		      else if(storeEmail == "") {
+		        alert("이메일을 입력하세요.");
 		        JoinForm.email1.focus();
 		        return false;
 		      }
@@ -281,10 +268,7 @@
 		      }
 		    	
 		   		// 전송전에 파일에 관한 사항체크...(회원사진의 내역이 비었으면 noimage를 hidden필드인 photo필드에 담아서 전송한다.)
-		  		if(fName.trim() == "") {
-		  			alert("가게 로고를 등록해야합니다!");
-		  		}
-		  		else {
+		  		if(fName.trim() != "") {
 		  			let fileSize = document.getElementById("fName").files[0].size;
 		  			
 		  			if(uExt != "JPG" && uExt != "GIF" && uExt != "PNG") {
@@ -300,73 +284,67 @@
 		  				return false;
 		  			}
 		    		submitFlag = 1;
-		    	}
-		    	
+		  		}
+		  		else {
+		  			submitFlag = 1;
+		  		}
+		   		
 		  		// 전송전에 '주소'를 하나로 묶어서 전송처리 준비한다.
 		  		let sample5_address = JoinForm.sample5_address.value + " ";
 		  		let sample5_address2 = JoinForm.sample5_address2.value + " ";
 		  		JoinForm.storeAddress.value = sample5_address + "/" + sample5_address2;
-		  		
+		   		
+		   		
 		  		// 전송전에 모든 체크가 끝나서 submitFlag가 1이되면 서버로 전송한다.
 		    	if(submitFlag == 1) {
-		    		if(idCheckSw == 0) {
-		    			alert("아이디 중복체크버튼을 눌러주세요!");
-		    			document.getElementById("midBtn").focus();
-		    		}
-		    		else if(storeNameCheckSw == 0) {
-		    			alert("가게명 중복체크버튼을 눌러주세요!");
-		    			document.getElementById("memberNickName").focus();
-		    			return false;
-		    		}
-		    		else if(emailCheckSw == 0) {
-		    			alert("이메일 인증은 필수입니다!");
-		    			document.getElementById("email1").focus();
-		    			return false;
-		    		}
-		    		else {
-			  			// 묶여진 필드(email/tel)를 폼태그안에 hidden태그의 값으로 저장시켜준다.
-			  			JoinForm.storeEmail.value = storeEmail;
-			  			JoinForm.storeNumber.value = storeNumber;
-			  			
-			  			JoinForm.submit();
-		    		}
+	    			if(storeName != '${vo.storeName}') {
+		    			if(storeNameCheckSw == 0) {
+			    			alert("지점명 중복체크버튼을 눌러주세요!");
+			    			document.getElementById("storeName").focus();
+			    			return false;
+			    		}
+		    			else {
+		    				if(storeEmail != '${vo.storeEmail}') {
+			    				if(emailCheckSw == 0) {
+					    			alert("이메일 인증은 필수입니다!");
+					    			document.getElementById("email1").focus();
+					    			return false;
+					    		}
+			    				else {
+			    					JoinForm.storeEmail.value = storeEmail;
+						  			JoinForm.storeNumber.value = storeNumber;
+						  			
+						  			JoinForm.submit();
+			    				}
+		    				}
+		    			}
+	    			}
+	    			else {
+	    				if(storeEmail != '${vo.storeEmail}') {
+		    				if(emailCheckSw == 0) {
+				    			alert("이메일 인증은 필수입니다!");
+				    			document.getElementById("email1").focus();
+				    			return false;
+				    		}
+		    				else {
+		    					JoinForm.storeEmail.value = storeEmail;
+					  			JoinForm.storeNumber.value = storeNumber;
+					  			
+					  			JoinForm.submit();
+		    				}
+	    				}
+	    				else {
+	    					JoinForm.storeEmail.value = storeEmail;
+				  			JoinForm.storeNumber.value = storeNumber;
+				  			
+				  			JoinForm.submit();
+	    				}
+	    			}
 		    	}
 		    	else {
-		    		alert("회원가입 실패~~");
+		    		alert("회원수정 실패~~");
 		    	}
 		    }
-			
-			// id 중복체크
-			  function idCheck() {
-			  	let storeMid = JoinForm.storeMid.value;
-			  	
-			  	if(storeMid.trim() == "") {
-			  		alert("아이디를 입력하세요!");
-			  		JoinForm.storeMid.focus();
-			  		return false;
-			  	}
-			  	else {
-				  	$.ajax({
-					  	type   : "post",
-					  	url    : "${ctp}/store/storeIdCheck",
-					  	data   : {storeMid : storeMid} ,
-					  	success:function(res) {
-					  		if(res == "1") {
-					  			document.getElementById("demo").innerHTML = "<font color = 'red'> 존재하는 아이디입니다! </font>"; 
-					  			
-					  		}
-					  		else {
-					  			document.getElementById("demo").innerHTML = "<font color = 'blue'><b>사용가능한 아이디입니다!</b> </font>";  
-					  			$("#storeMid").attr("readonly","readonly");
-					  			idCheckSw = 1;
-					  		}
-					  	},
-					  	error : function() {
-					  		alert("전송 오류~~");
-					  	}
-					  });	
-			    }
-			  }
 			
 			// 이메일로 인증문자보내기
 				function mailCheck() {
@@ -443,6 +421,7 @@
 					  		}
 					  		else {
 					  			document.getElementById("demo6").innerHTML = "<font color = 'blue'> 사용가능한 음식점 명입니다! </font>"; 
+					  			$("#storeName").attr("readonly","readonly");
 					  			storeNameCheckSw = 1;
 					  		}								
 					  	},
@@ -469,7 +448,7 @@
 	            </div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">음식점 이름</div>
 	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-	                <input type="text" class="form-control" id="storeName" name="storeName" placeholder="음식점 이름을 입력하세요" style="width: 100px;" required>&nbsp;
+	                <input type="text" class="form-control" id="storeName" name="storeName" value="${vo.storeName}" style="width: 100px;" required>&nbsp;
 	                <input type="button" class="btn btn-primary" id="midBtn" onclick="storeCheck()" style="width: 20%; text-align: center;"  value="중복체크">
 	            </div>
 	            <div style="font-size: 10px; margin-left: 9%;" id="demo6"></div>
@@ -478,8 +457,8 @@
 	             	<div class="input-group mb-3">
 								  <div class="input-group-append">
 								    <select name="storePart" class="form-control">
-								    	<c:forEach var="vo" items="${vos}">
-									    	<option value="${vo.storePart}" selected>${vo.storePart}</option>
+								    	<c:forEach var="cVo" items="${vos}">
+									    	<option value="${cVo.storePart}" ${cVo.storePart==vo.storePart ? "selected" : ""} >${cVo.storePart}</option>
 									    </c:forEach>
 									  </select>
 								  </div>
@@ -488,33 +467,23 @@
 	            
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">배달 최소 금액</div>
 	            <div class="loginbox-textbox">
-	                <input type="number" class="form-control" id="minPrice" name="minPrice" min="0" style="width: 30%; margin-left: 7%;" required>
+	                <input type="number" class="form-control" value="${vo.minPrice}" id="minPrice" name="minPrice" min="0" style="width: 30%; margin-left: 7%;" required>
 	            </div>
 
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">배달비</div>
 	            <div class="loginbox-textbox">
-	                <input type="number" class="form-control" id="deliverCost" name="deliverCost" min="0" style="width: 30%; margin-left: 7%;" required>
+	                <input type="number" class="form-control"  value="${vo.deliverCost}" id="deliverCost" name="deliverCost" min="0" style="width: 30%; margin-left: 7%;" required>
 	            </div>
 	            
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">영업시간</div>
 	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-							  OPEN &nbsp; <input type="time" name="storeTime1" id="storeTime1" value="09:00" class="form-control" />&nbsp;&nbsp;
-								CLOSE &nbsp; <input type="time" name="storeTime2" id="storeTime2" value="00:00" class="form-control"/>
+							  OPEN &nbsp; <input type="time" name="storeTime1" id="storeTime1" value="${storeTime1}" class="form-control" />&nbsp;&nbsp;
+								CLOSE &nbsp; <input type="time" name="storeTime2" id="storeTime2" value="${storeTime2}" class="form-control"/>
 	            </div>
 	            
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">등록자 아이디</div>
-	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-	                <input type="text" class="form-control" id="storeMid" name="storeMid" placeholder="아이디를 입력하세요" style="width: 100px;" required>&nbsp;
-	                <input type="button" class="btn btn-primary" id="midBtn" onclick="idCheck()" style="width: 20%; text-align: center;"  value="중복체크">
-	            </div>
-	            <div style="font-size: 10px; margin-left: 9%;" id="demo"></div>
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">비밀번호</div>
-	            <div class="loginbox-textbox">
-	                <input type="password" class="form-control" id="storePwd" name="storePwd" placeholder="비밀번호를 입력하세요"  style="width: 85%; margin: 0 auto;" required>
-	            </div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">성명</div>
 	            <div class="loginbox-textbox">
-	                <input type="text" class="form-control" id="HostName" name="HostName" placeholder="성명을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
+	                <input type="text" class="form-control" id="HostName" name="HostName" value="${hostname}" style="width: 85%; margin: 0 auto;" required>
 	            </div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">전화번호</div>
 	            <div class="loginbox-textbox">
@@ -522,46 +491,46 @@
 						      <div class="input-group" style="width: 60%;">
 							      <div class="input-group-prepend" style="float: left; margin-left: 12%">
 									      <select name="tel1" class="form-control custom-select">
-											    <option value="010" selected>010</option>
-											    <option value="02">02</option>
-											    <option value="031">031</option>
-											    <option value="032">032</option>
-											    <option value="041">041</option>
-											    <option value="042">042</option>
-											    <option value="043">043</option>
-									        <option value="051">051</option>
-									        <option value="052">052</option>
-									        <option value="061">061</option>
-									        <option value="062">062</option>
+											    <option value="010" ${tel1==010 ? "selected" : ""}>010</option>
+											    <option value="02" ${tel1==02 ? "selected" : ""}>02</option>
+											    <option value="031" ${tel1==031 ? "selected" : ""}>031</option>
+											    <option value="032" ${tel1==032 ? "selected" : ""}>032</option>
+											    <option value="041" ${tel1==041 ? "selected" : ""}>041</option>
+											    <option value="042" ${tel1==042 ? "selected" : ""}>042</option>
+											    <option value="043" ${tel1==043 ? "selected" : ""}>043</option>
+									        <option value="051" ${tel1==051 ? "selected" : ""}>051</option>
+									        <option value="052" ${tel1==052 ? "selected" : ""}>052</option>
+									        <option value="061" ${tel1==061 ? "selected" : ""}>061</option>
+									        <option value="062" ${tel1==062 ? "selected" : ""}>062</option>
 											  </select>
 							      </div>
-									      &nbsp;-&nbsp;<input type="text" name="tel2" maxlength=4 class="form-control" style="width: 50px;" required />&nbsp;-&nbsp;
-									      <input type="text" name="tel3" maxlength=4 class="form-control" style="width: 10px;" required/>
+									      &nbsp;-&nbsp;<input type="text" name="tel2" value="${tel2}" maxlength=4 class="form-control" style="width: 50px;" required />&nbsp;-&nbsp;
+									      <input type="text" name="tel3" maxlength=4  value="${tel3}" class="form-control" style="width: 10px;" required/>
 							    </div> 
 						    </div>
 	            </div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">주소지</div>
 	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-								<input type="text" id="sample5_address" placeholder="오른쪽버튼을 눌러 검색하세요" class="form-control" readonly>
+								<input type="text" id="sample5_address" value="${address1}" class="form-control" readonly>
 								<input type="button" onclick="sample5_execDaumPostcode()" class="btn btn-secondary ml-2" value="주소 검색"><br>
 							</div>
 	            <div class="loginbox-textbox input-group" style="width: 85.5%; margin: 0 auto;">
-								<input type="text" id="sample5_address2" placeholder="상세주소" class="form-control">
+								<input type="text" id="sample5_address2" value="${address2}" placeholder="상세주소" class="form-control">
 							</div>
 							<div id="map" style="width:300px;height:300px;margin-top:10px;display:none; margin-left: 10%;"></div>
 							
-	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">이메일</div>
+	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" value="${email1}"  style="margin-left: 7%;">이메일</div>
 	            <div class="loginbox-textbox" style="width: 70%; margin-left: 7%;">
 	             	<div class="input-group mb-3">
-								  <input type="text" class="form-control" placeholder="Email을 입력하세요." id="email1" name="email1" required />&nbsp;<span style="font-size: 1.5rem">@</span>&nbsp;
+								  <input type="text" class="form-control" value="${email1}" id="email1" name="email1" required />&nbsp;<span style="font-size: 1.5rem">@</span>&nbsp;
 								  <div class="input-group-append">
 								    <select name="email2" class="form-control">
-									    <option value="naver.com" selected>naver.com</option>
-									    <option value="hanmail.net">hanmail.net</option>
-									    <option value="hotmail.com">hotmail.com</option>
-									    <option value="gmail.com">gmail.com</option>
-									    <option value="nate.com">nate.com</option>
-									    <option value="yahoo.com">yahoo.com</option>
+									    <option value="naver.com" ${email2=='naver.com'  ? "selected" : ""} >naver.com</option>
+									    <option value="hanmail.net" ${email2=='hanmail.net.com'  ? "selected" : ""} >hanmail.net</option>
+									    <option value="hotmail.com" ${email2=='hotmail.com'  ? "selected" : ""}>hotmail.com</option>
+									    <option value="gmail.com" ${email2=='gmail.com'  ? "selected" : ""}>gmail.com</option>
+									    <option value="nate.com" ${email2=='nate.com'  ? "selected" : ""}>nate.com</option>
+									    <option value="yahoo.com" ${email2=='yahoo.com'  ? "selected" : ""}>yahoo.com</option>
 									  </select>
 								  </div>
 								  &nbsp;
@@ -581,18 +550,20 @@
 						    </div>
 					    </div>
 	            <div class="loginbox-submit text-center">
-	                <input type="button" onclick="JoinCheck()" class="btn btn-success btn-block mt-3" value="회원가입" style="width: 92%">
+	                <input type="button" onclick="updateStore()" class="btn btn-success btn-block mt-3" value="가게수정" style="width: 92%">
 	            </div>
 	            <div class="loginbox-submit text-center">
 	                <input type="button" onclick="location.href='${ctp}/member/JoinSelect';" class="btn btn-primary btn-block" value="돌아가기" style="width: 92%">
 	            </div>
 	        </div>
+	        <input type="hidden" name="idx" value="${vo.idx}"/>
 	        <input type="hidden" name="storeNumber"/>
     			<input type="hidden" name="storeEmail"/>
     			<input type="hidden" name="storeLatitude"/>
     			<input type="hidden" name="storeLongitude"/>
     			<input type="hidden" name="storeAddress"/>
     			<input type="hidden" name="logoPhoto"/>
+    			<input type="hidden" name="pastPhoto" value="${vo.logoPhoto}"/>
     			<input type="hidden" name="storeTime"/>
         </form>
     </div>

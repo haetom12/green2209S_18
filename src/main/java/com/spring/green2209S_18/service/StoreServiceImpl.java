@@ -136,11 +136,6 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public SubFoodMenuVO getAdminStoreSubMenu(String brandName) {
-		return storeDAO.getAdminStoreSubMenu(brandName);
-	}
-
-	@Override
 	public void setAdminStoreMenu(FoodMenuVO foodVo, String storeName) {
 		
 		String imgFile = foodVo.getFoodPhoto();
@@ -407,6 +402,57 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int setReportRating(int idx, String mid) {
 		return storeDAO.setReportRating(idx, mid);
+	}
+
+	@Override
+	public StoreVO getCheckStoreName(String storeName) {
+		return storeDAO.getCheckStoreName(storeName);
+	}
+
+	@Override
+	public int setStoreUpdate(StoreVO vo, MultipartFile fName, String pastPhoto) {
+		int res = 0;
+		String oFileName = fName.getOriginalFilename();
+		UUID uid = UUID.randomUUID();
+		String saveFileName = "";
+		
+		if(oFileName.equals("")) {
+			vo.setLogoPhoto(pastPhoto);
+			saveFileName = pastPhoto;
+			storeDAO.setStoreUpdate(vo);
+			
+			res = 1;
+			return res;
+		}
+		else {
+			saveFileName = uid + "_" + oFileName;
+		}
+		JavaspringProvide ps = new JavaspringProvide();
+		try {
+			ps.deleteAndUpdateFile(fName,saveFileName,pastPhoto, "store");
+			vo.setLogoPhoto(saveFileName);
+			storeDAO.setStoreUpdate(vo);
+			
+			res= 1;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public int setStorePwdUpdate(String newPwd, String mid) {
+		return storeDAO.setStorePwdUpdate(newPwd, mid);
+	}
+
+	@Override
+	public int setStoreDelete(String mid) {
+		return storeDAO.setStoreDelete(mid);
+	}
+
+	@Override
+	public List<FoodMenuVO> getSaleFoodList() {
+		return storeDAO.getSaleFoodList();
 	}
 
 

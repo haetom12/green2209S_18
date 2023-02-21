@@ -5,63 +5,127 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!-- Basic Page Info -->
-	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
-
-	<!-- Site favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="${ctp}/vendors/images/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="${ctp}/vendors/images/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="${ctp}/vendors/images/favicon-16x16.png">
-
-	<!-- Mobile Specific Metas -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<!-- CSS -->
-	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/core.css">
-	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/icon-font.min.css">
-	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
-
-	<script>
-		'use strict';
+    <title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${ctp}/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="${ctp}/css/animate.css">
+    <link rel="stylesheet" href="${ctp}/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="${ctp}/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="${ctp}/css/magnific-popup.css">
+    <link rel="stylesheet" href="${ctp}/css/aos.css">
+    <link rel="stylesheet" href="${ctp}/css/ionicons.min.css">
+    <link rel="stylesheet" href="${ctp}/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="${ctp}/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="${ctp}/css/flaticon.css">
+    <link rel="stylesheet" href="${ctp}/css/icomoon.css">
+    <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 		
-		function orderConfirm(orderIdx) {
-			let ans = confirm("해당 주문을 배달완료 확정시키겠습니까>");
-      if(!ans) return false;
-      
-		$.ajax({
-		  	type   : "post",
-		  	url    : "${ctp}/rider/riderOrderConfirm",
-		  	data   : {
-		  		orderIdx : orderIdx
-		  	},
-    		success:function(res) {
-    			if(res == "1") {
-    				alert("배달완료 되었습니다!");
-    				location.reload();
-    			}
-    			else {
-    				alert("완료 처리에 실패하였습니다.");
-    			}
-    		},
-    		error : function() {
-    			alert("전송 오류~~");
-    		}
-    	});
-		}
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/core.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/icon-font.min.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
+
+		<script>
+			'use strict';
+			function memberCheck() {
+				let mid = myform.mid.value;
+				let pwd = myform.pwd.value;
+				let sMid = '${sMid}';
+				
+				if(mid == "") {
+					alert("아이디를 입력하세요.");
+					myform.mid.focus();
+					return false;
+				}
+				else if(mid != sMid) {
+					alert("아이디가 일치하지 않습니다.");
+					myform.mid.focus();
+					return false;
+				}
+				else if(pwd == "") {
+					alert("비밀번호를 입력하세요.");
+					myform.pwd.focus();
+					return false;
+				}
+				
+				$.ajax({
+				  	type   : "post",
+				  	url    : "${ctp}/rider/riderDeleteCheck",
+				  	data   : {
+				  		riderMid : mid,
+				  		riderPwd : pwd
+				  		} ,
+				  	success:function(res) {
+				  		if(res == "1") {
+				  			alert("인증코드를 이메일로 전송하였습니다. 5분안에 인증하세요!");
+								document.getElementById("checkBtn").style.display = 'none';
+				       	document.getElementById("deleteBtn").style.display = 'block'; 	
+				       	document.getElementById("codeForm").style.display = 'block'; 	
+				  		}
+				  		else {
+				  			alert("아이디 또는 비밀번호가 틀립니다!");
+				  		}
+				  	},
+				  	error : function() {
+				  		alert("전송 오류~~");
+				  	}
+				  });	
+				
+			}
+			
+			function codeCheck() {
+				let code = myform.code.value;
+				
+				if(code == "") {
+					alert("코드를 입력하세요.");
+					myform.code.focus();
+					return false;
+				}
+				
+				$.ajax({
+				  	type   : "post",
+				  	url    : "${ctp}/rider/riderDeleteCodeCheck",
+				  	data   : {
+				  		code : code
+				  		},
+				  	success:function(res) {
+				  		if(res == "1") {
+				  			alert("탈퇴 인증에 성공하였습니다!");
+				  			let ans = confirm("회원탈퇴시 모든 정보가 삭제됩니다. 계속 진행하시겠습니까?");
+								if(!ans) return false;
+								
+								location.href="${ctp}/rider/riderDeleteOk";
+								
+				  		}
+				  		else {
+				  			alert("코드가 틀립니다!");
+				  		}
+				  	},
+				  	error : function() {
+				  		alert("전송 오류~~");
+				  	}
+			  });	
+			}
+			
+		</script>
+
 		
-	</script>
-	
-</head>
-<body>
+  </head>
+  <body>
 	<div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class='loader-progress' id="progress_div">
 				<div class='bar' id='bar1'></div>
 			</div>
-			<div class='percent' id='percent1'>0%</div>
+			<div class='percent' id='percent1'>30%</div>
 			<div class="loading-text">
 				라이더 로딩중...
 			</div>
@@ -215,69 +279,35 @@
 	<!-- =============================================== -->
 
 	<div class="main-container">
-		<div class="pd-ltr-20 xs-pd-20-10">
-			<div class="min-height-200px">
-				<div class="page-header">
-					<div class="row">
-						<div class="col-md-12 col-sm-12">
-							<div class="title">
-								<h4>pricing Table</h4>
-							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">pricing Table</li>
-								</ol>
-							</nav>
-						</div>
+	  <div class="container">
+			<div class="pd-20 card-box mb-30">
+				<div class="clearfix">
+					<h3 class="text-blue h3" style="text-align: center;">라이더 탈퇴</h3>
+				</div>
+				<form name="myform" method="post">
+					<div class="form-group">
+						<label>아이디</label>
+						<input class="form-control" id="mid" name="mid" placeholder="아이디를 입력하세요" type="text">
 					</div>
-				</div>
-
-				<div class="container px-0">
-					<h4 class="mb-30 text-blue h4">내 배달 현황</h4>
-					<div class="row">
-						<c:forEach var="cVo" items="${vos}" varStatus="st">
-							<div class="col-md-4 mb-30">
-								<div class="card-box pricing-card mt-30 mb-30">
-									<div class="pricing-icon">
-										<img src="${ctp}/data/store/${vo.logoPhoto}" >
-									</div>
-									<div class="price-title">
-										${cVo.storeName}
-									</div>
-									<div class="price-title">
-										<b><font color="red">배달중</font></b>
-									</div>
-									<div class="pricing-price">
-										<sup>￦</sup>${cVo.orderTotalPrice}<sub>/원</sub>
-									</div>
-									<div class="text">
-										Card servicing<br> for 1month
-									</div>
-									<div class="cta">
-										<input type="button"  value="배달 완료 확정" onclick="orderConfirm('${cVo.orderIdx}')" class="btn btn-primary btn-rounded btn-lg"/>
-									</div>
-								</div>
-							</div>
-						</c:forEach>
-						<c:if test="${vSize == 0}">
-							<div class="col-md-4 mb-30">
-								<div class="card-box pricing-card mt-30 mb-30">
-									<div class="pricing-price">
-										<i class="icon-copy fa fa-motorcycle" aria-hidden="true"></i><br />
-										<font size="5pt">현재 배달중인 주문이 없습니다.</font>
-									</div>
-								</div>
-							</div>
-						</c:if>
+					<div class="form-group">
+						<label>비밀번호</label>
+						<input class="form-control" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" type="password">
 					</div>
-				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-				</div>
-			</div>
-		</div>
-	</div>
+					<div class="form-group" id="codeForm" style="display: none;" >
+						<label>인증코드 입력</label>
+						<input class="form-control" id="code" name="code" placeholder="인증코드를 입력하세요" type="text">
+					</div>
+					<div class="form-group">
+					<div class="row">
+						<input type="button" value="회원인증"  id="checkBtn" name="checkBtn" onclick="memberCheck()" style="float: right;" class="btn btn-success ml-2" />
+						<input type="button" value="탈퇴신청" id="deleteBtn" name="deleteBtn" onclick="codeCheck()" style="display: none; float: right;" class="btn btn-success ml-2" />
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/rider/riderMain';"  class="btn btn-secondary ml-3 mr-2" />
+					</div>
+					</div>
+				</form>
+	    </div>
+    </div>
+  </div>
 	<!-- js -->
 	<script src="${ctp}/vendors/scripts/core.js"></script>
 	<script src="${ctp}/vendors/scripts/script.min.js"></script>

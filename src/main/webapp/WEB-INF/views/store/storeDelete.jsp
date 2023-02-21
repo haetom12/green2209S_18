@@ -58,10 +58,10 @@
 				
 				$.ajax({
 				  	type   : "post",
-				  	url    : "${ctp}/member/memberDeleteCheck",
+				  	url    : "${ctp}/store/storeDeleteCheck",
 				  	data   : {
-				  		mid : mid,
-				  		pwd : pwd
+				  		storeMid : mid,
+				  		storePwd : pwd
 				  		} ,
 				  	success:function(res) {
 				  		if(res == "1") {
@@ -92,7 +92,7 @@
 				
 				$.ajax({
 				  	type   : "post",
-				  	url    : "${ctp}/member/memberDeleteCodeCheck",
+				  	url    : "${ctp}/store/storeDeleteCodeCheck",
 				  	data   : {
 				  		code : code
 				  		},
@@ -102,7 +102,7 @@
 				  			let ans = confirm("회원탈퇴시 모든 정보가 삭제됩니다. 계속 진행하시겠습니까?");
 								if(!ans) return false;
 								
-								location.href="${ctp}/member/memberDeleteOk";
+								location.href="${ctp}/store/storeDeleteOk";
 								
 				  		}
 				  		else {
@@ -123,13 +123,16 @@
   
 		<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
 
-	<!-- Header -->
-	<header class="w3-container w3-padding bg-primary" id="myHeader">
-	  <div class="w3-center mt-3">
-		  <h4>환영합니다!</h4>
-		  <h1 class="w3-xxxlarge w3-animate-bottom w3-text-white">${vo.memberNickName} 님</h1>
-	  </div>
-	</header>
+    <div class="hero-wrap hero-bread" style="background-image: url('${ctp}/data/store/${vo.logoPhoto}'); width:40%; margin: 0 auto;">
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+          	<!-- <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Blog</span></p> -->
+            <h1 class="mb-0 bread">${vo.storeName}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <section class="ftco-section testimony-section" >
     	<div class="container">

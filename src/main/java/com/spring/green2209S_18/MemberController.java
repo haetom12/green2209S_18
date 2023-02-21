@@ -428,7 +428,7 @@ public class MemberController {
 	}
 	
 	
-	// 이메일 인증
+	// 삭제 전 이메일 인증
 	@ResponseBody
 	@RequestMapping(value = "/memberDeleteCheck", method = RequestMethod.POST)
 	public String memberDeleteCheckPost(String mid, String pwd, HttpSession session) {
@@ -488,7 +488,6 @@ public class MemberController {
 		return res+"";
 	}
 	
-	
 	// 이메일 인증
 	@ResponseBody
 	@RequestMapping(value = "/memberDeleteCodeCheck", method = RequestMethod.POST)
@@ -500,5 +499,15 @@ public class MemberController {
 		else return "2";
 	}
 	
+	// 계정 삭제 처리
+	@RequestMapping(value = "/memberDeleteOk", method = RequestMethod.GET)
+	public String memberDeleteOkGet(HttpSession session) {
+		
+		String mid = (String)session.getAttribute("sMid");
+		int res = memberService.setMemberDelete(mid);
+		
+		if(res==1) return "redirect:/msg/riderDeleteOk";
+		else return "redirect:/msg/memberDeleteNo";
+	}
 	
 }

@@ -31,6 +31,7 @@ import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.RatingVO;
+import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.WebSocketDbVO;
 import com.spring.green2209S_18.vo.wishListVO;
 
@@ -298,6 +299,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void setCouponUsed(String sCouponName, String mid) {
 		orderDAO.setCouponUsed(sCouponName, mid);
+	}
+
+	@Override
+	public List<StoreVO> getMostSellStore() {
+		return orderDAO.getMostSellStore();
 	}
 
 	

@@ -36,5 +36,7 @@ public interface MemberDAO {
 
 	public int setMemberPwdUpdate(@Param("pwd") String newPwd, @Param("mid") String mid);
 
+	public int setMemberDelete(@Param("mid") String mid);
+
 
 }

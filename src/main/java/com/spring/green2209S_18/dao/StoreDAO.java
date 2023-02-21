@@ -130,5 +130,15 @@ public interface StoreDAO {
 
 	public int setReportRating(@Param("idx") int idx, @Param("mid") String mid);
 
+	public StoreVO getCheckStoreName(@Param("storeName") String storeName);
+
+	public void setStoreUpdate(@Param("vo") StoreVO vo);
+
+	public int setStorePwdUpdate(@Param("storePwd") String newPwd, @Param("storeMid") String mid);
+
+	public int setStoreDelete(@Param("storeMid") String mid);
+
+	public List<FoodMenuVO> getSaleFoodList();
+
 
 }

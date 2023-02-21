@@ -69,6 +69,26 @@ public class RiderServiceImpl implements RiderService {
 	public List<CartVO> getRiderOrderList(String riderMid, String string) {
 		return riderDAO.getRiderOrderList(riderMid, string);
 	}
+
+	@Override
+	public int setRiderUpdate(RiderVO vo) {
+		return riderDAO.setRiderUpdate(vo);
+	}
+
+	@Override
+	public int setMemberPwdUpdate(String newPwd, String mid) {
+		return riderDAO.setMemberPwdUpdate(newPwd, mid);
+	}
+
+	@Override
+	public List<CartVO> getRiderOrderListPage(int startIndexNo, int pageSize, String mid) {
+		return riderDAO.getRiderOrderListPage(startIndexNo, pageSize, mid);
+	}
+
+	@Override
+	public int setRiderDelete(String mid) {
+		return riderDAO.setRiderDelete(mid);
+	}
 	
 	
 }

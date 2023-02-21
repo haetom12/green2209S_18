@@ -24,100 +24,52 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+		
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/core.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/icon-font.min.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
     
     <script>
-    	'use strict';
-    	/* 
-        $(document).ready(function() {
-        	
-        });
-    	 */
-    	// 음식 브랜드 선택시 리스트에 해당 음식 뿌리기
-        function categoryCheck() {
-        	let brandName = myform.brandName.value;
-        	let storeName = '${vo.storeName}';
-        	
-    			$.ajax({
-    				type : "post",
-    				url  : "${ctp}/store/adminBrandMenu",
-    				data : {
-    					brandName : brandName,
-    					storeName : storeName
-    					},
-    				success:function(data) {
-    					/* alert("data" + data.menuIdx); */
-    					var str = "";
-     					for(var i=0; i<data.length; i++) {
-    						str += "<tr class='price'>";
-    						str += "<td><input type='checkbox' name='chk' class='chk' value='"+data[i].menuIdx+"'/></td>";
-    						str += "<td class='image-prod'><div class='img' style='background-image:url(${ctp}/data/adminFoodPhoto/"+data[i].foodPhoto+");'></td>";
-    						str += "<td class='product-name'>"+data[i].foodName+"</td>";
-    						str += "<td class='image-prod'>"+data[i].foodTag+"</td>";
-    						str += "<td class='total'>"+data[i].price+"</td>";
-    						str += "</tr>";
-    					} 
-     					
-    					$("#demo").html(str);
-    				},
-    				error : function() {
-    					alert("전송오류!");
-    				}
-    			});
-      	}
-    	 
-   	  // 전체선택
-   	  $(function(){
-   	  	$("#checkAll").click(function(){
-   	  		if($("#checkAll").prop("checked")) {
-   		    		$(".chk").prop("checked", true);
-   	  		}
-   	  		else {
-   		    		$(".chk").prop("checked", false);
-   	  		}
-   	  	});
-   	  });
-   	  
-   	  
-   // 선택항목 가게에 저장하기(ajax처리하기)
-	  function selectSaveCheck() {
-	  	let ans = confirm("선택된 메뉴를 저장 하시겠습니까?");
-	  	if(!ans) return false;
-	  	
-	  	let delItems = "";
-	  	let storeName = '${vo.storeName}';
-	  	for(let i=0; i<myform.chk.length; i++) {
-	  		if(myform.chk[i].checked == true) delItems += myform.chk[i].value + "/";
-	  	}
-	  	
-	  	
-	  	if(delItems == "") {
-	  		alert("저장할 메뉴를 선택하세요.");
-	  		return false;
-	  	}
-			
-	  	$.ajax({
-	  		type : "post",
-	  		url  : "${ctp}/store/adminMenuInputOk	",
-	  		data : {
-	  			delItems : delItems,
-	  			storeName : storeName
-	  			},
-	  		success:function(res) {
-	  			if(res == "1") {
-	  				alert("선택된 메뉴를 저장 하였습니다.");
-	  			  location.reload();
-	  			}
-	  		},
-	  		error  :function() {
-	  			alert("전송오류!!");
-	  		}
-	  	});
-			
-	  }
-   	  
-    	 
-    </script>
+			'use strict';
+			function pwdCheck() {
+				let oldPwd = myform.oldPwd.value;
+				let newPwd = myform.newPwd.value;
+				let rePwd = myform.rePwd.value;
+				
+				let regPwd = /(?=.*[0-9a-zA-Z]).{4,20}$/;
+				
+				if(oldPwd == "") {
+					alert("기본 비밀번호를 입력하세요.");
+					myform.oldPwd.focus();
+					return false;
+				}
+				else if(newPwd == "") {
+					alert("새 비밀번호를 입력하세요.");
+					myform.newPwd.focus();
+					return false;
+				}
+		  else if(!regPwd.test(newPwd)) {
+		    alert("비밀번호는 1개이상의 문자와 특수문자 조합의 6~24 자리로 작성해주세요.");
+		    JoinForm.pwd.focus();
+		    return false;
+		    }
+				else if(rePwd == "") {
+					alert("새 비밀번호를 다시 입력하세요.");
+					myform.rePwd.focus();
+					return false;
+				}
+				else if(rePwd != newPwd) {
+					alert("새 비밀번호와 동일하지 않습니다!");
+					myform.rePwd.focus();
+					return false;
+				}
+				myform.submit();
+			}
+		</script>
     
   </head>
   <body class="goto-here">
@@ -135,38 +87,31 @@
       </div>
     </div>
 
-    <section class="ftco-section ftco-cart">
-			<div class="container">
-				<div class="row">
-    			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
-    					<h2 class="text-center">메뉴 리스트</h2><br />
-    					<form name="myform" method="post">
-						    <select name="brandName" id="brandName" onchange="categoryCheck()" style="width: 12%;">
-						    	<option value="" >프랜차이즈 선택</option>
-		    		    	<c:forEach var="vo" items="${vos}">
-						    		<option value="${vo.brandName}" >${vo.brandName}</option>
-						    	</c:forEach>
-							  </select>
-	    					<input type="button" value="메뉴 추가" onclick="selectSaveCheck()" class="btn btn-primary mb-1" style="float: right;"/>
-		    				<table class="table">
-							    <thead class="thead-primary">
-							      <tr class="text-center">
-							        <th><input type="checkbox" id="checkAll" />&nbsp;전체선택</th>
-							        <th>카테고리</th>
-							        <th>음식사진</th>
-							        <th>음식이름</th>
-							        <th>가격</th>
-							      </tr>
-							    </thead>
-							    <tbody id="demo"></tbody>
-							  </table>
-						  </form>
-					  </div>
-    			</div>
-    		</div>
-			</div>
-		</section>
+    <section class="ftco-section testimony-section" >
+    	<div class="container">
+				<div class="pd-20 card-box mb-30">
+					<div class="clearfix">
+						<h3 class="text-blue h3" style="text-align: center;">비밀번호 변경</h3>
+					</div>
+					<form name="myform" method="post">
+						<div class="form-group">
+							<label>기존 비밀번호</label>
+							<input class="form-control" id="oldPwd" name="oldPwd" placeholder="기존 비밀번호를 입력하세요" type="password">
+						</div>
+						<div class="form-group">
+							<label>새 비밀번호</label>
+							<input class="form-control" id="newPwd" name="newPwd" placeholder="새 비밀번호를 입력하세요" type="password">
+						</div>
+						<div class="form-group">
+							<label>새 비밀번호 다시 입력</label>
+							<input class="form-control" id="rePwd" name="rePwd" placeholder="새 비밀번호를 다시 입력하세요" type="password">
+						</div>
+						<input type="button" value="비밀번호 수정" onclick="pwdCheck()" style="float: right;" class="btn btn-success ml-2" />
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/store/myStorePage';" style="float: right;" class="btn btn-secondary mr-2" />
+					</form>
+  	    </div>
+      </div>
+    </section>
 
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 
@@ -225,6 +170,11 @@
 		    
 		});
 	</script>
+	<!-- js -->
+	<script src="${ctp}/vendors/scripts/core.js"></script>
+	<script src="${ctp}/vendors/scripts/script.min.js"></script>
+	<script src="${ctp}/vendors/scripts/process.js"></script>
+	<script src="${ctp}/vendors/scripts/layout-settings.js"></script>
     
   </body>
 </html>

@@ -30,4 +30,6 @@ public interface MemberService {
 
 	public int setMemberPwdUpdate(String newPwd, String mid);
 
+	public int setMemberDelete(String mid);
+
 }
