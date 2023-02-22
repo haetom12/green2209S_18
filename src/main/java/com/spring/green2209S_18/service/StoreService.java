@@ -135,5 +135,9 @@ public interface StoreService {
 
 	public List<FoodMenuVO> getSaleFoodList();
 
+	public StoreVO getMidFind(String name, String email);
+
+	public StoreVO getPwdFind(String mid, String email);
+
 
 }

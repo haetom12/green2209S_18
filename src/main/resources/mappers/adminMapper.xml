@@ -55,6 +55,22 @@
 		select * from adminfoodmenu where brandName = #{brandName};
 	</select>
 
+	<select id="getMemberList" resultType="com.spring.green2209S_18.vo.MemberVO">
+		select * from member where userDel = 'NO'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+
+	<select id="getDeleteMemberList" resultType="com.spring.green2209S_18.vo.MemberVO">
+		select * from member where userDel = 'OK'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+
+	<select id="totMemberListCnt" resultType="int">
+		select count(*) from member where userDel = 'NO' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totMemberDeleteListCnt" resultType="int">
+		select count(*) from member where userDel = 'OK' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
 
 
 	<insert id="setCategoryInput">
@@ -114,6 +130,10 @@
 
 	<delete id="setAdminMenuDeletePost">
 		delete from adminFoodMenu where foodName = #{foodName};
+	</delete>
+
+	<delete id="setMemberDelete">
+		delete from member where mid = #{mid};
 	</delete>
 	
 </mapper>

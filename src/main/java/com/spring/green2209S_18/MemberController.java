@@ -1,13 +1,22 @@
 package com.spring.green2209S_18;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -26,6 +35,7 @@ import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.RiderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
+import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.MailVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RiderVO;
@@ -56,19 +66,48 @@ public class MemberController {
 	PageProcess pageProcess;
 	
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
-	public String memberLoginGet() {
-
+	public String memberLoginGet(HttpServletRequest request) {
+		
+	// 쿠키 처리
+			Cookie[] cookies = request.getCookies();
+			for(int i=0; i<cookies.length; i++) {
+				if(cookies[i].getName().equals("cMid")) {
+					request.setAttribute("mid", cookies[i].getValue());
+					break;
+				}
+			}
+		
 		return "member/memberLogin";
 	}
 
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
-	public String memberLoginPost(HttpSession session,String mid, String pwd, String part, Model model) {
+	public String memberLoginPost(HttpSession session, HttpServletRequest request, HttpServletResponse response, 
+			String mid, String pwd, String part, Model model,
+			@RequestParam(name="idCheck", defaultValue = "", required = false) String idCheck) {
+		
+		System.out.println("id" + idCheck);
 		
 		// 일반회원 로그인
 		if(part.equals("member")) {
 			MemberVO vo = memberService.getMemberIdCheck(mid);
 			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
-				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
+				// 회원 인증처리된 경우 수행할 내용?  쿠키값처리 
+				
+				 if(idCheck.equals("on")) {
+					 	Cookie cookieMid = new Cookie("cMid", mid);
+						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						response.addCookie(cookieMid);
+				 }
+				 else {
+						Cookie[] cookies = request.getCookies();
+						for(int i=0; i<cookies.length; i++) {
+							if(cookies[i].getName().equals("cMid")) {
+								cookies[i].setMaxAge(0);
+								response.addCookie(cookies[i]);
+								break;
+							}
+						}
+				 }
 				
 				// 장바구니에 있는 리스트, 갯수 가져오기;
 				List<CartVO> vos = memberService.getMyCartList(mid);
@@ -98,6 +137,22 @@ public class MemberController {
 			if(vo != null && passwordEncoder.matches(pwd, vo.getRiderPwd()) && vo.getDeleteRequest().equals("NO")) {
 				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
 				
+				 if(idCheck.equals("on")) {
+					 	Cookie cookieMid = new Cookie("cMid", mid);
+						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						response.addCookie(cookieMid);
+				 }
+				 else {
+						Cookie[] cookies = request.getCookies();
+						for(int i=0; i<cookies.length; i++) {
+							if(cookies[i].getName().equals("cMid")) {
+								cookies[i].setMaxAge(0);
+								response.addCookie(cookies[i]);
+								break;
+							}
+						}
+				 }
+				
 				session.setAttribute("sMid", mid);
 				session.setAttribute("sPart", "rider");
 				model.addAttribute("vo",vo);
@@ -114,6 +169,22 @@ public class MemberController {
 			StoreVO vo = storeService.getStoreIdCheck(mid);
 			if(vo != null && passwordEncoder.matches(pwd, vo.getStorePwd()) && vo.getStoreDel().equals("NO")) {
 				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
+				
+				 if(idCheck.equals("on")) {
+					 	Cookie cookieMid = new Cookie("cMid", mid);
+						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						response.addCookie(cookieMid);
+				 }
+				 else {
+						Cookie[] cookies = request.getCookies();
+						for(int i=0; i<cookies.length; i++) {
+							if(cookies[i].getName().equals("cMid")) {
+								cookies[i].setMaxAge(0);
+								response.addCookie(cookies[i]);
+								break;
+							}
+						}
+				 }
 				
 				session.setAttribute("sMid", mid);
 				session.setAttribute("sPart", "store");
@@ -136,6 +207,22 @@ public class MemberController {
 			MemberVO vo = memberService.getMemberIdCheck(mid);
 			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
 				// 회원 인증처리된 경우 수행할 내용? session에 필요한 자료를 저장, 쿠키값처리, 그날 방문자수 1증가(방문포인트도 증가!)
+				
+				 if(idCheck.equals("on")) {
+					 	Cookie cookieMid = new Cookie("cMid", mid);
+						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						response.addCookie(cookieMid);
+				 }
+				 else {
+						Cookie[] cookies = request.getCookies();
+						for(int i=0; i<cookies.length; i++) {
+							if(cookies[i].getName().equals("cMid")) {
+								cookies[i].setMaxAge(0);
+								response.addCookie(cookies[i]);
+								break;
+							}
+						}
+				 }
 				
 				session.setAttribute("sMid", mid);
 				model.addAttribute("vo",vo);
@@ -165,15 +252,75 @@ public class MemberController {
 
 	// 회원가입처리
 	@RequestMapping(value = "/memberJoin", method = RequestMethod.POST)
-	public String memberJoinPost(MemberVO vo) {
+	public String memberJoinPost(MemberVO vo, HttpServletRequest request) {
 		// 아이디 체크
 		if(memberService.getMemberIdCheck(vo.getMid()) != null) {
 			return "redirect:/msg/memberIdCheckNo";
 		}
 		// 비밀번호 암호화
 		vo.setPwd(passwordEncoder.encode(vo.getPwd())); 
-		
 		int res = memberService.setMemberJoinOk(vo);
+		
+		// 처음 회원가입 이벤트로 할인 쿠폰 증정
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/qrCode/");
+		CouponVO pVo = new CouponVO();
+		
+		int discount = 3000;
+		
+		Calendar cal = Calendar.getInstance();
+    cal.setTime(new Date());
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+    cal.add(Calendar.MONTH, 1);
+    String expiration = df.format(cal.getTime());
+		
+    UUID uid = UUID.randomUUID(); // 기본 32글자
+    
+    String couponName = uid.toString().substring(0,8);
+    
+		String qrCode = orderService.qrCreate(vo.getMemberNickName(),couponName, discount, expiration, realPath);
+		
+		pVo.setOrderIdx(vo.getMid());
+		pVo.setMid(vo.getMid());
+		pVo.setQrCode(qrCode);
+		pVo.setCouponName(couponName);
+		pVo.setDiscount(discount);
+		pVo.setExpiration(expiration);
+		
+		orderService.setCouponInput(pVo);
+		
+		
+		// 메일로 qr 코드 보내기
+		
+		String toMail = vo.getEmail();
+    String title = "[저기요] 회원가입을 축하드립니다!";
+    String content = "";
+		
+    try {
+			// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+			
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title);
+			messageHelper.setText(content);
+			
+			content = content.replace("\n", "<br/>");
+			content += "[이벤트 쿠폰] \n ";
+			content += "저기요 회원가입을 진심으로 축하드립니다! \n쿠폰이 발급되었으니 첨부파일을 확인해주세요! ";
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setText(content);
+			
+		// file = new FileSystemResource(request.getRealPath("/resources/images/paris.jpg"));
+			FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/data/qrCode/"+qrCode));
+			messageHelper.addAttachment(qrCode, file);
+			
+			// 메일 전송하기
+			mailSender.send(message);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 		
 		if(res == 1) return "redirect:/msg/memberJoinOk"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
 		else return "redirect:/msg/memberJoinNo";
@@ -285,9 +432,8 @@ public class MemberController {
 			messageHelper.setText(content);
 			
 			content = content.replace("\n", "<br/>");
-			content += "<br>메일 인증번호입니다<br/>";
+			content += "메일 인증번호입니다<\n>";
 			content += "인증번호 : " + msg;
-			content += "<hr>";
 			
 			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
 			messageHelper.setText(content);
@@ -472,8 +618,8 @@ public class MemberController {
 			messageHelper.setSubject(title);
 			messageHelper.setText(content);
 			
-			content = content.replace("<br/>", "\n");
-			content += "<br>메일 인증번호입니다<br/>";
+			content = content.replace("\n", "<br/>");
+			content += "메일 인증번호입니다<\n>";
 			content += "인증번호 : " + msg;
 			
 			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
@@ -509,5 +655,144 @@ public class MemberController {
 		if(res==1) return "redirect:/msg/riderDeleteOk";
 		else return "redirect:/msg/memberDeleteNo";
 	}
+	
+	// 아이디 찾기
+	@RequestMapping(value = "midFind", method = RequestMethod.POST)
+	public String midFindPost(String options, String name, String email) {
+		
+		String mail = "";
+		String findMid = "";
+		
+		if(options.equals("member")) {
+			MemberVO vo = memberService.getMidFind(name, email);
+
+			if(vo==null) return "redirect:/msg/memberLoginNo";
+			
+			findMid = vo.getMid().replace(vo.getMid().substring(2,4), "**");
+			mail = vo.getEmail();
+		}
+		else if(options.equals("rider")) {
+			RiderVO vo = riderService.getMidFind(name, email);
+			
+			if(vo==null) return "redirect:/msg/memberLoginNo";
+			
+			findMid = vo.getRiderMid().replace(vo.getRiderMid().substring(2,4), "**");
+			mail = vo.getRiderEmail();
+		}
+		else {
+			StoreVO vo = storeService.getMidFind(name, email);
+			
+			if(vo==null) return "redirect:/msg/memberLoginNo";
+			
+			findMid = vo.getStoreMid().replace(vo.getStoreMid().substring(2,4), "**");
+			mail = vo.getStoreEmail();
+		}
+		
+		String toMail = mail;
+    String title = "[저기요] 회원 아이디 찾기";
+    String content = "";
+		
+		try {
+			// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title);
+			
+			content = content.replace("\n", "<br/>");
+			content += "회원 아이디입니다.\n";
+			content += "아이디 : " + findMid;
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setText(content);
+			
+			// 메일 전송하기
+			mailSender.send(message);
+			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/msg/midEmailSend";
+	}
+	
+	// 아이디 찾기
+	@RequestMapping(value = "pwdFind", method = RequestMethod.POST)
+	public String pwdFindPost(String options, String mid, String email) {
+		
+		String mail = "";
+		String newPwd = "";
+		
+		if(options.equals("member")) {
+			MemberVO vo = memberService.getPwdFind(mid, email);
+			if(vo==null) return "redirect:/msg/memberLoginNo";
+			
+			UUID uid = UUID.randomUUID();
+			newPwd = uid.toString().substring(0,8);
+			
+			String sPwd = passwordEncoder.encode(newPwd); 
+			memberService.setMemberPwdUpdate(sPwd, mid);
+			
+			mail = vo.getEmail();
+		}
+		else if(options.equals("rider")) {
+			RiderVO vo = riderService.getPwdFind(mid, email);
+			if(vo==null) return "redirect:/msg/memberLoginNo";
+			
+			UUID uid = UUID.randomUUID();
+			newPwd = uid.toString().substring(0,8);
+			
+			String sPwd = passwordEncoder.encode(newPwd); 
+			riderService.setMemberPwdUpdate(sPwd, mid);
+			
+			mail = vo.getRiderEmail();
+		}
+		else {
+			StoreVO vo = storeService.getPwdFind(mid, email);
+			if(vo==null) return "redirect:/msg/memberLoginNo";
+			
+			UUID uid = UUID.randomUUID();
+			newPwd = uid.toString().substring(0,8);
+			
+			String sPwd = passwordEncoder.encode(newPwd);
+			storeService.setStorePwdUpdate(sPwd, mid);
+			
+			mail = vo.getStoreEmail();
+		}
+		
+		String toMail = mail;
+		String title = "[저기요] 회원 임시비밀번호 발급";
+		String content = "";
+		
+		try {
+			// 메일을 전송하기 위한 객체 : MimeMessage() , MimeMessageHelper()
+			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title);
+			
+			content = content.replace("\n", "<br/>");
+			content += "임시비밀번호 입니다.\n";
+			content += "임시비밀번호 : " + newPwd;
+			
+			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
+			messageHelper.setText(content);
+			
+			// 메일 전송하기
+			mailSender.send(message);
+			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/msg/midEmailSend";
+	}
+	
+	
+	
 	
 }

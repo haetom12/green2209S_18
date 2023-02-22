@@ -139,7 +139,7 @@ public class StoreController {
 			@RequestParam(name = "storePart" , defaultValue = "", required = false) String storePart,
 			@RequestParam(name = "distance" , defaultValue = "1000", required = false) int distance) {
 		
-		System.out.println("거리 : " + distance);
+//		System.out.println("거리 : " + distance);
 		
 		String mid = (String)session.getAttribute("sMid");
 		
@@ -856,10 +856,11 @@ public class StoreController {
 			MimeMessage message = mailSender.createMimeMessage(); // 타입변환
 			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8"); //보관함에 저장하는곳
 			
-			content += "<br><hr><h3>메일 인증번호입니다</h3><hr><br/>";
+			
+			content = content.replace("\n", "<br/>");
+			content += "메일 인증번호입니다</n>";
+			content += "===================";
 			content += "인증번호 : " + msg;
-			content += "<p>===============================</p>";
-			content += "<hr>";
 			
 			// 메일보관함에 회원이 보내온 메세지들을 모두 저장시킨다.
 			messageHelper.setTo(toMail);

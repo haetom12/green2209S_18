@@ -32,4 +32,8 @@ public interface MemberService {
 
 	public int setMemberDelete(String mid);
 
+	public MemberVO getMidFind(String name, String email);
+
+	public MemberVO getPwdFind(String mid, String email);
+
 }

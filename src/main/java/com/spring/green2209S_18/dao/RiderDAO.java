@@ -33,4 +33,8 @@ public interface RiderDAO {
 
 	public int setRiderDelete(@Param("riderMid") String mid);
 
+	public RiderVO getMidFind(@Param("riderName") String name,@Param("riderEmail") String email);
+
+	public RiderVO getPwdFind(@Param("riderMid") String mid, @Param("riderEmail") String email);
+
 }

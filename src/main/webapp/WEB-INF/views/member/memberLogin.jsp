@@ -21,6 +21,9 @@
     <link href="${ctp}/assets/css/theme.css" rel="stylesheet" />
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 		
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/core.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/icon-font.min.css">
+		<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
 		
 		<style>
 			.login-container {
@@ -190,6 +193,67 @@
 			    background-color: #fff;
 			    text-align: left;
 			}
+			/* ============================================ */
+			.switch {
+			  position: relative;
+			  display: inline-block;
+			  width: 45px;
+			  height: 24px;
+			}
+			
+			.switch input { 
+			  opacity: 0;
+			  width: 0;
+			  height: 0;
+			}
+			
+			.slider {
+			  position: absolute;
+			  cursor: pointer;
+			  top: 0;
+			  left: 0;
+			  right: 0;
+			  bottom: 0;
+			  background-color: #ccc;
+			  -webkit-transition: .4s;
+			  transition: .4s;
+			}
+			
+			.slider:before {
+			  position: absolute;
+			  content: "";
+			  height: 16px;
+			  width: 15px;
+			  left: 2px;
+			  bottom: 4px;
+			  background-color: white;
+			  -webkit-transition: .4s;
+			  transition: .4s;
+			}
+			
+			input:checked + .slider {
+			  background-color: #2196F3;
+			}
+			
+			input:focus + .slider {
+			  box-shadow: 0 0 1px #2196F3;
+			}
+			
+			input:checked + .slider:before {
+			  -webkit-transform: translateX(26px);
+			  -ms-transform: translateX(26px);
+			  transform: translateX(26px);
+			}
+			
+			/* Rounded sliders */
+			.slider.round {
+			  border-radius: 34px;
+			}
+			
+			.slider.round:before {
+			  border-radius: 50%;
+			}
+			
 		</style>
 		<script>
 			'use strict';
@@ -212,6 +276,51 @@
 					LoginForm.submit();
 				}				
 			}
+			
+			function midFind() {
+				let name = myform.name.value;
+				let email = myform.email.value;
+				let options = myform.options.value;
+				
+				if(name == "") {
+					alert("성함을 입력하세요.");
+					myform.name.focus();
+					return false;
+				}
+				else if(email == "") {
+					alert("이메일을 입력하세요.");
+					myform.email.focus();
+					return false;
+				}
+				else if(options == "") {
+					alert("수정메뉴을 선택하세요.");
+					return false;
+				}
+				myform.submit();
+			}
+			
+			function pwdFind() {
+				let mid = myform2.mid.value;
+				let email = myform2.email.value;
+				let options = myform2.options.value;
+				
+				if(mid == "") {
+					alert("아이디를 입력하세요.");
+					myform2.mid.focus();
+					return false;
+				}
+				else if(email == "") {
+					alert("이메일을 입력하세요.");
+					myform2.email.focus();
+					return false;
+				}
+				else if(options == "") {
+					alert("수정메뉴을 선택하세요.");
+					return false;
+				}
+				myform2.submit();
+			}
+			
 		</script>
   </head>
 
@@ -259,14 +368,21 @@
 	            </div>
 	            
 	            <div class="loginbox-textbox">
-	                <input type="text" class="form-control" id="mid" name="mid" placeholder="아이디를 입력하세요" style="width: 85%; margin: 0 auto;">
+	                <input type="text" class="form-control" id="mid" name="mid" value="${mid}" placeholder="아이디를 입력하세요"  style="width: 85%; margin: 0 auto;">
 	            </div>
 	            <div class="loginbox-textbox">
 	                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요"  style="width: 85%; margin: 0 auto;">
 	            </div>
+	            <div>
+		            <label class="switch" style="float: left; margin-left: 40px; margin-right: 5px;">
+								  <input type="checkbox" name="idCheck" checked>
+								  <span class="slider round"></span>
+								</label>
+								<label>아이디 저장</label>
+							</div>
 	            <div class="loginbox-forgot">
-	                <a href="">아이디 찾기</a> /
-	                <a href="">비밀번호 찾기</a>
+	                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#login-modal" type="button">아이디 찾기</a> /
+	                <a href="#" data-backdrop="static" data-toggle="modal" data-target="#login-modal2" type="button">비밀번호 찾기</a>
 	            </div>
 	            <div class="loginbox-submit">
 	                <input type="button" onclick="loginCheck()" class="btn btn-primary btn-block" value="로그인" style="width: 100%">
@@ -278,11 +394,125 @@
         </form>
     </div>
 		</section>
+		
+		
+		<!-- 아이디 찾기 폼 -->
+			<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="login-box bg-white box-shadow border-radius-10">
+							<div class="login-title">
+								<h2 class="text-center text-primary">아이디 찾기</h2>
+							</div>
+							<form name="myform" method="post" action="${ctp}/member/midFind">
+								<div class="select-role">
+									<div class="btn-group btn-group-toggle" data-toggle="buttons">
+										<label class="btn" style="width: 50px;">
+											일반회원
+											<input type="radio" name="options" value="member">
+										</label>
+										<label class="btn" style="width: 50px;">
+											<input type="radio" name="options" value="rider">
+											라이더
+										</label>
+										<label class="btn" style="width: 50px;">
+											<input type="radio" name="options" value="store">
+											가게점주
+										</label>
+									</div>
+								</div>
+								<div class="input-group custom">
+									<input type="text" id="name" name="name" class="form-control form-control-lg" placeholder="성함을 입력하세요">
+									<div class="input-group-append custom">
+										<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
+									</div>
+								</div>
+								<div class="input-group custom">
+									<input type="text" id="email" name="email" class="form-control form-control-lg" placeholder="해당 이메일을 입력하세요">
+									<div class="input-group-append custom">
+										<span class="input-group-text"><i class="dw dw-email"></i></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="input-group mb-0">
+											<!--
+												use code for form submit
+												<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+											-->
+											<input class="btn btn-primary btn-lg btn-block" type="button" onclick="midFind()" value="아이디 찾기">
+											<input type="button" value="닫기" class="close btn btn-secondary btn-lg btn-block" data-dismiss="modal" aria-hidden="true">
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		<!-- 비밀번호 찾기 폼 -->
+			<div class="modal fade" id="login-modal2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="login-box bg-white box-shadow border-radius-10">
+							<div class="login-title">
+								<h2 class="text-center text-primary">비밀번호 찾기</h2>
+							</div>
+							<form name="myform2" method="post" action="${ctp}/member/pwdFind">
+								<div class="select-role">
+									<div class="btn-group btn-group-toggle" data-toggle="buttons">
+										<label class="btn" style="width: 50px;">
+											일반회원
+											<input type="radio" name="options" value="member">
+										</label>
+										<label class="btn" style="width: 50px;">
+											<input type="radio" name="options" value="rider">
+											라이더
+										</label>
+										<label class="btn" style="width: 50px;">
+											<input type="radio" name="options" value="store">
+											가게점주
+										</label>
+									</div>
+								</div>
+								<div class="input-group custom">
+									<input type="text" id="mid" name="mid" class="form-control form-control-lg" placeholder="아이디를 입력하세요">
+									<div class="input-group-append custom">
+										<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
+									</div>
+								</div>
+								<div class="input-group custom">
+									<input type="text" id="email" name="email" class="form-control form-control-lg" placeholder="해당 이메일을 입력하세요">
+									<div class="input-group-append custom">
+										<span class="input-group-text"><i class="dw dw-email"></i></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="input-group mb-0">
+											<!--
+												use code for form submit
+												<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+											-->
+											<input class="btn btn-primary btn-lg btn-block" type="button" onclick="pwdFind()" value="임시 비밀번호 발급">
+											<input type="button" value="닫기" class="close btn btn-secondary btn-lg btn-block" data-dismiss="modal" aria-hidden="true">
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		
 		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
     </main>
+	
     <script src="${ctp}/vendors/@popperjs/popper.min.js"></script>
     <script src="${ctp}/vendors/bootstrap/bootstrap.min.js"></script>
-    <script src="${ctp}/vendors/is/is.min.js"></script>
+    <script src="${ctp}/vendors/is/is.min.js"></script>			
     <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
     <script src="${ctp}/vendors/fontawesome/all.min.js"></script>
     <script src="${ctp}/assets/js/theme.js"></script>

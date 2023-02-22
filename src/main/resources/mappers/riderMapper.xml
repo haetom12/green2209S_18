@@ -27,6 +27,14 @@
 		select count(*) from foodorder where rider = #{rider};
 	</select>
 	
+	<select id="getMidFind" resultType="com.spring.green2209S_18.vo.RiderVO">
+		select * from rider where riderName = #{riderName} and riderEmail = #{riderEmail};
+	</select>
+	
+	<select id="getPwdFind" resultType="com.spring.green2209S_18.vo.RiderVO">
+		select * from rider where riderMid = #{riderMid} and riderEmail = #{riderEmail};
+	</select>
+	
 	
 	
 	<insert id="setRiderJoinOk">

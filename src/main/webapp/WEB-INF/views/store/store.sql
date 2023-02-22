@@ -150,9 +150,24 @@ create table storeTag (
 	select *, (select count(*) from ratingreply where ratingIdx=12) as replyCnt from ratingreply where ratingIdx=12 and replylevel = 0 or replylevel = 3;
 	select * from rating where storeName = #{storeName} order by idx desc limit #{startIndexNo},#{pageSize};
 	
+	select s.*, (select round(AVG(r.reviewStar), 1) from rating r where s.storeName = r.storeName and s.storeDel = 'NO') as rateAvg from store s 
+	where s.storePart = '치킨' and s.storeDel = 'NO' limit 0,5;
+	
 
 	-- 많이 팔린 상점 뽑기
 	SELECT storeName, COUNT(*) as cnt FROM foodorder GROUP BY storeName order by cnt desc limit 4;
 	
 	select * from storefoodmenu order by salePrice desc limit 8;	
+	
+	-- ------------------------------------------
+	select s.*, (select round(AVG(r.reviewStar), 1) from rating r where s.storeName = r.storeName and s.storeDel = 'NO') as rateAvg from store s 
+	where s.storePart = '치킨' and s.storeDel = 'NO' limit 0,5;
+	
+	
+	select s.*, (select round(AVG(r.reviewStar), 1) from rating r where s.storeName = r.storeName and s.storeDel = 'NO') as rateAvg,
+	(SELECT COUNT(*) FROM foodorder f, store s where s.storeName = f.storeName GROUP BY f.storeName) as cnt
+	from store s, foodorder f where s.storePart = '치킨' and s.storeDel = 'NO' and s.storeName = f.storeName limit 0,5;
+	
+		
+	
 	

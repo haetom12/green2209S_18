@@ -89,6 +89,16 @@ public class RiderServiceImpl implements RiderService {
 	public int setRiderDelete(String mid) {
 		return riderDAO.setRiderDelete(mid);
 	}
+
+	@Override
+	public RiderVO getMidFind(String name, String email) {
+		return riderDAO.getMidFind(name, email);
+	}
+
+	@Override
+	public RiderVO getPwdFind(String mid, String email) {
+		return riderDAO.getPwdFind(mid, email);
+	}
 	
 	
 }

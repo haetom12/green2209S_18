@@ -15,35 +15,32 @@
 	
 </head>
 <body class="w3-light-grey">
-
-<jsp:include page="/WEB-INF/views/admin/adminNav.jsp"></jsp:include>	
-
-<!-- Top container -->
-<div id="main" style="margin-left : 0; padding-left: 0px;">
-	<div class="w3-bar w3-top w3-large topbar" style="z-index:4">
-	<button class="openbtn"  onclick="openNav()">☰ 관리자 메뉴</button>
-	  <!-- <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button> -->
-	  <span class="w3-bar-item w3-right">Logo</span>
-	</div>
-	<!-- Overlay effect when opening sidebar on small screens -->
-	<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-
-	<!-- !PAGE CONTENT! -->
-	<div class="w3-main" id="main" style="margin-top:100px;">
-	  <div class="w3-row-padding w3-center w3-margin-top">
-			<div class="w3-third" style="margin-left: 30%;">
-			  <div class="w3-card w3-container" style="min-height:460px">	
-				  <br><h2>메뉴 설정</h2><br>
-				  <h4><a href="${ctp}/admin/storeBrandList">프랜차이즈 목록 추가/수정 <i class="fa fa-wrench" aria-hidden="true"></i></a></h4>
-				  <h4><a href="${ctp}/admin/storeBrandOptionList">프랜차이즈  메뉴 추가/수정 <i class="fa fa-hospital-o" aria-hidden="true"></i></a></h4>
-				  <h4><a href="#">가게 삭제 요청 <i class="fa fa-hospital-o" aria-hidden="true"></i></a></h4>
-				  <%-- <h4><a href="${ctp}/admin/adminStoreSubMenuOption">음식 태그별 추가 메뉴 추가/수정<i class="fa fa-trash"></i></a></h4> --%>
-			  </div>
+	<jsp:include page="/WEB-INF/views/admin/adminNav.jsp"></jsp:include>	
+	<!-- Top container -->
+	<div id="main" style="margin-left : 0; padding-left: 0px;">
+		<div class="w3-bar w3-top w3-large topbar" style="z-index:4">
+		<button class="openbtn"  onclick="openNav()">☰ 관리자 메뉴</button>
+		  <!-- <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button> -->
+		  <span class="w3-bar-item w3-right">Logo</span>
+		</div>
+		<!-- Overlay effect when opening sidebar on small screens -->
+		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+	
+		<!-- !PAGE CONTENT! -->
+		<div class="w3-main" id="main" style="margin-top:100px;">
+		  <div class="w3-row-padding w3-center w3-margin-top">
+				<div class="w3-third" style="margin-left: 30%;">
+				  <div class="w3-card w3-container" style="min-height:460px">	
+					  <br><h2>메뉴 설정</h2><br>
+					  <h4><a href="${ctp}/admin/storeBrandList">프랜차이즈 목록 추가/수정 <i class="fa fa-wrench" aria-hidden="true"></i></a></h4>
+					  <h4><a href="${ctp}/admin/storeBrandOptionList">프랜차이즈  메뉴 추가/수정 <i class="fa fa-hospital-o" aria-hidden="true"></i></a></h4>
+					  <h4><a href="#">가게 삭제 요청 <i class="fa fa-hospital-o" aria-hidden="true"></i></a></h4>
+					  <%-- <h4><a href="${ctp}/admin/adminStoreSubMenuOption">음식 태그별 추가 메뉴 추가/수정<i class="fa fa-trash"></i></a></h4> --%>
+				  </div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
 <script>
 
 // Get the DIV with overlay effect

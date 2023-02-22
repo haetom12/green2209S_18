@@ -140,5 +140,9 @@ public interface StoreDAO {
 
 	public List<FoodMenuVO> getSaleFoodList();
 
+	public StoreVO getMidFind(@Param("HostName") String name, @Param("storeEmail") String email);
+
+	public StoreVO getPwdFind(@Param("storeMid") String mid,@Param("storeEmail") String email);
+
 
 }

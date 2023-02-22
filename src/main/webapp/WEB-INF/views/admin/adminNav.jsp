@@ -1,110 +1,232 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
-
+<!DOCTYPE html>
+<html>
 <head>
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-	html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-	body {
-			  font-family: "Lato", sans-serif;
-			}
-		.sidebar {
-		  height: 100%;
-		  width: 0;
-		  position: fixed;
-		  z-index: 1;
-		  top: 0;
-		  left: 0;
-		  background-color: #4e148c;
-		  overflow-x: hidden;
-		  transition: 0.5s;
-		  padding-top: 60px;
-		}
-		
-		.sidebar a {
-		  padding: 8px 8px 8px 32px;
-		  text-decoration: none;
-		  font-size: 25px;
-		  color: white;
-		  display: block;
-		  transition: 0.3s;
-		}
-		
-		.sidebar a:hover {
-		  color: #fcf300;
-		}
-		
-		.sidebar .closebtn {
-		  position: absolute;
-		  top: 0;
-		  right: 25px;
-		  font-size: 36px;
-		  margin-left: 50px;
-		}
-		
-		.openbtn {
-		  font-size: 20px;
-		  cursor: pointer;
-		  background-color: #9600ff;
-		  color: white;
-		  padding: 10px 15px;
-		  border: none;
-		}
-		
-		.openbtn:hover {
-		  background-color: #444;
-		}
-		.topbar {
-		  background-color: #b892ff;			
-		}
-		
-		#main {
-		  transition: margin-left .5s;
-		  padding: 16px;
-		}
-		
-		/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-		@media screen and (max-height: 450px) {
-		  .sidebar {padding-top: 15px;}
-		  .sidebar a {font-size: 18px;}
-		}
-		
-		.w3-twothird {
-			width: 800px;
-		}
-		a {
-			text-decoration: none;
-		}
-		a:hover {
-			text-decoration: underline;
-		}
-		
-</style>
+	<!-- Basic Page Info -->
+	<meta charset="utf-8">
+	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+
+	<!-- Site favicon -->
+	<link rel="apple-touch-icon" sizes="180x180" href="${ctp}/vendors/images/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="${ctp}/vendors/images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="${ctp}/vendors/images/favicon-16x16.png">
+
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/core.css">
+	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="${ctp}/vendors/styles/style.css">
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+	
 </head>
-	<div id="mySidebar" class="sidebar">
-	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-	  <a href="${ctp}/h">홈페이지로</a>
-	  <a href="${ctp}/admin/adminMain">관리자 홈으로</a>
-	  <a href="${ctp}/admin/adminShopCategory">카테고리 수정</a>
-	  <a href="${ctp}/admin/adminStoreMain">브랜드별 메뉴 추가/수정</a>
+		
+<div class="pre-loader">
+		<div class="pre-loader-box">
+			<div class="loader-logo"><img src="vendors/images/deskapp-logo.svg" alt=""></div>
+			<div class='loader-progress' id="progress_div">
+				<div class='bar' id='bar1'></div>
+			</div>
+			<div class='percent' id='percent1'>50%</div>
+			<div class="loading-text">
+				로딩중...
+			</div>
+		</div>
 	</div>
-	<script>
 
-// Get the DIV with overlay effect
+	<div class="header">
+		<div class="header-left">
+			<div class="menu-icon dw dw-menu"></div>
+			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+		</div>
+	</div>
+	<div class="right-sidebar">
+		<div class="sidebar-title">
+			<h3 class="weight-600 font-16 text-blue">
+				Layout Settings
+				<span class="btn-block font-weight-400 font-12">User Interface Settings</span>
+			</h3>
+			<div class="close-sidebar" data-toggle="right-sidebar-close">
+				<i class="icon-copy ion-close-round"></i>
+			</div>
+		</div>
+		<div class="right-sidebar-body customscroll">
+			<div class="right-sidebar-body-content">
+				<h4 class="weight-600 font-18 pb-10">Header Background</h4>
+				<div class="sidebar-btn-group pb-30 mb-10">
+					<a href="javascript:void(0);" class="btn btn-outline-primary header-white active">White</a>
+					<a href="javascript:void(0);" class="btn btn-outline-primary header-dark">Dark</a>
+				</div>
 
-	function openNav() {
-	  document.getElementById("mySidebar").style.width = "250px";
-	  document.getElementById("main").style.marginLeft = "250px";
-	}
+				<h4 class="weight-600 font-18 pb-10">Sidebar Background</h4>
+				<div class="sidebar-btn-group pb-30 mb-10">
+					<a href="javascript:void(0);" class="btn btn-outline-primary sidebar-light ">White</a>
+					<a href="javascript:void(0);" class="btn btn-outline-primary sidebar-dark active">Dark</a>
+				</div>
 
-	function closeNav() {
-	  document.getElementById("mySidebar").style.width = "0";
-	  document.getElementById("main").style.marginLeft= "0";
-	}
-</script>
+				<h4 class="weight-600 font-18 pb-10">Menu Dropdown Icon</h4>
+				<div class="sidebar-radio-group pb-10 mb-10">
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebaricon-1" name="menu-dropdown-icon" class="custom-control-input" value="icon-style-1" checked="">
+						<label class="custom-control-label" for="sidebaricon-1"><i class="fa fa-angle-down"></i></label>
+					</div>
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebaricon-2" name="menu-dropdown-icon" class="custom-control-input" value="icon-style-2">
+						<label class="custom-control-label" for="sidebaricon-2"><i class="ion-plus-round"></i></label>
+					</div>
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebaricon-3" name="menu-dropdown-icon" class="custom-control-input" value="icon-style-3">
+						<label class="custom-control-label" for="sidebaricon-3"><i class="fa fa-angle-double-right"></i></label>
+					</div>
+				</div>
+
+				<h4 class="weight-600 font-18 pb-10">Menu List Icon</h4>
+				<div class="sidebar-radio-group pb-30 mb-10">
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebariconlist-1" name="menu-list-icon" class="custom-control-input" value="icon-list-style-1" checked="">
+						<label class="custom-control-label" for="sidebariconlist-1"><i class="ion-minus-round"></i></label>
+					</div>
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebariconlist-2" name="menu-list-icon" class="custom-control-input" value="icon-list-style-2">
+						<label class="custom-control-label" for="sidebariconlist-2"><i class="fa fa-circle-o" aria-hidden="true"></i></label>
+					</div>
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebariconlist-3" name="menu-list-icon" class="custom-control-input" value="icon-list-style-3">
+						<label class="custom-control-label" for="sidebariconlist-3"><i class="dw dw-check"></i></label>
+					</div>
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebariconlist-4" name="menu-list-icon" class="custom-control-input" value="icon-list-style-4" checked="">
+						<label class="custom-control-label" for="sidebariconlist-4"><i class="icon-copy dw dw-next-2"></i></label>
+					</div>
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebariconlist-5" name="menu-list-icon" class="custom-control-input" value="icon-list-style-5">
+						<label class="custom-control-label" for="sidebariconlist-5"><i class="dw dw-fast-forward-1"></i></label>
+					</div>
+					<div class="custom-control custom-radio custom-control-inline">
+						<input type="radio" id="sidebariconlist-6" name="menu-list-icon" class="custom-control-input" value="icon-list-style-6">
+						<label class="custom-control-label" for="sidebariconlist-6"><i class="dw dw-next"></i></label>
+					</div>
+				</div>
+
+				<div class="reset-options pt-30 text-center">
+					<button class="btn btn-danger" id="reset-settings">Reset Settings</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="left-side-bar">
+		<div class="brand-logo">
+			<a href="index.html">
+				<img src="${ctp}/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
+				<img src="${ctp}/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
+			</a>
+			<div class="close-sidebar" data-toggle="left-sidebar-close">
+				<i class="ion-close-round"></i>
+			</div>
+		</div>
+		<div class="menu-block customscroll">
+			<div class="sidebar-menu">
+				<ul id="accordion-menu">
+					<li>
+						<a href="${ctp}/admin/adminMain" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext">에드민 메인으로</span>
+						</a>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-group"></span><span class="mtext">회원관리</span>
+						</a>
+						<ul class="submenu">
+							<li class="dropdown">
+								<a href="javascript:;" class="dropdown-toggle">
+									<span class="micon fa fa-plus"></span><span class="mtext">일반회원관리</span>
+								</a>
+								<ul class="submenu child">
+									<li><a href="${ctp}/admin/memberList">활동중인 회원</a></li>
+									<li><a href="">활동 정지된 회원</a></li>
+									<li><a href="${ctp}/admin/memberDeleteList">회원 탈퇴 요청</a></li>
+								</ul>
+							</li>
+							<li><a href="">라이더 관리</a></li>
+							<li><a href="">가게 관리</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-calendar1"></span><span class="mtext">상품관리</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="${ctp}/admin/adminShopCategory">음식 카테고리 관리</a></li>
+							<li class="dropdown">
+								<a href="javascript:;" class="dropdown-toggle">
+									<span class="micon fa fa-plus"></span><span class="mtext">브랜드 및 메뉴 관리</span>
+								</a>
+								<ul class="submenu child">
+									<li><a href="${ctp}/admin/storeBrandList">브랜드 및 브랜드 메뉴 관리</a></li>
+									<li><a href="${ctp}/admin/storeBrandOptionList">프랜차이즈 메뉴 추가/수정</a></li>
+									<li><a href="javascript:;">가게 삭제 요청</a></li>
+								</ul>
+							</li>
+							
+						</ul>
+					</li>
+					<li>
+						<a href="#" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-star"></span><span class="mtext">별점관리</span>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-pencil"></span><span class="mtext">댓글관리</span>
+						</a>
+					</li>
+					<!-- 경계선  -->
+					<li>
+						<div class="dropdown-divider"></div>
+					</li>
+					
+					
+					<li>
+						<div class="sidebar-small-cap">Extra</div>
+					</li>
+					<li>
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-edit-2"></span><span class="mtext">Documentation</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="introduction.html">Introduction</a></li>
+							<li><a href="getting-started.html">Getting Started</a></li>
+							<li><a href="color-settings.html">Color Settings</a></li>
+							<li><a href="third-party-plugins.html">Third Party Plugins</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-paper-plane1"></span>
+							<span class="mtext">Landing Page <img src="${ctp}/vendors/images/coming-soon.png" alt="" width="25"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="mobile-menu-overlay"></div>
+	
+	<!-- js -->
+	<script src="${ctp}/vendors/scripts/core.js"></script>
+	<script src="${ctp}/vendors/scripts/script.min.js"></script>
+	<script src="${ctp}/vendors/scripts/process.js"></script>
+	<script src="${ctp}/vendors/scripts/layout-settings.js"></script>
+	<script src="${ctp}/src/plugins/apexcharts/apexcharts.min.js"></script>
+	<script src="${ctp}/vendors/scripts/dashboard.js"></script>
+</body>
+</html>

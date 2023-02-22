@@ -142,6 +142,8 @@ public class OrderController {
 		
 		List<CartVO> vos = memberService.getMyCartList(mid);
 		
+		StoreVO cVo = storeService.getstoreInfo(vos.get(0).getStoreName());
+		
 		if(vos.size() == 0) {
 			return "redirect:/msg/cartEmpty";
 		}
@@ -150,6 +152,7 @@ public class OrderController {
 		
 		StoreVO sVo = storeService.getstoreInfo(storeName);
 		
+		model.addAttribute("cVo", cVo);
 		model.addAttribute("mVo", mVo);
 		model.addAttribute("sVo", sVo);
 		model.addAttribute("vos", vos);

@@ -28,7 +28,7 @@ public class MessageController {
 			model.addAttribute("url", "member/memberLogin");
 		}
 		else if(msgFlag.equals("memberJoinOk")) {
-			model.addAttribute("msg", "회원가입 완료되었습니다!");
+			model.addAttribute("msg", "회원가입 완료되었습니다! 회원가입 축하 쿠폰이 발급되었으니 이메일 또는 홈페이지를 확인하세요!");
 			model.addAttribute("url", "member/memberLogin");
 		}
 		else if(msgFlag.equals("memberJoinNo")) {
@@ -375,6 +375,10 @@ public class MessageController {
 		else if(msgFlag.equals("storeDeleteNo")) {
 			model.addAttribute("msg", "회원탈퇴에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "/store/myStorePage");
+		}
+		else if(msgFlag.equals("midEmailSend")) {
+			model.addAttribute("msg", "아이디를 이메일로 전송하였습니다! 이메일을 확인하세요.");
+			model.addAttribute("url", "/member/memberLogin");
 		}
 		
 		return "include/message";

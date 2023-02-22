@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.green2209S_18.pagenation.PageProcess;
+import com.spring.green2209S_18.pagenation.PageVO;
 import com.spring.green2209S_18.service.AdminService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
-import com.spring.green2209S_18.vo.SubFoodMenuVO;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -33,11 +35,14 @@ public class AdminController {
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 	
+	@Autowired
+	PageProcess pageProcess;
+	
 	//어드민 페이지로
 	@RequestMapping(value = "adminMain", method = RequestMethod.GET)
 	public String adminMain() {
 		
-		return "admin/adminMain";
+		return "admin/adminMain2";
 	}
 	
 	//음식 카테고리 설정
@@ -123,8 +128,11 @@ public class AdminController {
 	}
 	
 	// 카테고리 수정 절차
-	@RequestMapping(value = "adminUpdateCategory", method = RequestMethod.POST)
+	@RequestMapping(value = "adminUpdateCategoryOk", method = RequestMethod.POST)
 	public String adminUpdateCategoryPost(StoreVO vo, MultipartFile fName, String pastPhoto, String pastCode) {
+		
+		System.out.println("vo : " + vo);
+		System.out.println("fname" + fName);
 		
 		int res = adminService.setCategoryUpdate(fName,vo,pastPhoto,pastCode);
 		
@@ -214,6 +222,10 @@ public class AdminController {
 	@RequestMapping(value = "adminBrandDelete", method = RequestMethod.POST)
 	public String adminBrandDeleteGet(String brandName) {
 		int res = 0;
+		
+		List<FoodMenuVO> vos = adminService.getstoreMenuList(brandName);
+		
+		if(vos.size() != 0) return "0";
 		
 		res = adminService.setadminBrandDelete(brandName);
 		return res+"";
@@ -444,7 +456,67 @@ public class AdminController {
 		if(res == 1) return "redirect:/msg/adminMenuUpdateOk?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8");
 		else return "redirect:/msg/adminMenuUpdateNo?brandName="+URLEncoder.encode(vo.getBrandName(), "UTF-8");
 	}
-
+	
+	// 어드민 회원 관리 폼 이동
+	@RequestMapping(value = "memberList", method = RequestMethod.GET)
+	public String adminmemberListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+		
+		System.out.println("정렬 : " + order);
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberList", search, searchString);		
+		
+		List<MemberVO> vos = adminService.getMemberList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/member/memberList";
+	}
+	// 탈퇴요청 회원 관리 폼 이동
+	@RequestMapping(value = "memberDeleteList", method = RequestMethod.GET)
+	public String memberDeleteListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+		
+		System.out.println("정렬 : " + order);
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberDeleteList", search, searchString);		
+		
+		List<MemberVO> vos = adminService.getDeleteMemberList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/member/memberDeleteList";
+	}
+	
+	// 회원 삭제
+	@Transactional
+	@RequestMapping(value = "adminMemberDeleteOk", method = RequestMethod.GET)
+	public String adminMemberDeleteOkPost(String mid) {
+		
+		
+		
+		
+		int res = adminService.setMemberDelete(mid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
 	
 }
 

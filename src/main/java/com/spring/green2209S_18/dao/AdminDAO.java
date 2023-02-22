@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -61,6 +62,19 @@ public interface AdminDAO {
 	public void setfoodMenuUpdate(@Param("vo") FoodMenuVO vo);
 
 	public List<SubFoodMenuVO> getChecksubTagList(@Param("foodTag") String foodTag,@Param("brandName") String brandName);
+
+	public List<FoodMenuVO> getAdminFoodList(@Param("brandName") String brandName);
+
+	public List<MemberVO> getMemberList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("search") String search, @Param("searchString") String searchString, @Param("order") String order);
+
+	public int totMemberListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public int totMemberDeleteListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<MemberVO> getDeleteMemberList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int setMemberDelete(@Param("mid") String mid);
 
 
 }

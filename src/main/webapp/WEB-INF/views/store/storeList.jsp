@@ -44,7 +44,7 @@
     				<ul class="product-category">
     					<li><a href="${ctp}/store/storeList?storePart=${storePart}" class="active">전 체</a></li>
     					<li><a href="${ctp}/store/storeList?storePart=${storePart}&ordered=rateAvg">별점 높은 순</a></li>
-    					<li><a href="#">주문 많은 순</a></li>
+    					<li><a href="${ctp}/store/storeList?storePart=${storePart}&ordered=orderCnt">주문 많은 순</a></li>
     					<li><a href="#">가까운 순</a></li>
     					<li><a href="#">찜 많은 순</a></li>
     				</ul>

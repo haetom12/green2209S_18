@@ -13,6 +13,7 @@ import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.dao.StoreDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -296,6 +297,21 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<FoodMenuVO> getstoreMenuList(String brandName) {
 		return adminDAO.getstoreMenuList(brandName);
+	}
+
+	@Override
+	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getMemberList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public List<MemberVO> getDeleteMemberList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getDeleteMemberList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public int setMemberDelete(String mid) {
+		return adminDAO.setMemberDelete(mid);
 	}
 
 }

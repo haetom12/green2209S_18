@@ -38,5 +38,9 @@ public interface MemberDAO {
 
 	public int setMemberDelete(@Param("mid") String mid);
 
+	public MemberVO getMidFind(@Param("memberName") String name,@Param("email") String email);
+
+	public MemberVO getPwdFind(@Param("mid") String mid, @Param("email") String email);
+
 
 }

@@ -455,6 +455,16 @@ public class StoreServiceImpl implements StoreService {
 		return storeDAO.getSaleFoodList();
 	}
 
+	@Override
+	public StoreVO getMidFind(String name, String email) {
+		return storeDAO.getMidFind(name, email);
+	}
+
+	@Override
+	public StoreVO getPwdFind(String mid, String email) {
+		return storeDAO.getPwdFind(mid, email);
+	}
+
 
 
 }

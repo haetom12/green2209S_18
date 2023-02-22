@@ -78,6 +78,16 @@ public class MemberServiceImpl implements MemberService {
 	public int setMemberDelete(String mid) {
 		return memberDAO.setMemberDelete(mid);
 	}
+
+	@Override
+	public MemberVO getMidFind(String name, String email) {
+		return memberDAO.getMidFind(name, email);
+	}
+
+	@Override
+	public MemberVO getPwdFind(String mid, String email) {
+		return memberDAO.getPwdFind(mid, email);
+	}
 	
 
 

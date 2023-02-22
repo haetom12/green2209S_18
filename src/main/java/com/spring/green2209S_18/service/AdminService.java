@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.green2209S_18.vo.FoodMenuVO;
+import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -61,5 +62,12 @@ public interface AdminService {
 	public List<SubFoodMenuVO> getChecksubTagList(String foodTag, String brandName);
 
 	public List<FoodMenuVO> getstoreMenuList(String brandName);
+
+	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public List<MemberVO> getDeleteMemberList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public int setMemberDelete(String mid);
+
 
 }

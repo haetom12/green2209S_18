@@ -29,6 +29,9 @@
 		
 		select s.*, (select round(AVG(r.reviewStar), 1) from rating r where s.storeName = r.storeName and s.storeDel = 'NO') as rateAvg from store s where s.storePart = #{storePart} and s.storeDel = 'NO' <if test='ordered !="" '> order by ${ordered} desc</if> limit #{startIndexNo},#{pageSize};
 		
+		<if test='ordered =="orderCnt" '>
+			
+		</if>
 	</select>
 
 	<select id="getStoreFoodMenu" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
@@ -145,11 +148,17 @@
   	select * from store where storeName=#{storeName};
   </select>
 
-	<!--  -->
 	 <select id="getSaleFoodList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
   	select * from storefoodmenu where <![CDATA[salePrice > 1]]> order by salePrice desc limit 8;
   </select>
-	
+
+	 <select id="getMidFind" resultType="com.spring.green2209S_18.vo.StoreVO">
+  	select * from store where HostName=#{HostName} and storeEmail = #{storeEmail};
+  </select>
+
+	 <select id="getPwdFind" resultType="com.spring.green2209S_18.vo.StoreVO">
+  	select * from store where storeMid=#{storeMid} and storeEmail = #{storeEmail};
+  </select>
 	
 	
 	

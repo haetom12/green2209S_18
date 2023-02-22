@@ -25,4 +25,8 @@ public interface RiderService {
 
 	public int setRiderDelete(String mid);
 
+	public RiderVO getMidFind(String name, String email);
+
+	public RiderVO getPwdFind(String mid, String email);
+
 }

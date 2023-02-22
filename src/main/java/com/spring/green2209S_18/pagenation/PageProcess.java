@@ -3,6 +3,7 @@ package com.spring.green2209S_18.pagenation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.dao.MemberDAO;
 import com.spring.green2209S_18.dao.OrderDAO;
 import com.spring.green2209S_18.dao.RiderDAO;
@@ -21,6 +22,9 @@ public class PageProcess {
 	
 	@Autowired
 	RiderDAO riderDAO;
+	
+	@Autowired
+	AdminDAO adminDAO;
 	
 	
 	public PageVO totRecCnt(int pag, int pageSize, String section, String search, String searchString) {
@@ -45,6 +49,12 @@ public class PageProcess {
 		}
 		else if(section.equals("riderOrderList")) {
 			totRecCnt = riderDAO.totOderListCnt(search);			
+		}
+		else if(section.equals("adminMemberList")) {
+			totRecCnt = adminDAO.totMemberListCnt(search,searchString);			
+		}
+		else if(section.equals("adminMemberDeleteList")) {
+			totRecCnt = adminDAO.totMemberDeleteListCnt(search,searchString);			
 		}
 		
 //		else if(section.equals("webMessage")) {

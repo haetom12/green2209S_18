@@ -110,51 +110,28 @@
     
 		// 장바구니에서 선택한 상품만 '주문'처리하기
     function order(){
-			/* let address1 = document.getElementById("address1").value;
-			let address2 = document.getElementById("address2").value;
-			let maxIdx = document.getElementById("maxIdx").value; */
 			
-			let orderTotalPrice = document.getElementById("orderTotalPrice").value
+			let minPrice = document.getElementById("minPrice").value;
 			
-			alert("총합 : " + orderTotalPrice);
+			let orderTotalPrice = document.getElementById("orderTotalPrice").value;
 			
-			/* let foodName = document.getElementById("foodName").value;
-			let thumbImg = document.getElementById("thumbImg").value;
-			let mainPrice = document.getElementById("mainPrice").value;
-			let subMenuName = document.getElementById("subMenuName").value;
-			let optionPrice = document.getElementById("optionPrice").value;
-			let optionNum = document.getElementById("optionNum").value;
-			let totalPrice = document.getElementById("totalPrice").value;
-			let orderAddress = document.getElementById("orderAddress").value;
-			let mid = document.getElementById("mid").value;
-			let baesong = document.getElementById("baesong").value;
-			 */
+			/* alert("총합 : " + orderTotalPrice); */
 			
-      
       for(let i=1; i<=maxIdx; i++){
         if($("#idx"+i).length != 0 && document.getElementById("idx"+i).checked){
           document.getElementById("checkItem"+i).value="1";
         }
       }
 
-      /* document.myform.baesong.value=document.getElementById("baesong").value; */
-      
       if(document.getElementById("lastPrice").value==0){
         alert("장바구니에서 주문처리할 상품을 선택해주세요!");
         return false;
       } 
+      else if(minPrice > orderTotalPrice)    {
+    	  alert("결제금액이 배달 최소 금액보다 작습니다. \n 배달최소금액 : " + minPrice + "원");
+        return false;
+      }   
       else {
-/*         alert("baesong" + baesong);
-    	  console.log("foodName" , foodName);
-    	  console.log("mainPrice" , mainPrice); 
-    	  console.log("subMenuName" , subMenuName); 
-    	  console.log("optionPrice" , optionPrice); 
-    	  console.log("optionNum" , optionNum); 
-    	  console.log("thumbImg" , thumbImg); 
-    	  console.log("totalPrice" , totalPrice); 
-    	  console.log("orderAddress" , orderAddress); 
-    	  console.log("mid" , mid); */
-    	 	
         document.myform.submit();
       }
     }
@@ -189,7 +166,7 @@
     				<div class="cart-list">
     					<h2 class="text-center">나의 장바구니</h2><br />
     					<form name="myform" method="post">
-	    					<input type="button" value="선택삭제" onclick="deleteCheck()" class="btn btn-danger mb-1" style="float: right;"/>
+	    					<!-- <input type="button" value="선택삭제" onclick="deleteCheck()" class="btn btn-danger mb-1" style="float: right;"/> -->
 		    				<table class="table">
 							    <thead class="thead-primary">
 									  <tr class="text-center">
@@ -250,6 +227,7 @@
 							  <input type="hidden" id="maxIdx" name="maxIdx" value="${maxIdx}"/>
 							  <input type="hidden" name="orderTotalPrice" id="orderTotalPrice"/>
 						    <input type="hidden" name="baesong" value="${sVo.deliverCost}"/>
+						    <input type="hidden" id="minPrice" name="minPrice" value="${cVo.minPrice}"/>
 							</form>
 					  </div>
     			</div>
@@ -274,10 +252,16 @@
     						<span>$3.00</span>
     					</p> -->
     					<hr>
-    					<p class="d-flex total-price">
-    						<span>총</span>
-    						<span><input type="text" id="lastPrice" value="0" class="totSubBox form-control" style="width: 100px;" readonly/></span>
-    					</p>
+    					<div>
+    						<span>배달최소금액</span>&nbsp;&nbsp;&nbsp;<span>:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    						<span><fmt:formatNumber value="${cVo.minPrice}" pattern='#,###원'/></span>
+    					</div>
+    					<div>
+	    					<p class="d-flex total-price mt-2">
+	    						<span>총</span>
+	    						<span><input type="text" id="lastPrice" value="0" class="totSubBox form-control" style="width: 100px;" readonly/></span>
+	    					</p>
+    					</div>
     				</div>
     				<p><input type="button" value="결제하기" class="btn btn-primary py-3 px-4" onClick="order()"/></p>
     				<!-- <p><a href="#" onClick="order()" class="btn btn-primary py-3 px-4">결제하기</a></p> -->

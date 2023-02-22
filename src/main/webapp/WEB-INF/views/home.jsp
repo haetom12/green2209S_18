@@ -11,25 +11,59 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="${ctp}/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="${ctp}/css/animate.css">
-    
     <link rel="stylesheet" href="${ctp}/css/owl.carousel.min.css">
     <link rel="stylesheet" href="${ctp}/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="${ctp}/css/magnific-popup.css">
-
     <link rel="stylesheet" href="${ctp}/css/aos.css">
-
     <link rel="stylesheet" href="${ctp}/css/ionicons.min.css">
-
     <link rel="stylesheet" href="${ctp}/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="${ctp}/css/jquery.timepicker.css">
-
-    
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+    <script>
+    
+    	'use strict';
+    	
+    	function fCheck(storeName, menuIdx) {
+    		
+				let sPart = '${sPart}';
+    		
+    		if(sPart == "") {
+    			alert("찜하기는 로그인 후 가능합니다!");
+    			return false;
+    		}
+    		
+    		let ans = confirm("선택된 메뉴를 찜하시겠습니까?");
+	    	if(!ans) return false;
+	    	
+	    	$.ajax({
+	    		type   : "post",
+	    		url    : "${ctp}/order/wishListInput",
+	    		data   : {
+	    			storeName : storeName,
+	    			menuIdx : menuIdx
+	    			},
+	    		success:function(res) {
+	    			if(res == "1") {
+	    				alert("메뉴가 찜목록에 추가되었습니다!");
+	    				location.reload();
+	    			}
+	    			else {
+	    				alert("이미 찜목록에 들어가 있는 제품입니다!");
+	    			}
+	    		},
+	    		error : function() {
+	    			alert("전송 오류~~");
+	    		}
+	    	});
+			}
+    	
+    </script>
+    
   </head>
   <body class="goto-here">
    	<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
@@ -159,12 +193,13 @@
     			<c:forEach var="fVo" items="${fVos}">
 	    			<div class="col-md-6 col-lg-3 ftco-animate">
 	    				<div class="product">
-	    					<a href="#" class="img-prod"><img class="img-fluid" src="${ctp}/data/storeFoodPhoto/${fVo.foodPhoto}" alt="Colorlib Template">
+	    					<a href="${ctp}/store/storeMenuInfo?menuIdx=${fVo.menuIdx}" class="img-prod"><img class="img-fluid" src="${ctp}/data/storeFoodPhoto/${fVo.foodPhoto}" alt="Colorlib Template">
 						 <!-- <span class="status">30%</span>
 	    						<div class="overlay"></div> -->
 	    					</a>
 	    					<div class="text py-3 pb-4 px-3 text-center">
-	    						<h3><a href="#">${fVo.foodName}</a></h3>
+	    						<h3><a href="#">${fVo.storeName}</a></h3>
+	    						<h4>${fVo.foodName}</h4>
 	    						<div class="d-flex">
 	    							<div class="pricing">
 			    						<p class="price"><span class="mr-2 price-dc">${fVo.price}원</span><span class="price-sale"><fmt:formatNumber value="${fVo.price - fVo.salePrice}" pattern="#,###원" /></span></p>
@@ -172,13 +207,10 @@
 		    					</div>
 		    					<div class="bottom-area d-flex px-3">
 		    						<div class="m-auto d-flex">
-		    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-		    								<span><i class="ion-ios-menu"></i></span>
-		    							</a>
-		    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+		    							<!-- <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
 		    								<span><i class="ion-ios-cart"></i></span>
-		    							</a>
-		    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
+		    							</a> -->
+		    							<a href="javascript:fCheck('${fVo.storeName}', '${fVo.menuIdx}');" class="heart d-flex justify-content-center align-items-center ">
 		    								<span><i class="ion-ios-heart"></i></span>
 		    							</a>
 	    							</div>

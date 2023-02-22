@@ -30,6 +30,14 @@
 	<select id="totOderListCnt" resultType="int">
 		select count(*) from foodorder where mid = #{mid};
 	</select>
+	
+	<select id="getMidFind" resultType="com.spring.green2209S_18.vo.MemberVO">
+		select * from member where memberName = #{memberName} and email = #{email};
+	</select>
+	
+	<select id="getPwdFind" resultType="com.spring.green2209S_18.vo.MemberVO">
+		select * from member where mid = #{mid} and email = #{email};
+	</select>
 
 
 
