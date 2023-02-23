@@ -555,11 +555,10 @@
 					      <tr align="center">
 					    	  <td class="m-0 p-0" colspan="4">
 								    <!-- 상품 상세설명 보여주기 -->
-								    <div id="content" style="background-color:#eee;" class="text-left"><br/>
+								    <div id="content" style="background-color:#eee; height: 500px; overflow: auto;" class="text-left"><br/>
 								      ${rVo.content}
-								      <hr />
 								    </div>		
-								    
+								    <hr />
 								    <form name="replyForm">
 										  <table class="table" style="background-color:#eee;">
 										    <tr>
