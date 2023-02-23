@@ -28,14 +28,18 @@
     <script>
     	'use strict';
     	
-    	function deleteCheck(foodName) {
+    	function deleteCheck(menuIdx) {
 	    	let ans = confirm("선택된 메뉴를 삭제하시겠습니까?");
 	    	if(!ans) return false;
+	    	
+	    	let storeName = '${vo.storeName}';
 	    	
 	    	$.ajax({
 	    		type   : "post",
 	    		url    : "${ctp}/store/storeMenuDeleteOk",
-	    		data   : {foodName : foodName},
+	    		data   : {
+	    			menuIdx : menuIdx
+	    			},
 	    		success:function(res) {
 	    			if(res == "0") {
 	    				alert("메뉴 삭제에 실패하였습니다.");
@@ -107,7 +111,7 @@
 								        <c:if test="${vo.admintag != 'O'}">
 													<input type="button" value="수정" onclick="location.href='${ctp}/store/storeMenuUpdate?foodName=${vo.foodName}';" class="btn btn-warning"/>
 												</c:if>
-												<input type="button" value="삭제" onclick="deleteCheck('${vo.foodName}')" class="btn btn-danger"/>
+												<input type="button" value="삭제" onclick="deleteCheck(${vo.menuIdx})" class="btn btn-danger"/>
 							        </td>
 							      </tr><!-- END TR-->
 						      </c:forEach>

@@ -29,6 +29,7 @@ public class StoreVO {
 	private String brandName;
 	private String foodTag;
 	private String admintag;
+	private String joinDate;
 	
 	private int cnt;
 	

@@ -16,8 +16,15 @@ public class test {
 		
 		String expiration = df.format(cal.getTime());
 		
-		System.out.println(expiration);
     
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+		Date now = new Date();
+		String now_dt = format.format(now);
+		System.out.println(now_dt);
+		
+		
+		
 	}
 
 

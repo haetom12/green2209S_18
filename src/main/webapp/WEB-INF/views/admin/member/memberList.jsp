@@ -37,28 +37,29 @@
     }
     
     function ordered() {
-    	let order = myform.orderForm.value;
+    	let order = myform.order.value;
+    	let search = myform.search.value;
+    	let searchString = myform.searchString.value;
     	
-			location.href='${ctp}/admin/memberList?order='+order;
+			location.href='${ctp}/admin/memberList?order='+order+'&search='+search+'&searchString='+searchString;
 		}
 	
 	function DelCheck(mid) {
-    	let ans = confirm("선택된 회원을 활동 정지 시키겠습니까?");
+    	let ans = confirm("선택된 회원을 탈퇴 전환 시키겠습니까?");
     	if(!ans) return false;
     	   	
     	$.ajax({
     		type   : "post",
-    		url    : "${ctp}/admin/adminMenuDelete",
+    		url    : "${ctp}/admin/adminMemberDeleteCheck",
     		data   : {
     			mid : mid
     			},
     		success:function(res) {
-    		  if(res == "2") {
-    				alert("제품이 없는곳을 제외한 모든 곳에서 메뉴를 삭제하였습니다.\n확인이 필요합니다.");
-    				location.reload();
+    		  if(res == "1") {
+    				alert("회원을 활동 정지 상태로 전환하였습니다!");
     			}
     			else {
-    				alert("메뉴가 완전히 삭제 되었습니다!");
+    				alert("회원 전화에 실패하였습니다! 다시 시도하세요.");
     				location.reload();
     			}
     		},
@@ -89,17 +90,17 @@
 						<form name="myform">
 					  	<div class="row mb-2">
 					  	  <div class="col form-inline">
-					  	    <select name="orderForm" style="width:18%;" onchange="ordered()" class="form-control mr-1">
+					  	    <select name="order" style="width:18%;" onchange="ordered()" class="form-control mr-1">
 					          <option value="memberName" ${order=='memberName' ? "selected" : ""} >이름 순</option>
 					          <option value="orderCnt" ${order=='orderCnt' ? "selected" : ""}>주문횟수 순</option>
 					          <option value="birthday" ${order=='birthday' ? "selected" : ""}>생년월일 순</option>
 					        </select>
 					  	    <select name="search" style="width:15%;" class="form-control mr-1">
-					          <option value="mid">아이디</option>
-					          <option value="nickName">별명</option>
-					          <option value="name">성명</option>
+					          <option value="mid" ${search=='mid' ? "selected" : ""}>아이디</option>
+					          <option value="nickName" ${search=='nickName' ? "selected" : ""}>별명</option>
+					          <option value="name" ${search=='name' ? "selected" : ""}>성명</option>
 					        </select>
-					  	    <input type="text" name="searchString" class="form-control mr-1" autofocus />&nbsp;
+					  	    <input type="text" name="searchString" class="form-control mr-1" value="${searchString}" autofocus />&nbsp;
 					  	    <input type="button" value="아이디개별검색" onclick="midSearch();" class="btn btn-primary" />
 					  	  </div>
 					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/memberList';" class="btn btn-success mr-2">전체검색</button></div>

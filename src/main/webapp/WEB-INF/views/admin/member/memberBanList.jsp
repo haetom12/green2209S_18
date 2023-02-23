@@ -41,53 +41,26 @@
     	let search = myform.search.value;
     	let searchString = myform.searchString.value;
     	
-			location.href='${ctp}/admin/memberDeleteList?order='+order+'&search='+search+'&searchString='+searchString;
+			location.href='${ctp}/admin/memberBanList?order='+order+'&search='+search+'&searchString='+searchString;
 		}
 	
 	function DelCheck(mid) {
-    	let ans = confirm("선택된 회원을 삭제하겠습니까?");
+    	let ans = confirm("선택된 회원을 활성화시키겠습니까?");
     	if(!ans) return false;
     	   	
     	$.ajax({
     		type   : "post",
-    		url    : "${ctp}/admin/adminMemberDeleteOk",
-    		data   : {
-    			mid : mid
-    			
-    			},
-    		success:function(res) {
-    		  if(res == "0") {
-    				alert("회원 삭제에 실패하였습니다. 다시 시도해주세요.");
-    				location.reload();
-    			}
-    			else {
-    				alert("회원이 삭제 되었습니다!");
-    				location.reload();
-    			}
-    		},
-    		error : function() {
-    			alert("전송 오류~~");
-    		}
-    	});
-    }
-	
-	function restoreCheck(mid) {
-    	let ans = confirm("선택된 회원을 다시 활성화시키겠습니까?");
-    	if(!ans) return false;
-    	   	
-    	$.ajax({
-    		type   : "post",
-    		url    : "${ctp}/admin/adminMemberRestore",
+    		url    : "${ctp}/admin/adminMemberBanListOk",
     		data   : {
     			mid : mid
     			},
     		success:function(res) {
     		  if(res == "0") {
-    				alert("회원복구에 실패하였습니다. 다시 시도해주세요.");
+    				alert("회원 수정에 실패하였습니다. 다시 시도해주세요.");
     				location.reload();
     			}
     			else {
-    				alert("회원이 복구되었습니다!");
+    				alert("회원 활동이 수정되었습니다!");
     				location.reload();
     			}
     		},
@@ -111,14 +84,14 @@
 			<div class="min-height-200px">
 				<div class="card-box mb-30">
 					<div class="pd-20">
-						<h3 class="h3 text-center">탈퇴 요청 회원 리스트</h3>
+						<h3 class="h3 text-center">활동 정지된 회원 리스트</h3>
 					</div>
 					<div class="pb-20">
 					
 						<form name="myform">
 					  	<div class="row mb-2">
 					  	  <div class="col form-inline">
-					  	    <select name="order" style="width:18%;" onchange="ordered()" class="form-control mr-1">
+					  	    <select name="order" style="width:18%;" onchange="ordered()" class="form-control mr-1 ml-1">
 					          <option value="memberName" ${order=='memberName' ? "selected" : ""} >이름 순</option>
 					          <option value="orderCnt" ${order=='orderCnt' ? "selected" : ""}>주문횟수 순</option>
 					          <option value="birthday" ${order=='birthday' ? "selected" : ""}>생년월일 순</option>
@@ -131,7 +104,7 @@
 					  	    <input type="text" name="searchString" class="form-control mr-1" autofocus />&nbsp;
 					  	    <input type="button" value="아이디개별검색" onclick="midSearch();" class="btn btn-primary" />
 					  	  </div>
-					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/memberDeleteList';" class="btn btn-success mr-2">전체검색</button></div>
+					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/memberBanList';" class="btn btn-success mr-2">전체검색</button></div>
 					  	</div>
 					  </form>
 					  
@@ -166,8 +139,7 @@
 							    	<td>${vo.orderCnt}</td>
 							    	<td>${vo.userDel}</td>
 							    	<td>
-							    	 <input type="button" onclick="restoreCheck('${vo.mid}')" class="btn btn-primary" value="회원 복구" />
-							    	 <input type="button" onclick="DelCheck('${vo.mid}')" class="btn btn-danger" value="회원 삭제" />
+							    	 <input type="button" onclick="DelCheck('${vo.mid}')" class="btn btn-danger" value="활동 재개" />
 							    	</td>
 							    </tr>
 						    	<c:set var="curScrStartNo" value="${curScrStartNo - 1}"/>
@@ -179,24 +151,24 @@
 	            <div class="btn-group mb-15" style="margin: 0 auto;">
 	              <ul>
 	              	<c:if test="${pageVo.pag > 1}">
-							      <li class="btn btn-light"><a href="${ctp}/admin/memberDeleteList?pageSize=${pageVo.pageSize}&pag=1&search=${search}&searchString=${searchString}&order=${order}">&lt;&lt;</a></li>
+							      <li class="btn btn-light"><a href="${ctp}/admin/memberBanList?pageSize=${pageVo.pageSize}&pag=1&search=${search}&searchString=${searchString}&order=${order}">&lt;&lt;</a></li>
 							    </c:if>
 	                <c:if test="${pageVo.curBlock > 0}">
-							      <li><a class="page-link text-secondary" href="${ctp}/admin/memberDeleteList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&lt;</a></li>
+							      <li><a class="page-link text-secondary" href="${ctp}/admin/memberBanList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&lt;</a></li>
 							    </c:if>
 	                <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
 							      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-							    		<li class="btn btn-primary"><a href="${ctp}/admin/memberDeleteList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}"><font color="white">${i}</font></a></li>
+							    		<li class="btn btn-primary"><a href="${ctp}/admin/memberBanList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}"><font color="white">${i}</font></a></li>
 							    	</c:if>
 							      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-							    		<li class="btn btn-light"><a href="${ctp}/admin/memberDeleteList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}">${i}</a></li>
+							    		<li class="btn btn-light"><a href="${ctp}/admin/memberBanList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}">${i}</a></li>
 							    	</c:if>
 							    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">	
-								      <li><a class="btn btn-light"href="${ctp}/admin/memberDeleteList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&gt;</a></li>
+								      <li><a class="btn btn-light"href="${ctp}/admin/memberBanList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&gt;</a></li>
 								    </c:if>
 							    </c:forEach>
 							     <c:if test="${pageVo.pag < pageVo.totPage}">
-							       <li class="btn btn-light"><a href="${ctp}/admin/memberDeleteList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}&search=${search}&searchString=${searchString}&order=${order}">&gt;&gt;</a></li>
+							       <li class="btn btn-light"><a href="${ctp}/admin/memberBanList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}&search=${search}&searchString=${searchString}&order=${order}">&gt;&gt;</a></li>
 							     </c:if>
 	              </ul>
 	            </div>

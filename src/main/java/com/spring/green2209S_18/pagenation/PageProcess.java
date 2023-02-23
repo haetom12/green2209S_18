@@ -56,6 +56,15 @@ public class PageProcess {
 		else if(section.equals("adminMemberDeleteList")) {
 			totRecCnt = adminDAO.totMemberDeleteListCnt(search,searchString);			
 		}
+		else if(section.equals("adminMemberBanList")) {
+			totRecCnt = adminDAO.totMemberBanListCnt(search,searchString);			
+		}
+		else if(section.equals("adminRiderList")) {
+			totRecCnt = adminDAO.totAdminRiderListCnt(search,searchString);			
+		}
+		else if(section.equals("adminRiderDeleteList")) {
+			totRecCnt = adminDAO.totRiderDeleteListCnt(search,searchString);			
+		}
 		
 //		else if(section.equals("webMessage")) {
 //			String mid = search;

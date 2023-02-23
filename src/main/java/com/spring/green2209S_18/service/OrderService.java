@@ -61,6 +61,17 @@ public interface OrderService {
 
 	public List<StoreVO> getMostSellStore();
 
+	public int setDeleteMember(String mid);
+
+	public List<CartVO> getMostSellFood(String foodTag);
+
+	public List<CartVO> getThisMonthOrderList(String now_date);
+
+	public List<CartVO> getMostOrderStore(String foodTag);
+
+	public void setDeleteUpdateMenu(int menuIdx);
+
+	public List<StoreVO> getkategoryCnt();
 
 
 

@@ -31,6 +31,12 @@ public class CartVO {
   private int maxIdx;   // 주문번호를 구하기위한 기존 최대 비밀번호필드
   private int orderTotalPrice2;
   
+  // 관리자 데이터에 뿌릴 변수
+  private int orderCnt;
+  private int totalProfit;
+  private String nickName;
+  
+  private String foodTag;
   
   // 배달 vo
 	private String rider;

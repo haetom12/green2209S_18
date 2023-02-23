@@ -38,7 +38,7 @@
 	
 	
 	<insert id="setRiderJoinOk">
-		insert into rider values (default, #{vo.riderMid}, #{vo.riderPwd}, #{vo.riderName}, #{vo.age}, #{vo.riderPhone}, #{vo.riderEmail}, default, default);	
+		insert into rider values (default, #{vo.riderMid}, #{vo.riderPwd}, #{vo.riderName}, #{vo.age}, #{vo.riderPhone}, #{vo.riderEmail}, default, default, default);	
 	</insert>
 	
 	

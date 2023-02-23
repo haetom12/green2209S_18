@@ -306,5 +306,36 @@ public class OrderServiceImpl implements OrderService {
 		return orderDAO.getMostSellStore();
 	}
 
+	@Override
+	public int setDeleteMember(String mid) {
+		return orderDAO.setDeleteMember(mid);
+	}
+
+	@Override
+	public List<CartVO> getMostSellFood(String foodTag) {
+		return orderDAO.getMostSellFood(foodTag);
+	}
+
+	@Override
+	public List<CartVO> getThisMonthOrderList(String now_date) {
+		return orderDAO.getThisMonthOrderList(now_date);
+	}
+
+	@Override
+	public List<CartVO> getMostOrderStore(String foodTag) {
+		return orderDAO.getMostOrderStore(foodTag);
+	}
+
+	@Override
+	public void setDeleteUpdateMenu(int menuIdx) {
+		orderDAO.setDeleteUpdateMenu(menuIdx);
+	}
+
+	@Override
+	public List<StoreVO> getkategoryCnt() {
+		return orderDAO.getkategoryCnt();
+	}
+
+
 	
 }

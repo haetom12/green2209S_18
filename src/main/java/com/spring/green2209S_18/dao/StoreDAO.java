@@ -60,7 +60,7 @@ public interface StoreDAO {
 
 	public List<FoodMenuVO> getStoreFoodMenuByTag(@Param("storeName") String storeName,@Param("foodTag") String foodTag);
 
-	public int setStoreMenuDeleteOk(@Param("foodName") String foodName);
+	public int setStoreMenuDeleteOk(@Param("menuIdx") int menuIdx);
 
 	public FoodMenuVO storeFoodNameCheck(@Param("storeName") String storeName, @Param("foodName") String foodName);
 
@@ -143,6 +143,8 @@ public interface StoreDAO {
 	public StoreVO getMidFind(@Param("HostName") String name, @Param("storeEmail") String email);
 
 	public StoreVO getPwdFind(@Param("storeMid") String mid,@Param("storeEmail") String email);
+
+	public FoodMenuVO getFoodInfo(@Param("menuIdx") int menuIdx);
 
 
 }

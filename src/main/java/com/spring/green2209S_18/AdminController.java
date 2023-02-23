@@ -2,7 +2,11 @@ package com.spring.green2209S_18;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import javax.mail.Store;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,10 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.pagenation.PageProcess;
 import com.spring.green2209S_18.pagenation.PageVO;
 import com.spring.green2209S_18.service.AdminService;
+import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
@@ -30,7 +37,13 @@ public class AdminController {
 	AdminService adminService;
 	
 	@Autowired
+	AdminDAO adminDAO;
+	
+	@Autowired
 	StoreService storeService;
+	
+	@Autowired
+	OrderService orderService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -40,9 +53,94 @@ public class AdminController {
 	
 	//어드민 페이지로
 	@RequestMapping(value = "adminMain", method = RequestMethod.GET)
-	public String adminMain() {
+	public String adminMain(Model model, @RequestParam(name="foodTag", defaultValue = "", required = false) String foodTag) {
 		
-		return "admin/adminMain2";
+		// 가장 많이 팔린 음식
+		List<CartVO> fVos = orderService.getMostSellFood(foodTag);
+
+		String[] foodName = new String[4];
+		int[] orderCnt = new int[4];
+		
+		if(fVos.size() != 0) {
+			for(int i=0; i<fVos.size(); i++) {
+				foodName[i] = fVos.get(i).getFoodName();
+				orderCnt[i] = fVos.get(i).getOrderCnt();
+			}
+		}
+		
+		model.addAttribute("foodName",foodName);
+		model.addAttribute("orderCnt",orderCnt);
+		
+		
+		// 가장 많이 판매한 가게
+		List<CartVO> sVos = orderService.getMostOrderStore(foodTag);
+		
+		String[] storeName = new String[4];
+		int[] storeOrderCnt = new int[4];
+		
+		if(sVos.size() != 0) {
+			for(int i=0; i<sVos.size(); i++) {
+				storeName[i] = sVos.get(i).getStoreName();
+				storeOrderCnt[i] = sVos.get(i).getOrderCnt();
+			}
+		}
+		
+		model.addAttribute("storeName", storeName);
+		model.addAttribute("storeOrderCnt", storeOrderCnt);
+		
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+		Date now = new Date();
+		String thisMonth = format.format(now);
+		/*
+		// 이번달 자료
+		
+		List<CartVO> oVos = orderService.getThisMonthOrderList(thisMonth);
+		*/
+		
+		// 이번달 최고 VIP 회원
+		List<CartVO> VIPMemberVos = adminDAO.getThisMonthMember(thisMonth);
+		
+		// 이번달 최고 거래량 지점
+		List<CartVO> bestStoreVos = adminDAO.getThisMonthStore(thisMonth);
+		
+		// 이번달 최고 베스트 드라이버
+		List<CartVO> bestRiderVos = adminDAO.getThisMonthRider(thisMonth);
+		
+		
+		// 음식 카테고리별 갯수
+		List<StoreVO> kVos = orderService.getkategoryCnt();
+		
+		String[] storePart = new String[4];
+		int[] partCnt = new int[4];
+		
+		if(kVos.size() != 0) {
+			for(int i=0; i<sVos.size(); i++) {
+				storePart[i] = kVos.get(i).getStorePart();
+				partCnt[i] = kVos.get(i).getCnt();
+			}
+		}
+		
+		// 총 회원수 / 총 거래량
+		int totMember = adminService.getToTMember();
+		int totStore = adminDAO.getToTStore();
+		int totRider = adminDAO.getTotRider();
+		int totOrder = adminDAO.getToTOrder();
+		
+		model.addAttribute("totMember" , totMember);
+		model.addAttribute("totStore" , totStore);
+		model.addAttribute("totRider" , totRider);
+		model.addAttribute("totOrder" , totOrder);
+		
+		model.addAttribute("bestStoreVos" , bestStoreVos);
+		model.addAttribute("VIPMemberVos" , VIPMemberVos);
+		model.addAttribute("bestRiderVos" , bestRiderVos);
+		
+		model.addAttribute("storePart" , storePart);
+		model.addAttribute("partCnt" , partCnt);
+		model.addAttribute("kVos" , kVos);
+		
+		return "admin/adminMain";
 	}
 	
 	//음식 카테고리 설정
@@ -130,9 +228,6 @@ public class AdminController {
 	// 카테고리 수정 절차
 	@RequestMapping(value = "adminUpdateCategoryOk", method = RequestMethod.POST)
 	public String adminUpdateCategoryPost(StoreVO vo, MultipartFile fName, String pastPhoto, String pastCode) {
-		
-		System.out.println("vo : " + vo);
-		System.out.println("fname" + fName);
 		
 		int res = adminService.setCategoryUpdate(fName,vo,pastPhoto,pastCode);
 		
@@ -376,14 +471,6 @@ public class AdminController {
 		// (음식점)태그에 속해있는 추가옵션이 있는지 확인
 //		List<SubFoodMenuVO> storeSubVos = storeService.getChecksubTagList(foodTag,brandName);
 		
-		/*
-		 * if(vos.size() != 0) return "0";
-		 * 
-		 * res = adminService.setStoreTagDelete(foodTag, brandName);
-		 * 
-		 * return res+"";
-		 */
-		
 		if(vos.size() == 0 && storevos.size() == 0) {
 			res = adminService.setStoreTagDelete(foodTag, brandName);
 			return "1"; 
@@ -430,7 +517,6 @@ public class AdminController {
 	}
 	
 	
-	
 	// 프랜차이즈 메뉴 수정 폼으로 이동
 	@RequestMapping(value = "adminStoreMenuUpdate", method = RequestMethod.GET)
 	public String adminStoreMenuUpdateGet(String brandName, String foodName, Model model) {
@@ -466,8 +552,6 @@ public class AdminController {
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
 		
-		System.out.println("정렬 : " + order);
-		
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberList", search, searchString);		
 		
 		List<MemberVO> vos = adminService.getMemberList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
@@ -480,6 +564,7 @@ public class AdminController {
 		
 		return "admin/member/memberList";
 	}
+	
 	// 탈퇴요청 회원 관리 폼 이동
 	@RequestMapping(value = "memberDeleteList", method = RequestMethod.GET)
 	public String memberDeleteListGet(Model model,
@@ -488,8 +573,6 @@ public class AdminController {
 			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
-		
-		System.out.println("정렬 : " + order);
 		
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberDeleteList", search, searchString);		
 		
@@ -504,19 +587,156 @@ public class AdminController {
 		return "admin/member/memberDeleteList";
 	}
 	
+	// 커뮤니티 밴 회원 관리 폼 이동
+	@RequestMapping(value = "memberBanList", method = RequestMethod.GET)
+	public String memberBanListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberBanList", search, searchString);		
+		
+		List<MemberVO> vos = adminService.getBanMemberList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/member/memberBanList";
+	}
+	
 	// 회원 삭제
 	@Transactional
-	@RequestMapping(value = "adminMemberDeleteOk", method = RequestMethod.GET)
+	@ResponseBody
+	@RequestMapping(value = "adminMemberDeleteOk", method = RequestMethod.POST)
 	public String adminMemberDeleteOkPost(String mid) {
 		
-		
-		
-		
+		//
+		int res2 = orderService.setDeleteMember(mid);
+
 		int res = adminService.setMemberDelete(mid);
+		
+		if(res == 1 && res2 == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	// 회원 활동 정상 수정
+	@ResponseBody
+	@RequestMapping(value = "adminMemberBanListOk", method = RequestMethod.POST)
+	public String adminMemberBanListOkPost(String mid) {
+		
+		int res = adminService.setUnLockMember(mid);
 		
 		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
 		else return "0";
 	}
+	
+	// 회원 활동 탈퇴로 수정
+	@ResponseBody
+	@RequestMapping(value = "adminMemberDeleteCheck", method = RequestMethod.POST)
+	public String adminMemberDeleteCheckPost(String mid) {
+		
+		int res = adminService.setAdminMemberDeleteCheck(mid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	// 회원 탈퇴에서 활동으로 수정
+	@ResponseBody
+	@RequestMapping(value = "adminMemberRestore", method = RequestMethod.POST)
+	public String adminMemberRestorePost(String mid) {
+		
+		int res = adminService.setadminMemberRestore(mid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	
+	// 어드민 라이더 폼 이동
+	@RequestMapping(value = "riderList", method = RequestMethod.GET)
+	public String adminRiderListListGet(Model model,
+			@RequestParam(name="order", defaultValue = "riderIdx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminRiderList", search, searchString);		
+		
+		List<MemberVO> vos = adminService.getRiderList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/rider/riderList";
+	}
+	
+	// 어드민 라이더 탈퇴신청 폼 이동
+	@RequestMapping(value = "riderDeleteList", method = RequestMethod.GET)
+	public String adminRiderDeleteListGet(Model model,
+			@RequestParam(name="order", defaultValue = "riderIdx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminRiderDeleteList", search, searchString);		
+		
+		List<MemberVO> vos = adminService.getRiderDeleteList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/rider/riderDeleteList";
+	}
+	
+	
+	// 라이더 탈퇴 처리
+	@ResponseBody
+	@RequestMapping(value = "adminRiderDeleteOk", method = RequestMethod.POST)
+	public String adminRiderDeleteOkPost(String riderMid) {
+		
+		int res = adminService.setAdminRiderDeleteOk(riderMid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	// 라이더 상태를 탈퇴신청으로
+	@ResponseBody
+	@RequestMapping(value = "adminRiderDelete", method = RequestMethod.POST)
+	public String adminRiderDeletePost(String riderMid) {
+		
+		int res = adminService.setAdminRiderDelete(riderMid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	// 라이더 상태를 탈퇴신청으로
+	@ResponseBody
+	@RequestMapping(value = "adminRiderRestore", method = RequestMethod.POST)
+	public String adminRiderRestorePost(String riderMid) {
+		
+		int res = adminService.setAdminRiderRestore(riderMid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	
 	
 }
 

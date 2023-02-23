@@ -314,4 +314,54 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.setMemberDelete(mid);
 	}
 
+	@Override
+	public List<MemberVO> getBanMemberList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getBanMemberList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public int setUnLockMember(String mid) {
+		return adminDAO.setUnLockMember(mid);
+	}
+
+	@Override
+	public int setAdminMemberDeleteCheck(String mid) {
+		return adminDAO.setAdminMemberDeleteCheck(mid);
+	}
+
+	@Override
+	public int setadminMemberRestore(String mid) {
+		return adminDAO.setadminMemberRestore(mid);
+	}
+
+	@Override
+	public List<MemberVO> getRiderList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getRiderList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public List<MemberVO> getRiderDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getRiderDeleteList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public int setAdminRiderDeleteOk(String riderMid) {
+		return adminDAO.setAdminRiderDeleteOk(riderMid);
+	}
+
+	@Override
+	public int setAdminRiderDelete(String riderMid) {
+		return adminDAO.setAdminRiderDelete(riderMid);
+	}
+
+	@Override
+	public int setAdminRiderRestore(String riderMid) {
+		return adminDAO.setAdminRiderRestore(riderMid);
+	}
+
+	@Override
+	public int getToTMember() {
+		return adminDAO.getToTMember();
+	}
+
 }

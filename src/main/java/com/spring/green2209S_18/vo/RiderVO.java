@@ -12,5 +12,6 @@ public class RiderVO {
 	private String riderPhone;
 	private String riderEmail;
 	private String deleteRequest;
+	private String joinDate;
 	private int reportRider;
 }

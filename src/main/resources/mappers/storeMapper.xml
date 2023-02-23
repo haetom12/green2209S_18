@@ -103,6 +103,10 @@
 		select * from storeFoodMenu where menuIdx = #{menuIdx};
 	</select>
 
+	<select id="getFoodInfo" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
+		select * from storeFoodMenu where menuIdx = #{menuIdx};
+	</select>
+
 	<select id="getstoreInfo" resultType="com.spring.green2209S_18.vo.StoreVO">
 		select * from store where storeName = #{storeName};
 	</select>
@@ -163,7 +167,7 @@
 	
 	
 	<insert id="setStoreJoinOk">
-		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime}, #{vo.deliverCost}, #{vo.minPrice});
+		insert into store values (default, #{vo.storeName}, #{vo.storePart}, #{vo.storeNumber}, #{vo.storeMid}, #{vo.storePwd}, #{vo.HostName}, #{vo.storeAddress}, #{vo.logoPhoto}, #{vo.storeEmail}, #{vo.storeLatitude}, #{vo.storeLongitude}, default, #{vo.storeTime}, #{vo.deliverCost}, #{vo.minPrice}, default);
 	</insert>
 	
 	<insert id="setAdminStoreTag">
@@ -258,7 +262,9 @@
 	</delete>
 	
 	<delete id="setStoreMenuDeleteOk">
-		delete from storeFoodMenu where foodName = #{foodName};
+		delete from cart where menuIdx = #{menuIdx};
+		delete from wishlist where menuIdx = #{menuIdx};
+		delete from storeFoodMenu where menuIdx = #{menuIdx};
 	</delete>
 	
 	<delete id="storefoodTagDelete">

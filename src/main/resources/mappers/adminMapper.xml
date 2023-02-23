@@ -59,16 +59,77 @@
 		select * from member where userDel = 'NO'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
 	</select>
 
+	<select id="getRiderList" resultType="com.spring.green2209S_18.vo.RiderVO">
+		select * from rider where deleteRequest = 'NO'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+
+	<select id="getRiderDeleteList" resultType="com.spring.green2209S_18.vo.RiderVO">
+		select * from rider where deleteRequest = 'OK'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+
 	<select id="getDeleteMemberList" resultType="com.spring.green2209S_18.vo.MemberVO">
 		select * from member where userDel = 'OK'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getBanMemberList" resultType="com.spring.green2209S_18.vo.MemberVO">
+		select * from member where userBan = 'OK'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
 	</select>
 
 	<select id="totMemberListCnt" resultType="int">
 		select count(*) from member where userDel = 'NO' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
 	</select>
 
+	<select id="totAdminRiderListCnt" resultType="int">
+		select count(*) from rider where deleteRequest = 'NO' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+	
+	<select id="totMemberBanListCnt" resultType="int">
+		select count(*) from member where userBan = 'OK' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
 	<select id="totMemberDeleteListCnt" resultType="int">
 		select count(*) from member where userDel = 'OK' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totRiderDeleteListCnt" resultType="int">
+		select count(*) from rider where deleteRequest = 'OK' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="getToTMember" resultType="int">
+		select count(*) from member;
+	</select>
+
+	<select id="getToTStore" resultType="int">
+		select count(*) from store;
+	</select>
+
+	<select id="getTotRider" resultType="int">
+		select count(*) from rider;
+	</select>
+
+	<select id="getToTOrder" resultType="int">
+		select count(*) from foodorder;
+	</select>
+
+	<select id="getThisMonthStore" resultType="com.spring.green2209S_18.vo.CartVO">
+		select r.storeName, r.orderDate, (select count(*) from foodorder r where s.storeName = r.storeName) as orderCnt,
+		(select sum(r.orderTotalPrice) from foodorder r where s.storeName = r.storeName) as totalProfit
+		from foodorder r, store s
+		where  r.storeName = s.storeName and substring(r.orderDate,1,7)=#{thisMonth} group by r.storeName order by orderCnt desc limit 5;
+	</select>
+
+	<select id="getThisMonthMember" resultType="com.spring.green2209S_18.vo.CartVO">
+		select (select m.memberNickName from member m where m.mid = r.mid) as nickName, r.orderDate, (select count(*) from foodorder r where m.mid = r.mid) as orderCnt,
+		(select sum(r.orderTotalPrice) from foodorder r where m.mid = r.mid) as totalProfit
+		from foodorder r, member m
+		where  m.mid = r.mid and substring(r.orderDate,1,7)=#{thisMonth} group by r.mid order by orderCnt desc limit 5;
+	</select>
+
+	<select id="getThisMonthRider" resultType="com.spring.green2209S_18.vo.CartVO">
+		select (select m.riderName from rider m where m.riderMid = r.rider) as rider, r.orderDate, (select count(*) from foodorder r where m.riderMid = r.rider) as orderCnt,
+		(select sum(r.orderTotalPrice) from foodorder r where m.riderMid = r.rider) as totalProfit
+		from foodorder r, rider m
+		where  m.riderMid = r.rider and substring(r.orderDate,1,7)=#{thisMonth} group by r.rider order by orderCnt desc limit 5;
 	</select>
 
 
@@ -109,6 +170,26 @@
 	<update id="setfoodMenuUpdate">
 		update adminFoodMenu set foodName = #{vo.foodName}, foodTag = #{vo.foodTag}, price = #{vo.price}, runOut = #{vo.runOut}, sale = #{vo.sale}, salePrice = #{vo.salePrice}, foodPhoto = #{vo.foodPhoto}, subMenu = #{vo.subMenu}, foodInfo = #{vo.foodInfo} where menuIdx = #{vo.menuIdx};
 	</update>
+
+	<update id="setUnLockMember">
+		update member set userBan = 'NO' where mid = #{mid};
+	</update>
+
+	<update id="setAdminMemberDeleteCheck">
+		update member set userDel = 'OK' where mid = #{mid};
+	</update>
+
+	<update id="setadminMemberRestore">
+		update member set userDel = 'NO' where mid = #{mid};
+	</update>
+
+	<update id="setAdminRiderDelete">
+		update rider set deleteRequest = 'OK' where riderMid = #{riderMid};
+	</update>
+	
+	<update id="setAdminRiderRestore">
+		update rider set deleteRequest = 'NO' where riderMid = #{riderMid};
+	</update>
 	
 	
 	
@@ -134,6 +215,10 @@
 
 	<delete id="setMemberDelete">
 		delete from member where mid = #{mid};
+	</delete>
+
+	<delete id="setAdminRiderDeleteOk">
+		delete from rider where riderMid = #{riderMid};
 	</delete>
 	
 </mapper>

@@ -59,4 +59,17 @@ public interface OrderDAO {
 
 	public List<StoreVO> getMostSellStore();
 
+	public int setDeleteMember(@Param("mid") String mid);
+
+	public List<CartVO> getMostSellFood(@Param("foodTag") String foodTag);
+
+	public List<CartVO> getThisMonthOrderList(@Param("now_date") String now_date);
+
+	public List<CartVO> getMostOrderStore(@Param("storePart") String foodTag);
+
+	public void setDeleteUpdateMenu(@Param("menuIdx") int menuIdx);
+
+	public List<StoreVO> getkategoryCnt();
+
+
 }

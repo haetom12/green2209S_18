@@ -41,11 +41,9 @@
 
 
 
-
 	<insert id="setMemberJoinOk">
-		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.memberName},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},default,default,default,default,#{vo.memberLatitude},#{vo.memberLongitude},#{vo.memberNickName});
+		insert into member values (default,#{vo.mid},#{vo.pwd},#{vo.memberName},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},default,default,default,default,default,#{vo.memberLatitude},#{vo.memberLongitude},#{vo.memberNickName}, default);
 	</insert>
-	
 	
 	
 	

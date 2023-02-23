@@ -152,12 +152,29 @@
 								</a>
 								<ul class="submenu child">
 									<li><a href="${ctp}/admin/memberList">활동중인 회원</a></li>
-									<li><a href="">활동 정지된 회원</a></li>
+									<li><a href="${ctp}/admin/memberBanList">커뮤니티 활동 정지된 회원</a></li>
 									<li><a href="${ctp}/admin/memberDeleteList">회원 탈퇴 요청</a></li>
 								</ul>
 							</li>
-							<li><a href="">라이더 관리</a></li>
-							<li><a href="">가게 관리</a></li>
+							<li class="dropdown">
+								<a href="javascript:;" class="dropdown-toggle">
+									<span class="micon fa fa-plus"></span><span class="mtext">라이더 관리</span>
+								</a>
+								<ul class="submenu child">
+									<li><a href="${ctp}/admin/riderList">활동중인 라이더</a></li>
+									<li><a href="${ctp}/admin/riderDeleteList">라이더 탈퇴 요청</a></li>
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a href="javascript:;" class="dropdown-toggle">
+									<span class="micon fa fa-plus"></span><span class="mtext">가게 관리</span>
+								</a>
+								<ul class="submenu child">
+									<li><a href="">활동중인 가게</a></li>
+									<li><a href="">가게 탈퇴 요청</a></li>
+								</ul>
+							</li>
+							<li><a href="">신고 관리</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -176,7 +193,6 @@
 									<li><a href="javascript:;">가게 삭제 요청</a></li>
 								</ul>
 							</li>
-							
 						</ul>
 					</li>
 					<li>

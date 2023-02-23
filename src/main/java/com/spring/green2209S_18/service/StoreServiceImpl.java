@@ -180,8 +180,8 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public int setStoreMenuDeleteOk(String foodName) {
-		return storeDAO.setStoreMenuDeleteOk(foodName);
+	public int setStoreMenuDeleteOk(int menuIdx) {
+		return storeDAO.setStoreMenuDeleteOk(menuIdx);
 	}
 
 	@Override
@@ -463,6 +463,11 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public StoreVO getPwdFind(String mid, String email) {
 		return storeDAO.getPwdFind(mid, email);
+	}
+
+	@Override
+	public FoodMenuVO getFoodInfo(int menuIdx) {
+		return storeDAO.getFoodInfo(menuIdx);
 	}
 
 

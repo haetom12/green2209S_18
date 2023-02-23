@@ -168,6 +168,71 @@ create table storeTag (
 	(SELECT COUNT(*) FROM foodorder f, store s where s.storeName = f.storeName GROUP BY f.storeName) as cnt
 	from store s, foodorder f where s.storePart = '치킨' and s.storeDel = 'NO' and s.storeName = f.storeName limit 0,5;
 	
+	-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		
+	select storeName, (select count(*) from foodorder r where s.storeName = r.storeName and s.storeDel = 'NO') as orderCnt from store s 
+	where s.storePart = '치킨' and s.storeDel = 'NO' order by orderCnt desc limit 4;
+	
+	--
+	select foodName, (select count(*) from foodorder r where s.foodName = r.foodName) as orderCnt from storefoodmenu s 
+	where s.foodTag = '치킨' order by orderCnt desc limit 4;
+	
+	-- 날짜별 먹은거
+	select r.foodName, r.orderDate, (select count(*) from foodorder r where s.foodName = r.foodName) as orderCnt from foodorder r, storefoodmenu s
+	where s.foodTag = '치킨' and r.foodName = s.foodName group by r.foodName order by orderCnt desc limit 4;
+
+	select r.foodName, r.orderDate, (select count(*) from foodorder r where s.foodName = r.foodName) as orderCnt from foodorder r, storefoodmenu s
+	where s.foodTag = '치킨' and r.foodName = s.foodName group by r.foodName order by orderCnt desc limit 4;
+	
+	
+	-- 2월에 가장 많이 팔린 메뉴와 거래량
+	select r.foodName, r.orderDate, (select count(*) from foodorder r where s.foodName = r.foodName) as orderCnt from foodorder r, storefoodmenu s
+	where  r.foodName = s.foodName and substring(r.orderDate,1,7)='2023-02' group by r.foodName order by orderCnt desc limit 4;
+
+	-- 2월에 와 거래량이 많은 가게 와 매출액
+	select r.storeName, r.orderDate, (select count(*) from foodorder r where s.storeName = r.storeName) as orderCnt,
+	(select sum(r.orderTotalPrice) from foodorder r where s.storeName = r.storeName) as totalProfit
+	from foodorder r, store s
+	where  r.storeName = s.storeName and substring(r.orderDate,1,7)='2023-02' group by r.storeName order by orderCnt desc limit 4;
+	
+	-- 2월에 와 거래량이 회원 과 지출액
+	select (select m.memberNickName from member m where m.mid = r.mid) as nickName, r.orderDate, (select count(*) from foodorder r where m.mid = r.mid) as orderCnt,
+	(select sum(r.orderTotalPrice) from foodorder r where m.mid = r.mid) as totalProfit
+	from foodorder r, member m
+	where  m.mid = r.mid and substring(r.orderDate,1,7)='2023-02' group by r.mid order by orderCnt desc limit 4;
+		
+	-- 2월에 와 배달을 많이한 라이더
+	select (select m.riderName from rider m where m.riderMid = r.rider) as rider, r.orderDate, (select count(*) from foodorder r where m.riderMid = r.rider) as orderCnt,
+	(select sum(r.orderTotalPrice) from foodorder r where m.riderMid = r.rider) as totalProfit
+	from foodorder r, rider m
+	where  m.riderMid = r.rider and substring(r.orderDate,1,7)='2023-02' group by r.rider order by orderCnt desc limit 4;
+	
+	-- 카테고리별 구매 퍼센트
+	select (select s.storePart from store s where s.storeName = r.storeName) as storePart, 
+	(select count(*) from foodorder r where s.storeName = r.storeName) as orderCnt,
+	from foodorder r, store s where r.storeName = s.storeName group by s.storePart order by orderCnt;
+
+	select s.storePart from store s, foodorder r where s.storeName = r.storeName group by s.storePart;
+	
+	select count(*) from store s, foodorder r where s.storeName = r.storeName group by s.storePart;
+	
+	-- 카테고리별 구매 퍼센트@@@@@@@@@@@@@@@@@
+	SELECT s.storePart AS storePart, COUNT(*) AS cnt FROM foodorder f, store s where s.storeName = f.storeName GROUP BY storePart;	
+	-------------------------
+	select (select s.storePart where s.storeName = r.storeName) as storePart ,(select count(*) from store s, foodorder r where s.storeName = r.storeName) as cnt 
+	from store s, foodorder r where s.storeName = r.storeName group by s.storePart;
+	--------
+	
+	select (select s.storePart from store s, foodorder r where s.storeName = r.storeName) as storePart, 
+	(select count(*) from store s, foodorder r where s.storeName = r.storeName) as orderCnt from store s, foodorder r where r.storeName = s.storeName group by storePart;
+	
+	-- 가게랑 총 거래숫자
+	select r.storeName,  (select count(*) from foodorder r where s.storeName = r.storeName) as orderCnt from foodorder r, store s
+	where s.storePart = '치킨' and r.storeName = s.storeName group by r.storeName order by orderCnt desc limit 4;
+	
+	select * from foodorder where substring(orderDate,1,7)='2023-02' order by orderDate;
+	
+	select r.foodName, (select count(*) from foodorder where s.foodName = r.foodName) as orderCnt from foodorder r, storefoodmenu s 
+	where substring(r.orderDate,1,7)='2023-02' group by r.foodName order by orderCnt desc;
 	
 	

@@ -310,6 +310,9 @@
         				alert("댓글이 입력되었습니다.");
         				location.reload();
         			}
+        			else if(res == "3") {
+        				alert("커뮤니티 활동이 정지되어 댓글 기능을 사용할 수 없습니다.");
+        			}
         			else {
         				alert("댓글 입력 실패~~~");
         			}

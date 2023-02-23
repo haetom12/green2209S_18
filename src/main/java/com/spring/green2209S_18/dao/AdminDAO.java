@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
@@ -75,6 +76,47 @@ public interface AdminDAO {
 			@Param("searchString") String searchString, @Param("order") String order);
 
 	public int setMemberDelete(@Param("mid") String mid);
+
+	public int totMemberBanListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<MemberVO> getBanMemberList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int setUnLockMember(@Param("mid") String mid);
+
+	public int setAdminMemberDeleteCheck(@Param("mid") String mid);
+
+	public int setadminMemberRestore(@Param("mid") String mid);
+
+	public int totAdminRiderListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<MemberVO> getRiderList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public List<MemberVO> getRiderDeleteList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int setAdminRiderDeleteOk(@Param("riderMid") String riderMid);
+
+	public int setAdminRiderDelete(@Param("riderMid") String riderMid);
+
+	public int setAdminRiderRestore(@Param("riderMid") String riderMid);
+
+	public int totRiderDeleteListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public int getToTMember();
+
+	public int getToTStore();
+
+	public int getTotRider();
+
+	public int getToTOrder();
+
+	public List<CartVO> getThisMonthStore(@Param("thisMonth") String thisMonth);
+
+	public List<CartVO> getThisMonthMember(@Param("thisMonth") String thisMonth);
+
+	public List<CartVO> getThisMonthRider(@Param("thisMonth") String thisMonth);
 
 
 }

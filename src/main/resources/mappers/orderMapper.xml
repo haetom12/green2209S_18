@@ -47,7 +47,26 @@
 		SELECT storeName, COUNT(*) as cnt FROM foodorder GROUP BY storeName order by cnt desc limit 4;
 	</select>
 	
+	<select id="getThisMonthOrderList" resultType="com.spring.green2209S_18.vo.CartVO">
+		select * from foodorder where substring(orderDate,1,7)='2023-02' order by orderDate;
+	</select>
 	
+	<select id="getMostSellFood" resultType="com.spring.green2209S_18.vo.CartVO">
+		select r.foodName, substring(r.orderDate,1,10) as orderDate, (select count(*) from foodorder r where s.foodName = r.foodName) as orderCnt from foodorder r, storefoodmenu s
+		where <if test='foodTag !="" '> s.foodTag = #{foodTag} and </if> r.foodName = s.foodName group by r.foodName order by orderCnt desc limit 4;
+	</select>
+	
+	<select id="getMostOrderStore" resultType="com.spring.green2209S_18.vo.CartVO">
+		select r.storeName, substring(r.orderDate,1,10) as orderDate, (select count(*) from foodorder r where s.storeName = r.storeName) as orderCnt from foodorder r, store s
+		where <if test='storePart !="" '> s.storePart = #{storePart} and </if> r.storeName = s.storeName group by r.storeName order by orderCnt desc limit 4;
+		
+		<!-- 		select r.storeName,  (select count(*) from foodorder r where s.storeName = r.storeName) as orderCnt from foodorder r, store s
+			where s.storePart = '치킨' and r.storeName = s.storeName group by r.storeName order by orderCnt desc limit 4; -->
+	</select>
+	
+	<select id="getkategoryCnt" resultType="com.spring.green2209S_18.vo.StoreVO">
+		SELECT s.storePart AS storePart, COUNT(*) AS cnt FROM foodorder f, store s where s.storeName = f.storeName GROUP BY storePart;
+	</select>
 	
 	<update id="setFoodOrderOk2">
 		update foodOrder set menuIdx =  concat(menuIdx,'/',#{vo.menuIdx}) , foodName =  concat(foodName,'/',#{vo.foodName}), mainPrice =  concat(mainPrice,'/',#{vo.mainPrice}),
@@ -105,6 +124,19 @@
 	
 	<delete id="myCartDelete">
 		delete from cart where idx = #{idx};
+	</delete>	
+
+	<delete id="setDeleteUpdateMenu">
+		delete from cart where menuIdx = #{menuIdx};
+		delete from wishlist where menuIdx = #{menuIdx};
+	</delete>	
+	
+	<delete id="setDeleteMember">
+		delete from cart where mid = #{mid};
+		delete from wishlist where mid = #{mid};
+		delete from coupon where mid = #{mid};
+		delete from ratingreply where mid = #{mid};
+		delete from rating where mid = #{mid};
 	</delete>	
 	
 </mapper>

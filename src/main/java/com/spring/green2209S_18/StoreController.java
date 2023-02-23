@@ -31,6 +31,7 @@ import com.spring.green2209S_18.service.AdminService;
 import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MailVO;
 import com.spring.green2209S_18.vo.MemberVO;
@@ -455,9 +456,12 @@ public class StoreController {
 // 선택한 메뉴 삭제
 	@ResponseBody
 	@RequestMapping(value = "/storeMenuDeleteOk", method = RequestMethod.POST)
-	public String storeMenuDeleteOkPost(String foodName) {
+	public String storeMenuDeleteOkPost(int menuIdx) {
 		int res = 0;
-		res = storeService.setStoreMenuDeleteOk(foodName);
+		FoodMenuVO vo = storeService.getFoodInfo(menuIdx);
+		
+		res = storeService.setStoreMenuDeleteOk(menuIdx);
+		
 		
 		return res+"";
 	}
@@ -496,10 +500,13 @@ public class StoreController {
 	}
 	
 	// 음식 수정 작업
+	@Transactional
 	@RequestMapping(value = "/storeMenuUpdate", method = RequestMethod.POST)
 	public String storeMenuUpdatePost(FoodMenuVO vo, String pastPhoto, String pastFoodName, MultipartFile fName) {
 		
 		int res = storeService.setStoreMenuUpdate(vo, fName, pastPhoto, pastFoodName);
+		
+		orderService.setDeleteUpdateMenu(vo.getMenuIdx());
 		
 		if(res == 1) return "redirect:/msg/storeMenuUpdateOk";
 		else return "redirect:/msg/storeMenuUpdateNo";
@@ -931,7 +938,13 @@ public class StoreController {
 	// 평점 댓글 달기
 	@ResponseBody
 	@RequestMapping(value = "storeReReplyInput", method = RequestMethod.POST)
-	public String storeReReplyInputPost(ratingReplyVO vo) {
+	public String storeReReplyInputPost(ratingReplyVO vo, HttpSession session) {
+		String mid = (String) session.getAttribute("sMid");
+		
+		MemberVO mVo = memberService.getMemberIdCheck(mid);
+		
+		if(mVo.getUserBan().equals("OK")) return "3";
+		
 		int res = 0;
 		
 		res = storeService.setRatingReReplyInput(vo);

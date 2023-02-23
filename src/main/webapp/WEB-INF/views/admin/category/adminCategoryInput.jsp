@@ -30,7 +30,6 @@
 		  let codeCheckSw = 0;
 		  let categoryCheckSw = 0;
 			
-			
 		  //  체크후 서버로 전송(submit)
 		  function fCheck() {
 			  let categoryStoreCode = myform.categoryStoreCode.value;
@@ -99,7 +98,6 @@
 				  	success:function(res) {
 				  		if(res == "1") {
 				  			document.getElementById("demo").innerHTML = "<font color = 'red'> 존재하는 코드입니다! </font>"; 
-				  			
 				  		}
 				  		else {
 				  			document.getElementById("demo").innerHTML = "<font color = 'blue'><b>사용가능한 코드입니다!</b> </font>";  
@@ -151,7 +149,7 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/views/admin/adminNav2.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/admin/adminNav.jsp"></jsp:include>
 	
 	<!-- =============================================== -->
 

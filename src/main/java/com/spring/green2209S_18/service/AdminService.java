@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.StoreVO;
@@ -68,6 +69,27 @@ public interface AdminService {
 	public List<MemberVO> getDeleteMemberList(int startIndexNo, int pageSize, String search, String searchString, String order);
 
 	public int setMemberDelete(String mid);
+
+	public List<MemberVO> getBanMemberList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public int setUnLockMember(String mid);
+
+	public int setAdminMemberDeleteCheck(String mid);
+
+	public int setadminMemberRestore(String mid);
+
+	public List<MemberVO> getRiderList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public List<MemberVO> getRiderDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public int setAdminRiderDeleteOk(String riderMid);
+
+	public int setAdminRiderDelete(String riderMid);
+
+	public int setAdminRiderRestore(String riderMid);
+
+	public int getToTMember();
+
 
 
 }

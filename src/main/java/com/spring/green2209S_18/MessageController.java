@@ -28,6 +28,14 @@ public class MessageController {
 			model.addAttribute("url", "member/memberLogin");
 		}
 		else if(msgFlag.equals("memberJoinOk")) {
+			model.addAttribute("msg", "회원가입 완료되었습니다!");
+			model.addAttribute("url", "member/memberLogin");
+		}
+		else if(msgFlag.equals("adminLoginOk")) {
+			model.addAttribute("msg", "어드민님 환영합니다~!");
+			model.addAttribute("url", "admin/adminMain");
+		}
+		else if(msgFlag.equals("memberJoinOk2")) {
 			model.addAttribute("msg", "회원가입 완료되었습니다! 회원가입 축하 쿠폰이 발급되었으니 이메일 또는 홈페이지를 확인하세요!");
 			model.addAttribute("url", "member/memberLogin");
 		}

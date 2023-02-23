@@ -227,7 +227,7 @@ public class MemberController {
 				session.setAttribute("sMid", mid);
 				model.addAttribute("vo",vo);
 				
-				return "redirect:/member/memberLoginOk";
+				return "redirect:/msg/adminLoginOk";
 			}
 			// 로그인 실패
 			else {
@@ -322,7 +322,7 @@ public class MemberController {
 			e.printStackTrace();
 		}
 		
-		if(res == 1) return "redirect:/msg/memberJoinOk"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		if(res == 1) return "redirect:/msg/memberJoinOk2"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
 		else return "redirect:/msg/memberJoinNo";
 	}
 	

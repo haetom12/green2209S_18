@@ -57,7 +57,7 @@ public interface StoreService {
 
 	public List<FoodMenuVO> getStoreFoodMenuByTag(String storeName, String foodTag);
 
-	public int setStoreMenuDeleteOk(String foodName);
+	public int setStoreMenuDeleteOk(int menuIdx);
 
 	public FoodMenuVO storeFoodNameCheck(String storeName, String foodName);
 
@@ -138,6 +138,8 @@ public interface StoreService {
 	public StoreVO getMidFind(String name, String email);
 
 	public StoreVO getPwdFind(String mid, String email);
+
+	public FoodMenuVO getFoodInfo(int menuIdx);
 
 
 }
