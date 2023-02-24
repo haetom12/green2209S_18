@@ -20,4 +20,6 @@ public interface QnADAO {
 
 	public int setQnAUpdateOk(@Param("vo") QnaVO vo);
 
+	public int totAdminQnAListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
 }

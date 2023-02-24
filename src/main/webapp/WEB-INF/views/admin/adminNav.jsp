@@ -137,6 +137,11 @@
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
 					<li>
+						<a href="${ctp}/h" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext">메인 홈페이지로</span>
+						</a>
+					</li>
+					<li>
 						<a href="${ctp}/admin/adminMain" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-house-1"></span><span class="mtext">에드민 메인으로</span>
 						</a>
@@ -235,13 +240,18 @@
 							<span class="micon dw dw-edit-2"></span><span class="mtext">문의 관리</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="introduction.html">모든 문의</a></li>
+							<li><a href="${ctp}/admin/QnAList">모든 문의</a></li>
 							<li><a href="getting-started.html">미 답변 문의</a></li>
 							<li><a href="color-settings.html">답변 문의</a></li>
 						</ul>
 					</li>
 					<li>
 						<div class="dropdown-divider"></div>
+					</li>
+					<li>
+						<a href="${ctp}/member/memberLogout" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext">로그아웃</span>
+						</a>
 					</li>
 				</ul>
 			</div>

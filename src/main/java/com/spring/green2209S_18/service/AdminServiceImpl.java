@@ -410,4 +410,9 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.getReplyReportList(startIndexNo, pageSize, search, searchString, order);
 	}
 
+	@Override
+	public List<StoreVO> getQnAList(int startIndexNo, int pageSize, String search, String searchString) {
+		return adminDAO.getQnAList(startIndexNo, pageSize, search, searchString);
+	}
+
 }

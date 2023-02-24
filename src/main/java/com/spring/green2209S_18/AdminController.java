@@ -919,5 +919,26 @@ public class AdminController {
 	}
 	
 	
+	// QnA 리스트 폼 이동
+	@RequestMapping(value = "QnAList", method = RequestMethod.GET)
+	public String QnAList(Model model,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminQnAList", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getQnAList(pageVo.getStartIndexNo(), pageSize, search, searchString);
+		
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/QnA/adminQnAList";
+	}
+	
+	
 }
 

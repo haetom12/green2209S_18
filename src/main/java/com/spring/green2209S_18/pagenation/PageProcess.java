@@ -90,6 +90,9 @@ public class PageProcess {
 		else if(section.equals("QnAList")) {
 			totRecCnt = qnADAO.totQnAListCnt(search,searchString);			
 		}
+		else if(section.equals("adminQnAList")) {
+			totRecCnt = qnADAO.totAdminQnAListCnt(search,searchString);			
+		}
 		
 //		else if(section.equals("webMessage")) {
 //			String mid = search;

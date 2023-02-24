@@ -109,6 +109,8 @@ public interface AdminService {
 
 	public List<StoreVO> getReplyReportList(int startIndexNo, int pageSize, String search, String searchString, String order);
 
+	public List<StoreVO> getQnAList(int startIndexNo, int pageSize, String search, String searchString);
+
 
 
 }

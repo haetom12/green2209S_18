@@ -141,7 +141,7 @@
 					          <option value="title" ${search=='title' ? "selected" : ""}>제목</option>
 					        </select>
 					  	    <input type="text" name="searchString" class="form-control mr-1" value="${searchString}" autofocus />&nbsp;
-					  	    <input type="button" value="아이디개별검색" onclick="midSearch();" class="btn btn-primary" />
+					  	    <input type="button" value="개별검색" onclick="midSearch();" class="btn btn-primary" />
 					  	  </div>
 					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/ratingList';" class="btn btn-success mr-2">전체검색</button></div>
 					  	</div>

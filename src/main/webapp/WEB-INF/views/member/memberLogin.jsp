@@ -261,6 +261,7 @@
 			function loginCheck() {
 				let mid = document.getElementById("mid").value;
 				let pwd = document.getElementById("pwd").value;
+				let part = LoginForm.part.value;
 				
 				if(mid.trim()==""){
 					alert("아이디를 입력하세요");
@@ -270,6 +271,10 @@
 				else if(pwd.trim()==""){
 					alert("비밀번호를 입력하세요");
 					LoginForm.pwd.focus();
+					return false;
+				}
+				else if(part.trim()==""){
+					alert("회원 분류를 선택하세요");
 					return false;
 				}
 				else {
@@ -343,7 +348,6 @@
 	                <div class="or-line"></div>
 	                <div class="or">OR</div>
 	            </div>
-	            
 	            <div class="loginbox-textbox">
 		            <div class="form-check-inline ml-4">
 						      <label class="form-check-label" for="radio1">
@@ -366,7 +370,6 @@
 						      </label>
 						    </div>
 	            </div>
-	            
 	            <div class="loginbox-textbox">
 	                <input type="text" class="form-control" id="mid" name="mid" value="${mid}" placeholder="아이디를 입력하세요"  style="width: 85%; margin: 0 auto;">
 	            </div>

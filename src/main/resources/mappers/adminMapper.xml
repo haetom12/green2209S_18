@@ -98,6 +98,10 @@
 	<select id="getReplyReportList" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
 		select * from ratingreply where reportCnt != 0 <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
 	</select>
+	
+	<select id="getQnAList" resultType="com.spring.green2209S_18.vo.QnaVO">
+		select * from qna <if test="search != ''"> where ${search} like concat('%',#{searchString},'%') </if> limit #{startIndexNo}, #{pageSize};
+	</select>
 
 	<select id="totMemberListCnt" resultType="int">
 		select count(*) from member where userDel = 'NO' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;

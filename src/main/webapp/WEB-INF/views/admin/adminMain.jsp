@@ -167,37 +167,7 @@
 				</div>
 			</div>
 			
-			<div class="row" >
-				<div class="col-xl-6 mb-30">
-					<div class="bg-white pd-20 card-box mb-30" >
-						<h4 class="h4 text-blue">메뉴 순위</h4>
-						<div id="adminChart1" style="width: 700px; height: 500px;"></div>
-					</div>
-				</div>
-				<div class="col-xl-6 mb-30">
-					<div class="bg-white pd-20 card-box mb-30" >
-						<h4 class="h4 text-blue">가게 순위</h4>
-						<div id="adminChart2" style="width: 700px; height: 500px;"></div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row" >
-				<div class="col-xl-6 mb-30">
-					<div class="bg-white pd-20 card-box mb-30" >
-						<h4 class="h4 text-blue">메뉴 순위</h4>
-						<div id="piechart" style="width: 700px; height: 500px;"></div>
-					</div>
-				</div>
-				<div class="col-xl-6 mb-30">
-					<div class="bg-white pd-20 card-box mb-30" >
-						<h4 class="h4 text-blue">가게 순위</h4>
-						<div id="adminChart4" style="width: 700px; height: 500px;"></div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row" >
+						<div class="row" >
 				<div class="col-xl-4 mb-30 bg-white">
 					<h2 class="h4 pd-20">이번달 VIP 고객</h2>
 					<table class="data-table table nowrap">
@@ -285,8 +255,38 @@
 						</tbody>
 					</table>
 				</div>
-				
 			</div>
+			
+			<div class="row" >
+				<div class="col-xl-6 mb-30">
+					<div class="bg-white pd-20 card-box mb-30" >
+						<h4 class="h4 text-blue">메뉴 순위</h4>
+						<div id="adminChart1" style="width: 700px; height: 500px;"></div>
+					</div>
+				</div>
+				<div class="col-xl-6 mb-30">
+					<div class="bg-white pd-20 card-box mb-30" >
+						<h4 class="h4 text-blue">가게 순위</h4>
+						<div id="adminChart2" style="width: 700px; height: 500px;"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row" >
+				<div class="col-xl-6 mb-30">
+					<div class="bg-white pd-20 card-box mb-30" >
+						<h4 class="h4 text-blue">메뉴 순위</h4>
+						<div id="piechart" style="width: 700px; height: 500px;"></div>
+					</div>
+				</div>
+				<div class="col-xl-6 mb-30">
+					<div class="bg-white pd-20 card-box mb-30" >
+						<h4 class="h4 text-blue">가게 순위</h4>
+						<div id="adminChart4" style="width: 700px; height: 500px;"></div>
+					</div>
+				</div>
+			</div>
+			
 			<div class="footer-wrap pd-20 mb-20 card-box">
 				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
 			</div>

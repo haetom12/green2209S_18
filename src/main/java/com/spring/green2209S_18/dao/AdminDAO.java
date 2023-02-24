@@ -155,5 +155,8 @@ public interface AdminDAO {
 	public List<StoreVO> getReplyReportList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
 			@Param("searchString") String searchString, @Param("order") String order);
 
+	public List<StoreVO> getQnAList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString);
+
 
 }

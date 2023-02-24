@@ -59,8 +59,9 @@
 	  $(document).ready(function(){
 		  
 			//채팅 서버 주소
-		  let url = "ws://localhost:9090/green2209S_18/chatserverDb"; 
-		  /* let url = "ws://192.168.50.23:9090/green2209S_18/chatserverDb"; */
+		  let url = "ws://localhost:9090/green2209S_18/chatserverDb";
+		 /*  let url = "ws://192.168.50.23:9090/green2209S_18/chatserverDb"; */
+		  /* let url = "ws://49.142.157.251:9090/green2209S_18/chatserverDb"; */
 		
 		  // 연결하기
 		  $('#btnConnect').click(function() {

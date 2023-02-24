@@ -15,6 +15,10 @@
 		select * from qna where idx = #{idx};
 	</select>
 
+	<select id="totAdminQnAListCnt" resultType="int">
+		select count(*) from qna <if test="search != ''"> where ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
 
 	<insert id="setQnAInput">
 		insert into qna (idx, mid, nickName, title, part, wDate, content, qnaSw) values (default, #{vo.mid}, #{vo.nickName}, #{vo.title}, #{vo.part}, default, #{vo.content}, default);
