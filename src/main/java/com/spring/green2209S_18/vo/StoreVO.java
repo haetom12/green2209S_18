@@ -10,7 +10,7 @@ public class StoreVO {
 	private String storeNumber;
 	private String storeMid;
 	private String storePwd;
-	private String HostName;
+	private String hostName;
 	private String storeAddress;
 	private String logoPhoto;
 	private String storeEmail;

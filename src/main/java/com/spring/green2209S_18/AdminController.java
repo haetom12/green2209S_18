@@ -28,6 +28,7 @@ import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 @Controller
 @RequestMapping("/admin")
@@ -550,7 +551,7 @@ public class AdminController {
 			@RequestParam(name="search", defaultValue = "", required = false) String search,
 			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
 		
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberList", search, searchString);		
 		
@@ -572,7 +573,7 @@ public class AdminController {
 			@RequestParam(name="search", defaultValue = "", required = false) String search,
 			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
 		
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberDeleteList", search, searchString);		
 		
@@ -594,7 +595,7 @@ public class AdminController {
 			@RequestParam(name="search", defaultValue = "", required = false) String search,
 			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
 		
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminMemberBanList", search, searchString);		
 		
@@ -665,11 +666,11 @@ public class AdminController {
 			@RequestParam(name="search", defaultValue = "", required = false) String search,
 			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
 		
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminRiderList", search, searchString);		
 		
-		List<MemberVO> vos = adminService.getRiderList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		List<RiderVO> vos = adminService.getRiderList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
 		
 		model.addAttribute("order",order);
 		model.addAttribute("search",search);
@@ -687,11 +688,11 @@ public class AdminController {
 			@RequestParam(name="search", defaultValue = "", required = false) String search,
 			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
 		
 		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminRiderDeleteList", search, searchString);		
 		
-		List<MemberVO> vos = adminService.getRiderDeleteList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		List<RiderVO> vos = adminService.getRiderDeleteList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
 		
 		model.addAttribute("order",order);
 		model.addAttribute("search",search);
@@ -725,7 +726,7 @@ public class AdminController {
 		else return "0";
 	}
 	
-	// 라이더 상태를 탈퇴신청으로
+	// 라이더 상태를 활동중으로
 	@ResponseBody
 	@RequestMapping(value = "adminRiderRestore", method = RequestMethod.POST)
 	public String adminRiderRestorePost(String riderMid) {
@@ -736,6 +737,186 @@ public class AdminController {
 		else return "0";
 	}
 	
+	
+	// 어드민 가게리스트 폼 이동
+	@RequestMapping(value = "storeList", method = RequestMethod.GET)
+	public String adminStoreListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminStoreList", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getStoreList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/store/storeList";
+	}
+	
+	// 가게 상태를 탈퇴신청으로
+	@ResponseBody
+	@RequestMapping(value = "adminStoreDelete", method = RequestMethod.POST)
+	public String adminStoreDeletePost(String storeMid) {
+		
+		int res = adminService.setAdminStoreDelete(storeMid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	
+	// 어드민 가게 탈퇴 신청리스트 폼 이동
+	@RequestMapping(value = "storeDeleteList", method = RequestMethod.GET)
+	public String adminStoreDeleteListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminStoreDeleteList", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getStoreDeleteList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/store/storeDeleteList";
+	}
+	
+	
+	// 가게 상태를 탈퇴신청으로
+	@ResponseBody
+	@RequestMapping(value = "adminStoreRestore", method = RequestMethod.POST)
+	public String adminStoreRestorePost(String storeMid) {
+		
+		int res = adminService.setAdminStoreRestore(storeMid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	// 가게 탈퇴 처리
+	@ResponseBody
+	@RequestMapping(value = "adminStoreDeleteOk", method = RequestMethod.POST)
+	public String adminStoreDeleteOkPost(String storeMid) {
+		
+		int res = adminService.setAdminStoreDeleteOk(storeMid);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	
+	// 어드민 별점 리스트 폼 이동
+	@RequestMapping(value = "ratingList", method = RequestMethod.GET)
+	public String adminRatingListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminRatingList", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getRatingList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/rating/ratingList";
+	}
+	
+	// 평점리뷰 삭제 처리
+	@ResponseBody
+	@RequestMapping(value = "adminRatingDeleteCheck", method = RequestMethod.POST)
+	public String adminRatingDeleteCheckPost(int idx) {
+		
+		int res = storeService.setRatingDeleteOk(idx);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	
+	// 신고된 평점리뷰 폼 이동
+	@RequestMapping(value = "ratingReportList", method = RequestMethod.GET)
+	public String adminratingReportListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "ratingReportList", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getRatingReportList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/rating/ratingReportList";
+	}
+	
+	// 댓글 리스트 폼 이동
+	@RequestMapping(value = "ratingReplyList", method = RequestMethod.GET)
+	public String adminRatingReplyListGet(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "ratingReplyList", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getRatingReplyList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/rating/ratingReplyList";
+	}
+	
+	// 신고된 댓글 리스트 폼 이동
+	@RequestMapping(value = "ratingReplyReportList", method = RequestMethod.GET)
+	public String ratingReplyReportList(Model model,
+			@RequestParam(name="order", defaultValue = "idx", required = false) String order,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "ratingReplyReportList", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getReplyReportList(pageVo.getStartIndexNo(), pageSize, search, searchString, order);
+		
+		model.addAttribute("order",order);
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/rating/ratingReplyReportList";
+	}
 	
 	
 }

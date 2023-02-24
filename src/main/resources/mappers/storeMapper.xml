@@ -196,11 +196,11 @@
 	
 	<insert id="setRatingReplyInput">
 		<!-- insert into ratingreply values (default, #{vo.ratingIdx}, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, default); -->
-		insert into ratingreply (idx, ratingIdx, mid, nickName, writeDate, content, replylevel) values (default, #{vo.ratingIdx}, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, default) ;
+		insert into ratingreply (idx, ratingIdx, mid, nickName, writeDate, content, replylevel, reportCnt) values (default, #{vo.ratingIdx}, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, default, default) ;
 	</insert>
 	
 	<insert id="setRatingReReplyInput">
-		insert into ratingreply values (default, #{vo.ratingIdx}, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, 1, #{vo.replyIdx});
+		insert into ratingreply (idx, ratingIdx, mid, nickName, writeDate, content, replylevel, replyIdx, reportCnt) values (default, #{vo.ratingIdx}, #{vo.mid}, #{vo.nickName}, default, #{vo.content}, 1, #{vo.replyIdx}, default);
 	</insert>
 	
 	
@@ -242,6 +242,10 @@
 	
 	<update id="setReportRating">
 		update rating set reportRating = reportRating + 1, reportRatingMid = concat(#{mid},'/')  where idx = #{idx};
+	</update>
+	
+	<update id="setReportReply">
+		update ratingreply set reportCnt = reportCnt + 1, reportMid = concat(#{mid},'/')  where idx = #{idx};
 	</update>
 	
 	<update id="setStoreUpdate">

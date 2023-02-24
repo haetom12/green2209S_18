@@ -146,5 +146,7 @@ public interface StoreDAO {
 
 	public FoodMenuVO getFoodInfo(@Param("menuIdx") int menuIdx);
 
+	public int setReportReply(@Param("idx") int idx, @Param("mid") String mid);
+
 
 }

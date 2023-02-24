@@ -73,6 +73,9 @@ public class MemberController {
 			for(int i=0; i<cookies.length; i++) {
 				if(cookies[i].getName().equals("cMid")) {
 					request.setAttribute("mid", cookies[i].getValue());
+				}
+				if(cookies[i].getName().equals("cPart")) {
+					request.setAttribute("part", cookies[i].getValue());
 					break;
 				}
 			}
@@ -95,8 +98,11 @@ public class MemberController {
 				
 				 if(idCheck.equals("on")) {
 					 	Cookie cookieMid = new Cookie("cMid", mid);
+					 	Cookie cookiePart = new Cookie("cPart", part);
 						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
 						response.addCookie(cookieMid);
+						cookiePart.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						response.addCookie(cookiePart);
 				 }
 				 else {
 						Cookie[] cookies = request.getCookies();
@@ -106,8 +112,14 @@ public class MemberController {
 								response.addCookie(cookies[i]);
 								break;
 							}
+							if(cookies[i].getName().equals("cPart")) {
+								cookies[i].setMaxAge(0);
+								response.addCookie(cookies[i]);
+								break;
+							}
 						}
 				 }
+				 
 				
 				// 장바구니에 있는 리스트, 갯수 가져오기;
 				List<CartVO> vos = memberService.getMyCartList(mid);
@@ -139,13 +151,21 @@ public class MemberController {
 				
 				 if(idCheck.equals("on")) {
 					 	Cookie cookieMid = new Cookie("cMid", mid);
+					 	Cookie cookiePart = new Cookie("cPart", part);
 						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
 						response.addCookie(cookieMid);
+						cookiePart.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						response.addCookie(cookiePart);
 				 }
 				 else {
 						Cookie[] cookies = request.getCookies();
 						for(int i=0; i<cookies.length; i++) {
 							if(cookies[i].getName().equals("cMid")) {
+								cookies[i].setMaxAge(0);
+								response.addCookie(cookies[i]);
+								break;
+							}
+							if(cookies[i].getName().equals("cPart")) {
 								cookies[i].setMaxAge(0);
 								response.addCookie(cookies[i]);
 								break;
@@ -172,13 +192,21 @@ public class MemberController {
 				
 				 if(idCheck.equals("on")) {
 					 	Cookie cookieMid = new Cookie("cMid", mid);
+					 	Cookie cookiePart = new Cookie("cPart", part);
 						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
 						response.addCookie(cookieMid);
+						cookiePart.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						response.addCookie(cookiePart);
 				 }
 				 else {
 						Cookie[] cookies = request.getCookies();
 						for(int i=0; i<cookies.length; i++) {
 							if(cookies[i].getName().equals("cMid")) {
+								cookies[i].setMaxAge(0);
+								response.addCookie(cookies[i]);
+								break;
+							}
+							if(cookies[i].getName().equals("cPart")) {
 								cookies[i].setMaxAge(0);
 								response.addCookie(cookies[i]);
 								break;

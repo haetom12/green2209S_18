@@ -63,6 +63,14 @@
 		select * from rider where deleteRequest = 'NO'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
 	</select>
 
+	<select id="getStoreList" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from store where storeDel = 'NO'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+
+	<select id="getStoreDeleteList" resultType="com.spring.green2209S_18.vo.StoreVO">
+		select * from store where storeDel = 'OK'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+
 	<select id="getRiderDeleteList" resultType="com.spring.green2209S_18.vo.RiderVO">
 		select * from rider where deleteRequest = 'OK'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
 	</select>
@@ -73,6 +81,22 @@
 	
 	<select id="getBanMemberList" resultType="com.spring.green2209S_18.vo.MemberVO">
 		select * from member where userBan = 'OK'  <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getRatingList" resultType="com.spring.green2209S_18.vo.RatingVO">
+		select * from rating <if test="search != ''"> where ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getRatingReplyList" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
+		select * from ratingreply <if test="search != ''"> where ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getRatingReportList" resultType="com.spring.green2209S_18.vo.RatingVO">
+		select * from rating where reportRating != 0 <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getReplyReportList" resultType="com.spring.green2209S_18.vo.ratingReplyVO">
+		select * from ratingreply where reportCnt != 0 <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by ${order} desc limit #{startIndexNo}, #{pageSize};
 	</select>
 
 	<select id="totMemberListCnt" resultType="int">
@@ -93,6 +117,30 @@
 
 	<select id="totRiderDeleteListCnt" resultType="int">
 		select count(*) from rider where deleteRequest = 'OK' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totAdminStoreListCnt" resultType="int">
+		select count(*) from store where storeDel = 'NO' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totStoreDeleteListCnt" resultType="int">
+		select count(*) from store where storeDel = 'OK' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totRatingListCnt" resultType="int">
+		select count(*) from rating <if test="search != ''"> where ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totRatingReportListCnt" resultType="int">
+		select count(*) from rating where reportRating != 0 <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totRatingReplyListCnt" resultType="int">
+		select count(*) from ratingreply <if test="search != ''"> where ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totRatingReplyReportListCnt" resultType="int">
+		select count(*) from ratingreply where reportCnt != 0 <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
 	</select>
 
 	<select id="getToTMember" resultType="int">
@@ -191,6 +239,14 @@
 		update rider set deleteRequest = 'NO' where riderMid = #{riderMid};
 	</update>
 	
+	<update id="setAdminStoreDelete">
+		update store set storeDel = 'OK' where storeMid = #{storeMid};
+	</update>
+	
+	<update id="setAdminStoreRestore">
+		update store set storeDel = 'NO' where storeMid = #{storeMid};
+	</update>
+	
 	
 	
 	<delete id="setCategoryDelete">
@@ -219,6 +275,10 @@
 
 	<delete id="setAdminRiderDeleteOk">
 		delete from rider where riderMid = #{riderMid};
+	</delete>
+
+	<delete id="setAdminStoreDeleteOk">
+		delete from store where storeMid = #{storeMid};
 	</delete>
 	
 </mapper>

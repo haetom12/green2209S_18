@@ -141,5 +141,7 @@ public interface StoreService {
 
 	public FoodMenuVO getFoodInfo(int menuIdx);
 
+	public int setReportReply(int idx, String mid);
+
 
 }

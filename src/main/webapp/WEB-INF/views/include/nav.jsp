@@ -73,20 +73,6 @@
 			          <li class="nav-item"><a href="${ctp}/member/memberLogin" class="nav-link">로그인</a></li>
 			          <li class="nav-item"><a href="${ctp}/member/JoinSelect" class="nav-link">회원가입</a></li>
 		          </c:if>
-		          <c:if test="${sMid!=null && sMid!='admin'}">
-			          <li class="nav-item active dropdown">
-		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지</a>
-		              <div class="dropdown-menu" aria-labelledby="dropdown04">
-		              	<a class="dropdown-item" href="shop.html">주문내역</a>
-		              	<a class="dropdown-item" href="${ctp}/order/myWishList">찜목록</a>
-		                <a class="dropdown-item" href="product-single.html">선물함</a>
-		                <a class="dropdown-item" href="cart.html">쿠폰함</a>
-		                <a class="dropdown-item" href="checkout.html">리뷰관리</a>
-		              </div>
-		            </li>
-			          <li class="nav-item cta cta-colored"><a href="${ctp}/member/memberWishlist" class="nav-link"><span class="icon-shopping_cart"></span>&nbsp;장바구니[0]</a></li>
-								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
-							</c:if>
 		          <c:if test="${sMid=='admin'}">
 			          <li class="nav-item"><a href="${ctp}/admin/adminMain" class="nav-link">관리자 페이지</a></li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
@@ -100,11 +86,7 @@
 		        <ul class="navbar-nav ml-auto">
 		          <li class="nav-item"><a href="${ctp}/store/shopCategory" class="nav-link">주문하기</a></li>
 		          <li class="nav-item"><a href="${ctp}/store/shopNear" class="nav-link">내주변 맛집 보기</a></li>
-		          <li class="nav-item"><a href="contact.html" class="nav-link">고객문의</a></li>
-		          <c:if test="${sMid==null}">
-			          <li class="nav-item"><a href="${ctp}/member/memberLogin" class="nav-link">로그인</a></li>
-			          <li class="nav-item"><a href="${ctp}/member/JoinSelect" class="nav-link">회원가입</a></li>
-		          </c:if>
+		          <li class="nav-item"><a href="${ctp}/QnA/QnAList" class="nav-link">1:1 고객문의</a></li>
 		          <c:if test="${sMid!=null && sMid!='admin'}">
 			          <li class="nav-item active dropdown">
 		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지</a>
@@ -119,11 +101,6 @@
 			          <li class="nav-item cta cta-colored"><a href="${ctp}/order/myCart" class="nav-link"><span class="icon-shopping_cart"></span>&nbsp;장바구니[${myCartCnt}]</a></li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>
-		          <c:if test="${sMid=='admin'}">
-		          	<li class="nav-item"><a href="${ctp}/rider/orderChat" class="nav-link">채팅</a></li>
-			          <li class="nav-item"><a href="${ctp}/admin/adminMain" class="nav-link">관리자 페이지</a></li>
-								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
-							</c:if>
 		        </ul>
 		      </div>
 	      </c:if>
@@ -131,13 +108,6 @@
 				<c:if test="${sPart=='rider'}">
 		      <div class="collapse navbar-collapse" id="ftco-nav">
 		        <ul class="navbar-nav ml-auto">
-		          <li class="nav-item"><a href="${ctp}/store/shopCategory" class="nav-link">주문하기</a></li>
-		          <li class="nav-item"><a href="${ctp}/store/shopNear" class="nav-link">내주변 맛집 보기</a></li>
-		          <li class="nav-item"><a href="contact.html" class="nav-link">고객문의</a></li>
-		          <c:if test="${sMid==null}">
-			          <li class="nav-item"><a href="${ctp}/member/memberLogin" class="nav-link">로그인</a></li>
-			          <li class="nav-item"><a href="${ctp}/member/JoinSelect" class="nav-link">회원가입</a></li>
-		          </c:if>
 		          <c:if test="${sMid!=null}">
 			          <li class="nav-item active dropdown">
 		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지</a>
@@ -160,10 +130,6 @@
 		      <div class="collapse navbar-collapse" id="ftco-nav">
 		        <ul class="navbar-nav ml-auto">
 		          <li class="nav-item"><a href="${ctp}/store/shopCategory" class="nav-link">주문확인</a></li>
-		          <c:if test="${sMid==null}">
-			          <li class="nav-item"><a href="${ctp}/member/memberLogin" class="nav-link">로그인</a></li>
-			          <li class="nav-item"><a href="${ctp}/member/JoinSelect" class="nav-link">회원가입</a></li>
-		          </c:if>
 		          <c:if test="${sMid!=null && sMid!='admin'}">
 			          <li class="nav-item active dropdown">
 		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">매장관리</a>
@@ -174,10 +140,6 @@
 		              </div>
 		            </li>
 		            <li class="nav-item"><a href="contact.html" class="nav-link">고객문의</a></li>
-								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
-							</c:if>
-		          <c:if test="${sMid=='admin'}">
-			          <li class="nav-item"><a href="${ctp}/admin/adminMain" class="nav-link">관리자 페이지</a></li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>
 		        </ul>

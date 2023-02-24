@@ -470,6 +470,11 @@ public class StoreServiceImpl implements StoreService {
 		return storeDAO.getFoodInfo(menuIdx);
 	}
 
+	@Override
+	public int setReportReply(int idx, String mid) {
+		return storeDAO.setReportReply(idx, mid);
+	}
+
 
 
 }

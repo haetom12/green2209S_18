@@ -76,6 +76,13 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="header">
+		<div class="header-left">
+			<div class="menu-icon dw dw-menu"></div>
+			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+		</div>
+	</div>
 
 	<div class="right-sidebar">
 		<div class="sidebar-title">

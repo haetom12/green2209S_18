@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -78,9 +79,9 @@ public interface AdminService {
 
 	public int setadminMemberRestore(String mid);
 
-	public List<MemberVO> getRiderList(int startIndexNo, int pageSize, String search, String searchString, String order);
+	public List<RiderVO> getRiderList(int startIndexNo, int pageSize, String search, String searchString, String order);
 
-	public List<MemberVO> getRiderDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order);
+	public List<RiderVO> getRiderDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order);
 
 	public int setAdminRiderDeleteOk(String riderMid);
 
@@ -89,6 +90,24 @@ public interface AdminService {
 	public int setAdminRiderRestore(String riderMid);
 
 	public int getToTMember();
+
+	public List<StoreVO> getStoreList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public int setAdminStoreDelete(String storeMid);
+
+	public List<StoreVO> getStoreDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public int setAdminStoreRestore(String storeMid);
+
+	public int setAdminStoreDeleteOk(String storeMid);
+
+	public List<StoreVO> getRatingList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public List<StoreVO> getRatingReportList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public List<StoreVO> getRatingReplyList(int startIndexNo, int pageSize, String search, String searchString, String order);
+
+	public List<StoreVO> getReplyReportList(int startIndexNo, int pageSize, String search, String searchString, String order);
 
 
 

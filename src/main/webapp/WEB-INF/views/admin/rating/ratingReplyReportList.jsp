@@ -41,26 +41,26 @@
     	let search = myform.search.value;
     	let searchString = myform.searchString.value;
     	
-			location.href='${ctp}/admin/memberList?order='+order+'&search='+search+'&searchString='+searchString;
+			location.href='${ctp}/admin/ratingReplyList?order='+order+'&search='+search+'&searchString='+searchString;
 		}
 	
-	function DelCheck(mid) {
-    	let ans = confirm("선택된 회원을 탈퇴 전환 시키겠습니까?");
+	function DelCheck(idx) {
+    	let ans = confirm("선택한 댓글을 삭제하겠습니까?");
     	if(!ans) return false;
     	   	
     	$.ajax({
     		type   : "post",
-    		url    : "${ctp}/admin/adminMemberDeleteCheck",
+    		url  : "${ctp}/store/storeReplydelete",
     		data   : {
-    			mid : mid
+    			idx : idx
     			},
     		success:function(res) {
     		  if(res == "1") {
-    				alert("회원을 활동 정지 상태로 전환하였습니다!");
+    				alert("댓글을 삭제하였습니다!");
+    				location.reload();
     			}
     			else {
-    				alert("회원 전환에 실패하였습니다! 다시 시도하세요.");
-    				location.reload();
+    				alert("댓글 삭제에 실패하였습니다! 다시 시도하세요.");
     			}
     		},
     		error : function() {
@@ -83,7 +83,7 @@
 			<div class="min-height-200px">
 				<div class="card-box mb-30">
 					<div class="pd-20">
-						<h3 class="h3 text-center">일반 회원 리스트</h3>
+						<h3 class="h3 text-center">최근 신고된 댓글</h3>
 					</div>
 					<div class="pb-20">
 					
@@ -91,19 +91,19 @@
 					  	<div class="row mb-2">
 					  	  <div class="col form-inline">
 					  	    <select name="order" style="width:18%;" onchange="ordered()" class="form-control mr-1">
-					          <option value="memberName" ${order=='memberName' ? "selected" : ""} >이름 순</option>
-					          <option value="orderCnt" ${order=='orderCnt' ? "selected" : ""}>주문횟수 순</option>
-					          <option value="birthday" ${order=='birthday' ? "selected" : ""}>생년월일 순</option>
+					          <option value="mid" ${order=='mid' ? "selected" : ""} >아이디 순</option>
+					          <option value="nickName" ${order=='nickName' ? "selected" : ""}>닉네임 순</option>
+					          <option value="writeDate" ${order=='writeDate' ? "selected" : ""}>작성날짜 순</option>
 					        </select>
 					  	    <select name="search" style="width:15%;" class="form-control mr-1">
-					          <option value="mid" ${search=='mid' ? "selected" : ""}>아이디</option>
-					          <option value="nickName" ${search=='nickName' ? "selected" : ""}>별명</option>
-					          <option value="name" ${search=='name' ? "selected" : ""}>성명</option>
+					          <option value="mid" ${search=='mid' ? "selected" : ""} >아이디</option>
+					          <option value="nickName" ${search=='nickName' ? "selected" : ""}>닉네임</option>
+					          <option value="content" ${search=='content' ? "selected" : ""}>내용</option>
 					        </select>
 					  	    <input type="text" name="searchString" class="form-control mr-1" value="${searchString}" autofocus />&nbsp;
-					  	    <input type="button" value="아이디개별검색" onclick="midSearch();" class="btn btn-primary" />
+					  	    <input type="button" value="개별검색" onclick="midSearch();" class="btn btn-primary" />
 					  	  </div>
-					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/memberList';" class="btn btn-success mr-2">전체검색</button></div>
+					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/ratingReplyList';" class="btn btn-success mr-2">전체검색</button></div>
 					  	</div>
 					  </form>
 					  
@@ -111,15 +111,10 @@
 							<thead>
 								<tr class="text-center">
 					        <th>번호</th>
-					        <th>성명</th>
-					        <th>아이디</th>
-					        <th>닉네임</th>
-					        <th>전화번호</th>
-					        <th>생년월일</th>
-					        <th>주소</th>
-					        <th>이메일</th>
-					        <th>주문 횟수</th>
-					        <th>탈퇴 요청</th>
+					        <th>신고횟수</th>
+					        <th>작성자</th>
+					        <th>댓글 내용</th>
+					        <th>작성 날짜</th>
 					        <th>비고</th>
 								</tr>
 							</thead>
@@ -128,17 +123,12 @@
 								<c:forEach var="vo" items="${vos}" varStatus="st">
 						   		<tr class="text-center">
 							    	<td>${curScrStartNo}</td>
-							    	<td>${vo.memberName}</td>
+							    	<td>${vo.reportCnt}</td>
 							    	<td>${vo.mid}</td>
-							    	<td>${vo.memberNickName}</td>
-							    	<td>${vo.tel}</td>
-							    	<td>${fn:substring(vo.birthday,0,10)}</td>
-							    	<td>${vo.address}</td>
-							    	<td>${vo.email}</td>
-							    	<td>${vo.orderCnt}</td>
-							    	<td>${vo.userDel}</td>
+							    	<td>${vo.content}</td>
+							    	<td>${fn:substring(vo.writeDate,0,16)}</td>
 							    	<td>
-							    	 <input type="button" onclick="DelCheck('${vo.mid}')" class="btn btn-danger" value="활동 정지 전환" />
+							    	 <input type="button" onclick="DelCheck('${vo.idx}')" class="btn btn-danger" value="댓글 삭제" />
 							    	</td>
 							    </tr>
 						    	<c:set var="curScrStartNo" value="${curScrStartNo - 1}"/>
@@ -150,24 +140,24 @@
 	            <div class="btn-group mb-15" style="margin: 0 auto;">
 	              <ul>
 	              	<c:if test="${pageVo.pag > 1}">
-							      <li class="btn btn-light"><a href="${ctp}/admin/memberList?pageSize=${pageVo.pageSize}&pag=1&search=${search}&searchString=${searchString}&order=${order}">&lt;&lt;</a></li>
+							      <li class="btn btn-light"><a href="${ctp}/admin/ratingReplyList?pageSize=${pageVo.pageSize}&pag=1&search=${search}&searchString=${searchString}&order=${order}">&lt;&lt;</a></li>
 							    </c:if>
 	                <c:if test="${pageVo.curBlock > 0}">
-							      <li><a class="page-link text-secondary" href="${ctp}/admin/memberList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&lt;</a></li>
+							      <li><a class="page-link text-secondary" href="${ctp}/admin/ratingReplyList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&lt;</a></li>
 							    </c:if>
 	                <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
 							      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-							    		<li class="btn btn-primary"><a href="${ctp}/admin/memberList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}"><font color="white">${i}</font></a></li>
+							    		<li class="btn btn-primary"><a href="${ctp}/admin/ratingReplyList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}"><font color="white">${i}</font></a></li>
 							    	</c:if>
 							      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-							    		<li class="btn btn-light"><a href="${ctp}/admin/memberList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}">${i}</a></li>
+							    		<li class="btn btn-light"><a href="${ctp}/admin/ratingReplyList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&order=${order}">${i}</a></li>
 							    	</c:if>
 							    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">	
-								      <li><a class="btn btn-light"href="${ctp}/admin/memberList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&gt;</a></li>
+								      <li><a class="btn btn-light"href="${ctp}/admin/ratingReplyList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&order=${order}">&gt;</a></li>
 								    </c:if>
 							    </c:forEach>
 							     <c:if test="${pageVo.pag < pageVo.totPage}">
-							       <li class="btn btn-light"><a href="${ctp}/admin/memberList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}&search=${search}&searchString=${searchString}&order=${order}">&gt;&gt;</a></li>
+							       <li class="btn btn-light"><a href="${ctp}/admin/ratingReplyList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}&search=${search}&searchString=${searchString}&order=${order}">&gt;&gt;</a></li>
 							     </c:if>
 	              </ul>
 	            </div>

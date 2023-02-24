@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.dao.MemberDAO;
 import com.spring.green2209S_18.dao.OrderDAO;
+import com.spring.green2209S_18.dao.QnADAO;
 import com.spring.green2209S_18.dao.RiderDAO;
 import com.spring.green2209S_18.dao.StoreDAO;
 
@@ -25,6 +26,9 @@ public class PageProcess {
 	
 	@Autowired
 	AdminDAO adminDAO;
+	
+	@Autowired
+	QnADAO qnADAO;
 	
 	
 	public PageVO totRecCnt(int pag, int pageSize, String section, String search, String searchString) {
@@ -64,6 +68,27 @@ public class PageProcess {
 		}
 		else if(section.equals("adminRiderDeleteList")) {
 			totRecCnt = adminDAO.totRiderDeleteListCnt(search,searchString);			
+		}
+		else if(section.equals("adminStoreList")) {
+			totRecCnt = adminDAO.totAdminStoreListCnt(search,searchString);			
+		}
+		else if(section.equals("adminStoreDeleteList")) {
+			totRecCnt = adminDAO.totStoreDeleteListCnt(search,searchString);			
+		}
+		else if(section.equals("adminRatingList")) {
+			totRecCnt = adminDAO.totRatingListCnt(search,searchString);			
+		}
+		else if(section.equals("ratingReportList")) {
+			totRecCnt = adminDAO.totRatingReportListCnt(search,searchString);			
+		}
+		else if(section.equals("ratingReplyList")) {
+			totRecCnt = adminDAO.totRatingReplyListCnt(search,searchString);			
+		}
+		else if(section.equals("ratingReplyReportList")) {
+			totRecCnt = adminDAO.totRatingReplyReportListCnt(search,searchString);			
+		}
+		else if(section.equals("QnAList")) {
+			totRecCnt = qnADAO.totQnAListCnt(search,searchString);			
 		}
 		
 //		else if(section.equals("webMessage")) {

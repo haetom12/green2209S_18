@@ -141,6 +141,15 @@
 							<span class="micon dw dw-house-1"></span><span class="mtext">에드민 메인으로</span>
 						</a>
 					</li>
+					
+					<!-- 경계선  -->
+					<li>
+						<div class="dropdown-divider"></div>
+					</li>
+					<li>
+						<div class="sidebar-small-cap">회원 및 상품 관리</div>
+					</li>
+					
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-group"></span><span class="mtext">회원관리</span>
@@ -170,8 +179,8 @@
 									<span class="micon fa fa-plus"></span><span class="mtext">가게 관리</span>
 								</a>
 								<ul class="submenu child">
-									<li><a href="">활동중인 가게</a></li>
-									<li><a href="">가게 탈퇴 요청</a></li>
+									<li><a href="${ctp}/admin/storeList">활동중인 가게</a></li>
+									<li><a href="${ctp}/admin/storeDeleteList">가게 탈퇴 요청</a></li>
 								</ul>
 							</li>
 							<li><a href="">신고 관리</a></li>
@@ -190,46 +199,49 @@
 								<ul class="submenu child">
 									<li><a href="${ctp}/admin/storeBrandList">브랜드 및 브랜드 메뉴 관리</a></li>
 									<li><a href="${ctp}/admin/storeBrandOptionList">프랜차이즈 메뉴 추가/수정</a></li>
-									<li><a href="javascript:;">가게 삭제 요청</a></li>
 								</ul>
 							</li>
 						</ul>
 					</li>
 					<li>
-						<a href="#" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-star"></span><span class="mtext">별점관리</span>
-						</a>
-					</li>
-					<li>
-						<a href="#" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-pencil"></span><span class="mtext">댓글관리</span>
-						</a>
 					</li>
 					<!-- 경계선  -->
 					<li>
 						<div class="dropdown-divider"></div>
 					</li>
-					
-					
 					<li>
-						<div class="sidebar-small-cap">Extra</div>
+						<div class="sidebar-small-cap">커뮤니티</div>
 					</li>
-					<li>
+					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit-2"></span><span class="mtext">Documentation</span>
+							<span class="micon fa fa-star"></span><span class="mtext">별점관리</span>
 						</a>
-						<ul class="submenu">
-							<li><a href="introduction.html">Introduction</a></li>
-							<li><a href="getting-started.html">Getting Started</a></li>
-							<li><a href="color-settings.html">Color Settings</a></li>
-							<li><a href="third-party-plugins.html">Third Party Plugins</a></li>
+						<ul class="submenu child">
+							<li><a href="${ctp}/admin/ratingList">모든 별점</a></li>
+							<li><a href="${ctp}/admin/ratingReportList">신고 처리된 별점</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon fa fa-pencil"></span><span class="mtext">댓글관리</span>
+						</a>
+						<ul class="submenu child">
+							<li><a href="${ctp}/admin/ratingReplyList">모든 댓글</a></li>
+							<li><a href="${ctp}/admin/ratingReplyReportList">신고 처리된 댓글</a></li>
 						</ul>
 					</li>
 					<li>
-						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-paper-plane1"></span>
-							<span class="mtext">Landing Page <img src="${ctp}/vendors/images/coming-soon.png" alt="" width="25"></span>
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-edit-2"></span><span class="mtext">문의 관리</span>
 						</a>
+						<ul class="submenu">
+							<li><a href="introduction.html">모든 문의</a></li>
+							<li><a href="getting-started.html">미 답변 문의</a></li>
+							<li><a href="color-settings.html">답변 문의</a></li>
+						</ul>
+					</li>
+					<li>
+						<div class="dropdown-divider"></div>
 					</li>
 				</ul>
 			</div>

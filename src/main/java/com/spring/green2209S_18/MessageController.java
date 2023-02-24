@@ -388,6 +388,18 @@ public class MessageController {
 			model.addAttribute("msg", "아이디를 이메일로 전송하였습니다! 이메일을 확인하세요.");
 			model.addAttribute("url", "/member/memberLogin");
 		}
+		else if(msgFlag.equals("QnAInputOk")) {
+			model.addAttribute("msg", "문의를 등록하였습니다!");
+			model.addAttribute("url", "/QnA/QnAList");
+		}
+		else if(msgFlag.equals("QnAUpdateOk")) {
+			model.addAttribute("msg", "문의를 수정하였습니다!");
+			model.addAttribute("url", "/QnA/QnAList");
+		}
+		else if(msgFlag.equals("QnAUpdateNo")) {
+			model.addAttribute("msg", "문의 수정에 실패하였습니다. 다시 시도해주세요.");
+			model.addAttribute("url", "/QnA/QnAList");
+		}
 		
 		return "include/message";
 	}

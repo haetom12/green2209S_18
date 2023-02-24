@@ -347,22 +347,22 @@
 	            <div class="loginbox-textbox">
 		            <div class="form-check-inline ml-4">
 						      <label class="form-check-label" for="radio1">
-						        <input type="radio" class="form-check-input" name="part" value="member" checked> 일반회원
+						        <input type="radio" class="form-check-input" name="part" value="member" ${part == "member"  ? "checked" : ""}> 일반회원
 						      </label>
 						    </div>
 						    <div class="form-check-inline">
 						      <label class="form-check-label" for="radio2">
-						        <input type="radio" class="form-check-input" name="part" value="rider"> 라이더
+						        <input type="radio" class="form-check-input" name="part" value="rider" ${part == "rider"  ? "checked" : ""}> 라이더
 						      </label>
 						    </div>
 						    <div class="form-check-inline">
 						      <label class="form-check-label" for="radio3">
-						        <input type="radio" class="form-check-input" name="part" value="store"> 가게
+						        <input type="radio" class="form-check-input" name="part" value="store" ${part == "store"  ? "checked" : ""}> 가게
 						      </label>
 						    </div>
 						    <div class="form-check-inline">
 						      <label class="form-check-label" for="radio4">
-						        <input type="radio" class="form-check-input" name="part" value="admin"> 관리자
+						        <input type="radio" class="form-check-input" name="part" value="admin" ${part == "admin"  ? "checked" : ""}> 관리자
 						      </label>
 						    </div>
 	            </div>

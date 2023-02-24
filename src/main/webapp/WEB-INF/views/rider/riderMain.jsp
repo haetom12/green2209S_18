@@ -68,6 +68,13 @@
 		</div>
 	</div>
 
+	<div class="header">
+		<div class="header-left">
+			<div class="menu-icon dw dw-menu"></div>
+			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+		</div>
+	</div>
+
 	<div class="right-sidebar">
 		<div class="sidebar-title">
 			<h3 class="weight-600 font-16 text-blue">
@@ -179,12 +186,16 @@
 							<li><a href="${ctp}/rider/riderDelete">라이더 탈퇴</a></li>
 						</ul>
 					</li>
+					<li>
+						<a href="${ctp}/member/memberLogout" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-lock"></span><span class="mtext">로그아웃</span>
+						</a>
+					</li>
 					
 					<!-- 경계선  -->
 					<li>
 						<div class="dropdown-divider"></div>
 					</li>
-					
 					
 					<li>
 						<div class="sidebar-small-cap">Extra</div>

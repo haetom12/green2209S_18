@@ -1020,11 +1020,38 @@ public class StoreController {
 					return "3";
 				}
 			}
-			
 		}
-		
 		String rMid = vo.getMid();
 		res = storeService.setReportRating(idx, mid);
+		res = memberService.setReportRating(rMid);
+		
+		if(res == 1) return "1";
+		
+		else return res+"";
+	}
+		// 댓글 신고
+		@ResponseBody
+		@RequestMapping(value = "storeReplyReport", method = RequestMethod.POST)
+		public String storeReplyReportPost(int idx, HttpSession session) {
+			int res = 0;
+			String mid = (String)session.getAttribute("sMid");
+			
+			ratingReplyVO vo = storeService.getReplyComment(idx);
+			
+			if(vo.getReportMid() != null) {
+				
+				String[] report = vo.getReportMid().split("/");
+				
+				for(int i = 0; i<report.length; i++) {
+					if(report[i].equals(mid)) {
+						
+						return "3";
+					}
+				}
+			}
+		
+		String rMid = vo.getMid();
+		res = storeService.setReportReply(idx, mid);
 		res = memberService.setReportRating(rMid);
 		
 		if(res == 1) return "1";

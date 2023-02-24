@@ -11,9 +11,11 @@ public class ratingReplyVO {
 	private String writeDate;
 	private String content;
 	private String update;
+	private String reportMid;
 	
 	private int replylevel;
 	private int replyIdx;
 	private int replyCnt;
+	private int reportCnt;
 	
 }

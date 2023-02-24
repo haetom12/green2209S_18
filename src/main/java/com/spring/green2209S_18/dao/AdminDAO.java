@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -90,10 +91,10 @@ public interface AdminDAO {
 
 	public int totAdminRiderListCnt(@Param("search") String search, @Param("searchString") String searchString);
 
-	public List<MemberVO> getRiderList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+	public List<RiderVO> getRiderList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
 			@Param("searchString") String searchString, @Param("order") String order);
 
-	public List<MemberVO> getRiderDeleteList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+	public List<RiderVO> getRiderDeleteList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
 			@Param("searchString") String searchString, @Param("order") String order);
 
 	public int setAdminRiderDeleteOk(@Param("riderMid") String riderMid);
@@ -117,6 +118,42 @@ public interface AdminDAO {
 	public List<CartVO> getThisMonthMember(@Param("thisMonth") String thisMonth);
 
 	public List<CartVO> getThisMonthRider(@Param("thisMonth") String thisMonth);
+
+	public int totAdminStoreListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<StoreVO> getStoreList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int setAdminStoreDelete(@Param("storeMid") String storeMid);
+	
+	public int totStoreDeleteListCnt(@Param("search") String search, @Param("searchString") String searchString);
+	
+	public List<StoreVO> getStoreDeleteList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int setAdminStoreRestore(@Param("storeMid") String storeMid);
+
+	public int setAdminStoreDeleteOk(@Param("storeMid") String storeMid);
+
+	public int totRatingListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<StoreVO> getRatingList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int totRatingReportListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<StoreVO> getRatingReportList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int totRatingReplyListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<StoreVO> getRatingReplyList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
+
+	public int totRatingReplyReportListCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public List<StoreVO> getReplyReportList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString, @Param("order") String order);
 
 
 }

@@ -14,6 +14,7 @@ import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.dao.StoreDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
 
@@ -335,12 +336,12 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<MemberVO> getRiderList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+	public List<RiderVO> getRiderList(int startIndexNo, int pageSize, String search, String searchString, String order) {
 		return adminDAO.getRiderList(startIndexNo, pageSize, search, searchString, order);
 	}
 
 	@Override
-	public List<MemberVO> getRiderDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+	public List<RiderVO> getRiderDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order) {
 		return adminDAO.getRiderDeleteList(startIndexNo, pageSize, search, searchString, order);
 	}
 
@@ -362,6 +363,51 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int getToTMember() {
 		return adminDAO.getToTMember();
+	}
+
+	@Override
+	public List<StoreVO> getStoreList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getStoreList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public int setAdminStoreDelete(String storeMid) {
+		return adminDAO.setAdminStoreDelete(storeMid);
+	}
+
+	@Override
+	public List<StoreVO> getStoreDeleteList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getStoreDeleteList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public int setAdminStoreRestore(String storeMid) {
+		return adminDAO.setAdminStoreRestore(storeMid);
+	}
+
+	@Override
+	public int setAdminStoreDeleteOk(String storeMid) {
+		return adminDAO.setAdminStoreDeleteOk(storeMid);
+	}
+
+	@Override
+	public List<StoreVO> getRatingList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getRatingList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public List<StoreVO> getRatingReportList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getRatingReportList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public List<StoreVO> getRatingReplyList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getRatingReplyList(startIndexNo, pageSize, search, searchString, order);
+	}
+
+	@Override
+	public List<StoreVO> getReplyReportList(int startIndexNo, int pageSize, String search, String searchString, String order) {
+		return adminDAO.getReplyReportList(startIndexNo, pageSize, search, searchString, order);
 	}
 
 }

@@ -131,9 +131,9 @@
 			                   html += "<b id='commentWriter_" + vos[i].nickName + "'>" + vos[i].nickName + "</b>";
 			                   
 			                   /* html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '  <a href="#"  onclick="modalView('+i+')" data-toggle="modal" data-target="#myModal"><font color="orange">(수정)</font></a> / <a href="javascript:replydelete('+vos[i].idx+')"><font color="red">(삭제)</font></a></span>'; */
-			                   
+			                   																																																	
 			                   if(nickName != vos[i].nickName) {
-				                   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate + "</span>";
+				                   html += "<span style='float:right;' align='right' id='writeDate"+ vos[i].nickName +"'> " + vos[i].writeDate + "&nbsp;<a href='javascript:reportReply("+vos[i].idx+")'><font color='red'>(신고하기)</font></a></span>";
 			                   }
 			                   else {
 			                	   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '  <a href="#"  onclick="modalView('+i+')" data-toggle="modal" data-target="#myModal"><font color="orange">(수정)</font></a> / <a href="javascript:replydelete('+vos[i].idx+')"><font color="red">(삭제)</font></a></span>';
@@ -176,11 +176,48 @@
 			           $("#openC"+idx)[0].style.display = 'none';
 			           document.getElementById("closeC"+idx).style.display = 'block'; 	
 			           $("#demo"+idx)[0].style.display = 'block';
+			           $("#replyForm"+idx)[0].style.display = 'block';
+			           
+			           
 	      		},
 	    			error  : function() {
 	    				alert("전송 오류!!");
 	    			}
 	      	});
+			}
+    	
+    	// 해당 댓글 신고
+    	function reportReply(idx) {
+								
+    		let mid = "${sMid}";
+				if(mid == "") {
+					alert("신고 기능은 로그인 후 가능합니다.");
+					return false;
+				}
+				 
+				let ans = confirm("댓글을 신고하시겠습니까?");
+
+				if(!ans) return false;				
+				
+    		$.ajax({
+        		type : "post",
+        		url  : "${ctp}/store/storeReplyReport",
+        		data   : {
+			  			idx : idx
+			  		},
+        		success:function(res) {
+        			if(res == "1") {
+        				alert("댓글 신고하였습니다.");
+        				location.reload();
+        			}
+        			else if(res == "3") {
+        				alert("이미 신고한 댓글입니다.");
+        			}
+        			else {
+        				alert("댓글 신고에 실패하였습니다. 다시 시도해주세요. ");
+        			}
+        		},
+      	});
 			}
     	
     	// 해당 댓글 삭제하기
@@ -243,8 +280,8 @@
 		                   html += "<div class='mb-2'>";
 		                   html += "<b id='commentWriter_" + vos[i].nickName + "'>" + vos[i].nickName + "</b>";
 		                   
-		                   if(nickName != vos[i].nickName) {
-			                   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '</span>';
+		                   if(nickName != vos[i].nickName) {																	
+			                   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate + "&nbsp;<a href='javascript:reportReply("+vos[i].idx+")'><font color='red'>(신고하기)</font></a></span>";
 		                   }
 		                   else {
 			                   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '  <a href="#"  onclick="modalView('+i+')" data-toggle="modal" data-target="#myModal"><font color="orange">(수정)</font></a> / <a href="javascript:replydelete('+vos[i].idx+')"><font color="red">(삭제)</font></a></span>';
@@ -329,6 +366,7 @@
     		$("#demo"+idx)[0].style.display = 'none';
     		document.getElementById("openC"+idx).style.display = 'block';
        	document.getElementById("closeC"+idx).style.display = 'none'; 	
+       	$("#replyForm"+idx)[0].style.display = 'none';
 			}
     	
     	function rereplyClose(idx) {
@@ -394,6 +432,13 @@
       	});
 			}
 		function reportRating(idx) {
+			
+			let mid = "${sMid}";
+			if(mid == "") {
+				alert("신고 기능은 로그인 후 가능합니다.");
+				return false;
+			}
+			
 			let ans = confirm("선택한 리뷰를 신고하시겠습니까? 허위 신고는 불이익이 생길수 있습니다.");
 			if(!ans) return false;
 			
@@ -535,18 +580,18 @@
 												<input type="radio" name="reviewStar" value="1" id="rate5"><label
 													for="rate5">★</label>
 											</c:if>
-											</fieldset>
+										</fieldset>
 											&nbsp;&nbsp;
-											<c:if test="${sMid != 'admin' && sMid != rVo.mid}">
-												<a href="javascript:reportRating(${rVo.idx})"><font color="red">신고하기</font></a>
-											</c:if>
-											<c:if test="${sMid == 'admin'}">
-												<input type="button" value="삭제" onclick="ratingDelete(${rVo.idx})" class="btn btn-danger"  />
-											</c:if>
-											<c:if test="${sMid == rVo.mid}">
-												<input type="button" value="수정" onclick="location.href='${ctp}/store/ratingUpdate?idx=${rVo.idx}';" class="btn btn-warning" />
-												<input type="button" value="삭제" onclick="ratingDelete(${rVo.idx})" class="btn btn-danger"  />
-											</c:if>
+										<c:if test="${sMid != 'admin' && sMid != rVo.mid}">
+											<a href="javascript:reportRating(${rVo.idx})"><font color="red">신고하기</font></a>
+										</c:if>
+										<c:if test="${sMid == 'admin'}">
+											<input type="button" value="삭제" onclick="ratingDelete(${rVo.idx})" class="btn btn-danger"  />
+										</c:if>
+										<c:if test="${sMid == rVo.mid}">
+											<input type="button" value="수정" onclick="location.href='${ctp}/store/ratingUpdate?idx=${rVo.idx}';" class="btn btn-warning" />
+											<input type="button" value="삭제" onclick="ratingDelete(${rVo.idx})" class="btn btn-danger"  />
+										</c:if>
 							    </th>
 							  </tr>
 					    </thead>
@@ -559,7 +604,18 @@
 								      ${rVo.content}
 								    </div>		
 								    <hr />
-								    <form name="replyForm">
+								    <div style="text-align: left;" >
+								    	<div class="mt-1">
+					              <input type="button" value="댓글보기" id="openC${rVo.idx}" onclick="getCommentList(${rVo.idx})" class="btn btn-info mb-5"/>
+					              <input type="button" value="댓글닫기" id="closeC${rVo.idx}" onclick="closeCommentList(${rVo.idx})" class="btn btn-info mb-5" style="display: none;"/>
+					              <ul class="comment-list" style="background-color:#eee;">
+					              <div id="demo${rVo.idx}">
+					              </div>
+					              </ul>
+					            </div>
+								    </div>	
+								    
+								    <form name="replyForm${rVo.idx}" id="replyForm${rVo.idx}" style="display: none;">
 										  <table class="table" style="background-color:#eee;">
 										    <tr>
 										      <td style="width:85%; text-align:left;" >
@@ -575,47 +631,6 @@
 										    </tr>
 										  </table>
 										</form>
-								    
-								    <div style="text-align: left;" >
-								    	<div class="mt-1">
-					              <input type="button" value="댓글보기" id="openC${rVo.idx}" onclick="getCommentList(${rVo.idx})" class="btn btn-info mb-5"/>
-					              <input type="button" value="댓글닫기" id="closeC${rVo.idx}" onclick="closeCommentList(${rVo.idx})" class="btn btn-info mb-5" style="display: none;"/>
-					              <ul class="comment-list" style="background-color:#eee;">
-					              <div id="demo${rVo.idx}">
-					              </div>
-					               <%-- 
-					                <li class="comment">
-					                  <div class="comment-body">
-					                    <h3>${rrVo.rSt.count.nickName}</h3>
-					                    <div class="meta"><b>${rrVo.rSt.index.writeDate}</b></div>
-					                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-					                    <p><a href="#" class="reply">Reply</a></p>
-					                  </div>
-					                  
-						                <!-- 대 댓글 -->
-					                  <ul class="children">
-					                    <li class="comment">
-					                      <div class="comment-body">
-					                        <h3>John Doe</h3>
-					                        <div class="meta">June 27, 2018 at 2:21pm</div>
-					                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-					                        <p><a href="#" class="reply">Reply</a></p>
-					                      </div>
-					                    </li>
-					                    <li class="comment">
-					                      <div class="comment-body">
-					                        <h3>John Doe</h3>
-					                        <div class="meta">June 27, 2018 at 2:21pm</div>
-					                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-					                        <p><a href="#" class="reply">Reply</a></p>
-					                      </div>
-					                    </li>
-					                  </ul> 
-					                </li>
-					                 --%>
-					              </ul>
-					            </div>
-								    </div>			    	
 					    	  </td>
 						    </tr>
 					    </tbody>
