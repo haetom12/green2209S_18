@@ -22,16 +22,24 @@
     <link rel="stylesheet" href="${ctp}/css/flaticon.css">
     <link rel="stylesheet" href="${ctp}/css/icomoon.css">
     <link rel="stylesheet" href="${ctp}/css/style.css">
+    
+    <script>
+    	function warning() {
+    		alert("서비스 준비중입니다! 이용에 불편함을 드려 죄송합니다.");
+    		return false;
+    	}
+    	
+    </script>
+    
   </head>
   
   <body class="goto-here">
   	<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
-    <div class="hero-wrap hero-bread" style="background-image: url('${ctp}/images/bg_1.jpg');">
+    <div class="hero-wrap hero-bread" style="background-image: url('${ctp}/images/${storePart}.jpg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
-          <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Products</span></p>
-            <h1 class="mb-0 bread">Products</h1>
+          <div class="col-md-2 ftco-animate text-center">
+            <h1 class="mb-0 bread bg-primary">${storePart}</h1>
           </div>
         </div>
       </div>
@@ -42,11 +50,12 @@
     		<div class="row justify-content-center">
     			<div class="col-md-10 mb-5 text-center">
     				<ul class="product-category">
-    					<li><a href="${ctp}/store/storeList?storePart=${storePart}" class="active">전 체</a></li>
-    					<li><a href="${ctp}/store/storeList?storePart=${storePart}&ordered=rateAvg">별점 높은 순</a></li>
-    					<li><a href="${ctp}/store/storeList?storePart=${storePart}&ordered=orderCnt">주문 많은 순</a></li>
-    					<li><a href="#">가까운 순</a></li>
-    					<li><a href="#">찜 많은 순</a></li>
+  						<%-- <li><a href="${ctp}/store/storeList?storePart=${storePart}" class="active">전 체</a></li> --%>
+  						<li><a href="${ctp}/store/storeList?storePart=${storePart}" >전 체</a></li>
+  						<li><a href="${ctp}/store/storeList?storePart=${storePart}&ordered=rateAvg">별점 높은 순</a></li>
+    					<li><a href="javascript:warning()">주문 많은 순</a></li>
+    					<li><a href="javascript:warning()">가까운 순</a></li>
+    					<li><a href="javascript:warning()">찜 많은 순</a></li>
     				</ul>
     			</div>
     		</div>

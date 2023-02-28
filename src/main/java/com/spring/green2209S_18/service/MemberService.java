@@ -5,6 +5,8 @@ import java.util.List;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.QnaVO;
+import com.spring.green2209S_18.vo.RatingVO;
 
 public interface MemberService {
 
@@ -35,5 +37,10 @@ public interface MemberService {
 	public MemberVO getMidFind(String name, String email);
 
 	public MemberVO getPwdFind(String mid, String email);
+
+	public QnaVO getQnAContent(int idx);
+
+	public List<QnaVO> getQnAComment(int idx);
+
 
 }

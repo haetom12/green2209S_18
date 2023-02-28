@@ -58,7 +58,6 @@
     		success:function(res) {
     		  if(res == "0") {
     				alert("회원 삭제에 실패하였습니다. 다시 시도해주세요.");
-    				location.reload();
     			}
     			else {
     				alert("회원이 삭제 되었습니다!");

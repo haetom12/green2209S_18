@@ -96,7 +96,11 @@ public class MemberController {
 			if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
 				// 회원 인증처리된 경우 수행할 내용?  쿠키값처리 
 				
-				 if(idCheck.equals("on")) {
+				 if(mid.equals("admin")) {
+					 return "redirect:/msg/notAuthorize";
+				 }
+				
+				 else if(idCheck.equals("on")) {
 					 	Cookie cookieMid = new Cookie("cMid", mid);
 					 	Cookie cookiePart = new Cookie("cPart", part);
 						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
@@ -152,9 +156,9 @@ public class MemberController {
 				 if(idCheck.equals("on")) {
 					 	Cookie cookieMid = new Cookie("cMid", mid);
 					 	Cookie cookiePart = new Cookie("cPart", part);
-						cookieMid.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						cookieMid.setMaxAge(60*60*24*7);  
 						response.addCookie(cookieMid);
-						cookiePart.setMaxAge(60*60*24*7);  // 쿠키 만료시간을 7일..
+						cookiePart.setMaxAge(60*60*24*7);  
 						response.addCookie(cookiePart);
 				 }
 				 else {
@@ -222,7 +226,7 @@ public class MemberController {
 				session.setAttribute("sEmail", vo.getStoreEmail());
 				model.addAttribute("vo",vo);
 				
-				return "redirect:/member/memberLoginOk";
+				return "redirect:/h";
 			}
 			// 로그인 실패
 			else {
@@ -253,6 +257,7 @@ public class MemberController {
 				 }
 				
 				session.setAttribute("sMid", mid);
+				session.setAttribute("sPart", "admin");
 				model.addAttribute("vo",vo);
 				
 				return "redirect:/msg/adminLoginOk";
@@ -475,7 +480,7 @@ public class MemberController {
 		return res+"";
 	}
 	
-	// 내 주문내역 리스트로
+	// 이메일 인증 체크
 	@ResponseBody
 	@RequestMapping(value = "/memberEmailCheckOk", method = RequestMethod.POST)
 	public String memberEmailCheckPost(String emailCode, HttpSession session) {
@@ -817,7 +822,7 @@ public class MemberController {
 			e.printStackTrace();
 		}
 		
-		return "redirect:/msg/midEmailSend";
+		return "redirect:/msg/pwdEmailSend";
 	}
 	
 	

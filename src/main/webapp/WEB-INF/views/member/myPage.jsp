@@ -100,7 +100,6 @@
                 <li><a href="${ctp}/member/myOrderList" class="py-2 d-block">최근 주문 내역</a></li>
                 <li><a href="${ctp}/order/myWishList" class="py-2 d-block">찜목록</a></li>
                 <li><a href="${ctp}/order/myCouponList" class="py-2 d-block">쿠폰함</a></li>
-                <li><a href="#" class="py-2 d-block">내 리뷰 관리</a></li>
               </ul>
             </div>
           </div>
@@ -108,8 +107,8 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">서비스 관리</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">내 문의 조회</a></li>
-                <li><a href="#" class="py-2 d-block">문의 등록 하기</a></li>
+                <li><a href="${ctp}/QnA/QnAList" class="py-2 d-block">내 문의 조회</a></li>
+                <li><a href="${ctp}/QnA/QnAInput" class="py-2 d-block">문의 등록 하기</a></li>
               </ul>
             </div>
           </div>

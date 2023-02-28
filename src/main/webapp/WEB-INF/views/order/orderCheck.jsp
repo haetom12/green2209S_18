@@ -33,6 +33,11 @@
 			'use strict';
 			// 결재하기
 		    function order() {
+					if(agree.checked == false) {
+						alert("결제 시스템 동의를 눌러주세요.");
+						return false;
+					}
+				
 		    	var ans = confirm("결재하시겠습니까?");
 		    	
 		    	let address1 = myform.address1.value;
@@ -217,32 +222,11 @@
 	          	</div>
 	          	<div class="col-md-12">
 	          		<div class="cart-detail p-3 p-md-4">
-	          			<h3 class="billing-heading mb-4">Payment Method</h3>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2"> Direct Bank Tranfer</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2"> Check Payment</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2"> Paypal</label>
-											</div>
-										</div>
-									</div>
+	          			<h3 class="billing-heading mb-4">결제 진행</h3>
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="checkbox">
-											   <label><input type="checkbox" value="" class="mr-2"> I have read and accept the terms and conditions</label>
+											   <label><input type="checkbox" id="agree" name="agree" class="mr-2"> 결제 시스템 이용약관 대하여 동의합니다</label>
 											</div>
 										</div>
 									</div>

@@ -59,27 +59,27 @@
   <body class="goto-here">
   
 		<jsp:include page="/WEB-INF/views/include/nav.jsp"></jsp:include>		
+		
     <div class="hero-wrap hero-bread" style="background-image: url('${ctp}/images/bg_1.jpg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-            <h1 class="mb-0 bread">마이 페이지</h1>
-<!--           	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">나의</a></span></p>
-            <h1 class="mb-0 bread">찜목록</h1> -->
+            <h1 class="mb-0 bread">내 주문 내역</h1>
           </div>
         </div>
       </div>
     </div>
 
-		<div class="container" style="width: 2500px; margin-top: 5%;">
+		<div class="container" style="width: 3000px; margin-top: 5%;">
 			<div class="ftco-animate">
-				<h2 class="text-center">내 주문 내역</h2><br />
+				<h2 class="text-center">최근 배달 주문</h2><br />
 				<form name="myform" method="post">
   				<table class="table">
 				    <thead class="thead-primary">
 						  <tr class="text-center">
 						    <th>메뉴사진</th>
 						    <th>주문정보</th>
+						    <th>주문자</th>
 						    <th style="width: 130px;">배달요청사항</th>
 						    <th>총상품금액</th>
 						    <th>배달주소</th>
@@ -110,6 +110,7 @@
 					          </c:forEach>
 					        </p>
 					      </td>
+					      <td>${vo.mid}</td>
 					      <td>
 					      	<c:if test="${vo.orderMessage==''}">
 					      		<b>(없음)</b>
@@ -140,9 +141,6 @@
 					     				<c:if test="${vo.ratingOk=='NO'}">		
 					     					<input type="button" class="btn btn-primary" value="별점작성" onclick="location.href='${ctp}/order/ratingInput?orderIdx=${vo.orderIdx}';" />
 					     				</c:if>
-					     				<c:if test="${vo.ratingOk!='NO'}">		
-					     					<input type="button" class="btn btn-primary" value="별점보러가기" onclick="location.href='${ctp}/order/myRating?orderIdx=${vo.orderIdx}';" />
-					     				</c:if>
 					     			</c:if>	
 										<c:if test="${vo.progress=='배달채택'}">				      		
 					     				<b><font color="green">${vo.progress}</font></b>
@@ -152,7 +150,7 @@
 					     			</c:if>	
 										<c:if test="${vo.progress=='주문완료'}">				      		
 					     				<b><font color="orange">${vo.progress}</font></b><br />
-					     				<input type="button" value="주문취소" onclick="orderCancle('${vo.orderIdx}')" class="btn btn-warning" />
+					     				<input type="button" value="주문취소" class="btn btn-danger" onclick="orderCancle(${vo.orderIdx})" />
 					     			</c:if>	
 					     		</div>
 					      </td>
@@ -173,24 +171,24 @@
             <div class="block-27">
               <ul>
               	<c:if test="${pageVo.pag > 1}">
-						      <li><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=1">&lt;&lt;</a></li>
+						      <li><a href="${ctp}/store/shopOrderList?pageSize=${pageVo.pageSize}&pag=1">&lt;&lt;</a></li>
 						    </c:if>
                 <c:if test="${pageVo.curBlock > 0}">
-						      <li><a class="page-link text-secondary" href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}">&lt;</a></li>
+						      <li><a class="page-link text-secondary" href="${ctp}/store/shopOrderList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}">&lt;</a></li>
 						    </c:if>
                 <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
 						      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-						    		<li class="active"><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+						    		<li class="active"><a href="${ctp}/store/shopOrderList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
 						    	</c:if>
 						      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-						    		<li><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
+						    		<li><a href="${ctp}/store/shopOrderList?pageSize=${pageVo.pageSize}&pag=${i}">${i}</a></li>
 						    	</c:if>
 						    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">
-							      <li><a class="page-link text-secondary" href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}">&gt;</a></li>
+							      <li><a class="page-link text-secondary" href="${ctp}/store/shopOrderList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}">&gt;</a></li>
 							    </c:if>
 						    </c:forEach>
 						     <c:if test="${pageVo.pag < pageVo.totPage}">
-						       <li><a href="${ctp}/member/myOrderList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}">&gt;&gt;</a></li>
+						       <li><a href="${ctp}/store/shopOrderList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}">&gt;&gt;</a></li>
 						     </c:if>
               </ul>
             </div>

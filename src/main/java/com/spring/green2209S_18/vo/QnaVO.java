@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class QnaVO {
 	private int idx;
-	private String qnaIdx;
+	private int qnaIdx;
 	private String mid;
 	private String nickName;
 	private String title;

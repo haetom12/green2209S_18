@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.QnaVO;
 import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
@@ -63,7 +64,7 @@ public interface AdminService {
 
 	public List<SubFoodMenuVO> getChecksubTagList(String foodTag, String brandName);
 
-	public List<FoodMenuVO> getstoreMenuList(String brandName);
+	public List<FoodMenuVO> getstoreMenuList(int startIndexNo, int pageSize, String search, String searchString, String brandName);
 
 	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, String search, String searchString, String order);
 
@@ -111,6 +112,15 @@ public interface AdminService {
 
 	public List<StoreVO> getQnAList(int startIndexNo, int pageSize, String search, String searchString);
 
+	public int setAdminQnAInput(int idx, QnaVO vo);
+
+	public int setQnAnwerDelete(int idx);
+
+	public int setAdminDeleteQnA(int idx);
+
+	public List<StoreVO> getQnAListYet(int startIndexNo, int pageSize, String search, String searchString);
+
+	public List<StoreVO> getQnAListDone(int startIndexNo, int pageSize, String search, String searchString);
 
 
 }

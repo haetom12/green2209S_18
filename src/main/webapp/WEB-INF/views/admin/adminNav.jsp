@@ -29,7 +29,8 @@
 	
 </head>
 		
-<div class="pre-loader">
+	<!-- 
+	<div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class="loader-logo"><img src="vendors/images/deskapp-logo.svg" alt=""></div>
 			<div class='loader-progress' id="progress_div">
@@ -41,6 +42,7 @@
 			</div>
 		</div>
 	</div>
+	 -->
 
 	<div class="header">
 		<div class="header-left">
@@ -124,7 +126,7 @@
 	</div>
 
 	<div class="left-side-bar">
-		<div class="brand-logo">
+<%-- 		<div class="brand-logo">
 			<a href="index.html">
 				<img src="${ctp}/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
 				<img src="${ctp}/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
@@ -132,7 +134,7 @@
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>
 			</div>
-		</div>
+		</div> --%>
 		<div class="menu-block customscroll">
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
@@ -241,8 +243,8 @@
 						</a>
 						<ul class="submenu">
 							<li><a href="${ctp}/admin/QnAList">모든 문의</a></li>
-							<li><a href="getting-started.html">미 답변 문의</a></li>
-							<li><a href="color-settings.html">답변 문의</a></li>
+							<li><a href="${ctp}/admin/QnAListYet">미 답변 문의</a></li>
+							<li><a href="${ctp}/admin/QnAListDone">답변 문의</a></li>
 						</ul>
 					</li>
 					<li>

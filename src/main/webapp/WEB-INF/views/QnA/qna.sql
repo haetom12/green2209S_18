@@ -20,6 +20,7 @@ select count(idx) from qna;
 
 select * from qna2 order by qnaIdx desc, idx desc;
 
+select * from qna where qnaIdx is null;
 
 /* 이번에 작성된 qna는 다음과 같은 방법으로 구현해 봤다.
  * 질문글과 답변글을 올릴때 아래 idx, qnaIdx, qnaSw가 결정된다. 즉, qnaSw는 질문글은 'q', 답변글은 'a'로 설정되고, 먼저 idx값을 구한후, 아래와 같은 방법으로 qnaIdx를 구한다.

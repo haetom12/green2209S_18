@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.mail.Store;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,11 +24,14 @@ import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.pagenation.PageProcess;
 import com.spring.green2209S_18.pagenation.PageVO;
 import com.spring.green2209S_18.service.AdminService;
+import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.QnaVO;
+import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 @Controller
@@ -45,6 +49,9 @@ public class AdminController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -316,10 +323,10 @@ public class AdminController {
 	//프랜차이즈 삭제
 	@ResponseBody
 	@RequestMapping(value = "adminBrandDelete", method = RequestMethod.POST)
-	public String adminBrandDeleteGet(String brandName) {
+	public String adminBrandDeleteGet(int startIndexNo, int pageSize, String search, String searchString, String brandName) {
 		int res = 0;
 		
-		List<FoodMenuVO> vos = adminService.getstoreMenuList(brandName);
+		List<FoodMenuVO> vos = adminService.getstoreMenuList(startIndexNo, pageSize, search, searchString, brandName);
 		
 		if(vos.size() != 0) return "0";
 		
@@ -341,13 +348,27 @@ public class AdminController {
 	
 	// 선택한 프랜차이즈 음식메뉴 리스트 폼 이동
 	@RequestMapping(value = "storeMenuList", method = RequestMethod.GET)
-	public String storeMenuListGet(Model model, String brandName) {
+	public String storeMenuListGet(Model model, String brandName,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt2(pag, pageSize, "adminMenuList", search, searchString, brandName);	
 		
 		// 음식 프렌차이즈 가져오기
-		List<FoodMenuVO> vos = adminService.getstoreMenuList(brandName);
+		List<FoodMenuVO> vos = adminService.getstoreMenuList(pageVo.getStartIndexNo(), pageSize, search, searchString, brandName);
+		List<FoodMenuVO> tVos = adminService.getstoreTagList(brandName);
+		
 		
 		model.addAttribute("brandName", brandName);
+		model.addAttribute("search", search);
+		model.addAttribute("searchString", searchString);
+		model.addAttribute("pag", pag);
+		model.addAttribute("pageSize", pageSize);
 		model.addAttribute("vos", vos);
+		model.addAttribute("tVos", tVos);
+		model.addAttribute("pageVo", pageVo);
 		
 		return "admin/menu/storeMenuList";
 	}
@@ -621,7 +642,7 @@ public class AdminController {
 
 		int res = adminService.setMemberDelete(mid);
 		
-		if(res == 1 && res2 == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		if(res == 1 || res2 == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
 		else return "0";
 	}
 	
@@ -851,6 +872,17 @@ public class AdminController {
 		else return "0";
 	}
 	
+	// 평점리뷰 복구 처리
+	@ResponseBody
+	@RequestMapping(value = "adminRatingRestore", method = RequestMethod.POST)
+	public String adminRatingRestorePost(int idx) {
+		
+		int res = adminDAO.setRatingRestore(idx);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
 	
 	// 신고된 평점리뷰 폼 이동
 	@RequestMapping(value = "ratingReportList", method = RequestMethod.GET)
@@ -939,6 +971,122 @@ public class AdminController {
 		return "admin/QnA/adminQnAList";
 	}
 	
+	//별점 내용 확인
+	@RequestMapping(value = "ratingContent", method = RequestMethod.GET)
+	public String QnAListGet(Model model, int idx) {
+		
+		RatingVO vo = storeService.getRatingInfo(idx);
+		
+		model.addAttribute("vo",vo);
+		
+		return "admin/rating/ratingContent";
+	}
+	
+	//별점 내용 확인
+	@RequestMapping(value = "QnAContent", method = RequestMethod.GET)
+	public String QnAContentGet(Model model, int idx) {
+		
+		QnaVO vo = memberService.getQnAContent(idx);
+		
+		List<QnaVO> vos = memberService.getQnAComment(idx);
+		
+		model.addAttribute("vo",vo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/QnA/QnAContent";
+	}
+	
+	//별점 내용 확인
+	@ResponseBody
+	@RequestMapping(value = "QnAnwerDelete", method = RequestMethod.POST)
+	public String QnAnwerDeletePost(int idx) {
+		
+		int res = adminService.setQnAnwerDelete(idx);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	// 평점리뷰 삭제 처리
+	@Transactional
+	@ResponseBody
+	@RequestMapping(value = "adminQnAInput", method = RequestMethod.POST)
+	public String adminQnAInputPost(int idx, String content, String part, String title, HttpSession session) {
+		
+		QnaVO vo = new QnaVO();
+		String mid = (String) session.getAttribute("sMid");
+		String nickName = (String) session.getAttribute("sNickName");
+		if(nickName==null) nickName = "어드민";
+		
+		vo.setQnaIdx(idx);
+		vo.setMid(mid);
+		vo.setNickName(nickName);
+		vo.setPart(part);
+		vo.setTitle(title);
+		vo.setQnaSw("a");
+		vo.setContent(content);
+		
+		// 답변 등록
+		int res = adminService.setAdminQnAInput(idx, vo);
+		// 해당 문의 답변 상황 바꾸기
+		//adminService.setQnASituation(idx);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	
+	// 문의 삭제
+	@ResponseBody
+	@RequestMapping(value = "adminDeleteQnA", method = RequestMethod.POST)
+	public String adminDeleteQnAPost(int idx) {
+		
+		int res = adminService.setAdminDeleteQnA(idx);
+		
+		if(res == 1) return "1"; // 정상처리가 되면 true == 1이 자동으로 넘어옴
+		else return "0";
+	}
+	
+	
+	// QnA 답변 대기중인 폼 이동
+	@RequestMapping(value = "QnAListYet", method = RequestMethod.GET)
+	public String QnAListYet(Model model,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "adminQnAListYet", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getQnAListYet(pageVo.getStartIndexNo(), pageSize, search, searchString);
+		
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/QnA/adminQnAListYet";
+	}
+	
+	// QnA 답변완료된 리스트
+	@RequestMapping(value = "QnAListDone", method = RequestMethod.GET)
+	public String QnAListDone(Model model,
+			@RequestParam(name="search", defaultValue = "", required = false) String search,
+			@RequestParam(name="searchString", defaultValue = "", required = false) String searchString,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize) {
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "QnAListDone", search, searchString);		
+		
+		List<StoreVO> vos = adminService.getQnAListDone(pageVo.getStartIndexNo(), pageSize, search, searchString);
+		
+		model.addAttribute("search",search);
+		model.addAttribute("searchString",searchString);
+		model.addAttribute("pageVo",pageVo);
+		model.addAttribute("vos",vos);
+		
+		return "admin/QnA/adminQnAListDone";
+	}
 	
 }
 

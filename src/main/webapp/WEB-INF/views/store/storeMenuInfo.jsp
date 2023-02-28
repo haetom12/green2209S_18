@@ -132,6 +132,13 @@
         
         // 장바구니 호출시 수행함수
         function cart() {
+	    		let sPart = '${sPart}';
+	    		
+	    		if(sPart == "") {
+	    			alert("장바구니는 로그인 후 가능합니다!");
+	    			return false;
+	    		}
+        	
         	if(document.getElementById("totalPrice").value==0) {
         		alert("옵션을 선택해주세요");
         		return false;
@@ -152,6 +159,14 @@
         
         // 직접 주문하기
         function order() {
+        	
+	    		let sPart = '${sPart}';
+	    		
+	    		if(sPart == "") {
+	    			alert("주문은 로그인 후 가능합니다!");
+	    			return false;
+	    		}
+        	
         	let totalPrice = document.getElementById("totalPrice").value;
         	if('${sMid}' == "") {
         		alert("로그인 후 이용 가능합니다.");

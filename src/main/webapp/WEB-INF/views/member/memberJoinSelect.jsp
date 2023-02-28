@@ -76,7 +76,7 @@
 		              </div>
 	              </a>
 	              <div class="media-body">
-	                <font size="6pt" color="#4c956c">주문 회원 가입</font>
+	                <font size="6pt" color="#4c956c">일반 회원 가입</font>
 	              </div>
 	            </div>      
 	          </div>

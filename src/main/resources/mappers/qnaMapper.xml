@@ -16,7 +16,15 @@
 	</select>
 
 	<select id="totAdminQnAListCnt" resultType="int">
-		select count(*) from qna <if test="search != ''"> where ${search} like concat('%',#{searchString},'%')</if>;
+		select count(*) from qna where qnaSw = 'q' or qnaSw = '답변완료' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totAdminQnAListYetCnt" resultType="int">
+		select count(*) from qna where qnaSw = 'q' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totAdminQnAListDoneCnt" resultType="int">
+		select count(*) from qna where qnaSw = '답변완료' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
 	</select>
 
 

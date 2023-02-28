@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.RatingVO;
 import com.spring.green2209S_18.vo.StoreVO;
@@ -102,7 +103,7 @@ public interface StoreDAO {
 
 	public int setRatingUpdateOk(@Param("vo") RatingVO vo);
 
-	public int totStoreMenuCnt(@Param("storeName") String search);
+	public int totStoreMenuCnt(@Param("storeName") String search, @Param("foodTag") String searchString);
 
 	public List<FoodMenuVO> getStoreFoodMenu2(@Param("storeName") String storeName, @Param("foodTag") String foodTag, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
 
@@ -147,6 +148,10 @@ public interface StoreDAO {
 	public FoodMenuVO getFoodInfo(@Param("menuIdx") int menuIdx);
 
 	public int setReportReply(@Param("idx") int idx, @Param("mid") String mid);
+
+	public int totStoreOrderListCnt(@Param("storeName") String search, @Param("searchString") String searchString);
+
+	public List<CartVO> getShopOrderListList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("storeName") String storeName);
 
 
 }

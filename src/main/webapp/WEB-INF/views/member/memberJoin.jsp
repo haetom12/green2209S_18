@@ -222,14 +222,29 @@
 		    	let tel = tel1 + "-" + tel2 + "-" + tel3;
 		    	
 		    	// 유효성 검사체크처리한다.(필수 입력필드는 꼭 처리해야 한다.)
-		    	if(!regMid.test(mid)) {
+		    	if(mid.trim()=="") {
+		        alert("아이디를 입력하세요!");
+		        JoinForm.mid.focus();
+		        return false;
+		      }
+		    	else if(!regMid.test(mid)) {
 		        alert("아이디는 영문 소문자와 숫자, 언더바(_)만 사용가능합니다.(길이는 4~20자리까지 허용)");
 		        JoinForm.mid.focus();
 		        return false;
 		      }
+		    	else if(pwd.trim()=="") {
+			        alert("비밀번호를 입력하세요!");
+			        JoinForm.pwd.focus();
+			        return false;
+			      }
 		      else if(!regPwd.test(pwd)) {
 		        alert("비밀번호는 1개이상의 문자와 특수문자 조합의 6~24 자리로 작성해주세요.");
 		        JoinForm.pwd.focus();
+		        return false;
+		      }
+		      else if(memberName.trim()=="") {
+		        alert("성명을 입력하세요.");
+		        JoinForm.memberName.focus();
 		        return false;
 		      }
 		      else if(!regName.test(memberName)) {
@@ -242,6 +257,11 @@
 		        JoinForm.email1.focus();
 		        return false;
 		      }
+		      else if(tel2 == "" || tel3 == "") {
+		    	  alert("전화번호를 입력하세요.");
+		        JoinForm.tel2.focus();
+		        return false;
+		    	}
 		    	
 		    	// 선택사항인 전화번호가 입력되어서 전송되었다면 전화번호형식을 체크해 준다.
 		      if(tel2 != "" || tel3 != "") {

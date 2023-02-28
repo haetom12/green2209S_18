@@ -9,6 +9,8 @@ import com.spring.green2209S_18.dao.MemberDAO;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.QnaVO;
+import com.spring.green2209S_18.vo.RatingVO;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -87,6 +89,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberVO getPwdFind(String mid, String email) {
 		return memberDAO.getPwdFind(mid, email);
+	}
+
+	@Override
+	public QnaVO getQnAContent(int idx) {
+		return memberDAO.getQnAContent(idx);
+	}
+
+	@Override
+	public List<QnaVO> getQnAComment(int idx) {
+		return memberDAO.getQnAComment(idx);
 	}
 	
 

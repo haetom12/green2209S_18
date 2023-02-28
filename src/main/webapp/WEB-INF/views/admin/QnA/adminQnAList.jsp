@@ -72,32 +72,24 @@
       	  myform.submit();
         }
     }
-    
-    function ordered() {
-    	let order = myform.order.value;
-    	let search = myform.search.value;
-    	let searchString = myform.searchString.value;
-    	
-			location.href='${ctp}/admin/adminQnAList?order='+order+'&search='+search+'&searchString='+searchString;
-		}
 	
 	function DelCheck(idx) {
-    	let ans = confirm("선택한 별점을 삭제하겠습니까?");
+    	let ans = confirm("선택한 문의을 삭제하겠습니까?");
     	if(!ans) return false;
     	   	
     	$.ajax({
     		type   : "post",
-    		url    : "${ctp}/admin/adminQnADeleteCheck",
+    		url    : "${ctp}/admin/adminDeleteQnA",
     		data   : {
     			idx : idx
     			},
     		success:function(res) {
     		  if(res == "1") {
-    				alert("별점을 삭제하였습니다!");
+    				alert("문의를 삭제하였습니다!");
     				location.reload();
     			}
     			else {
-    				alert("별점 삭제에 실패하였습니다! 다시 시도하세요.");
+    				alert("문의 삭제에 실패하였습니다! 다시 시도하세요.");
     			}
     		},
     		error : function() {
@@ -123,20 +115,20 @@
 						<h3 class="h3 text-center">모든 문의</h3>
 					</div>
 					<div class="pb-20">
-					
+					  
 						<form name="myform">
 					  	<div class="row mb-2">
-					  	  <div class="col form-inline">
-					  	    <select name="search" style="width:15%;" class="form-control mr-1">
-    						    <option value="개인정보" ${search=='개인정보' ? "selected" : ""}>개인정보</option>
-							    	<option value="광고" ${search=='광고' ? "selected" : ""}>광고</option>
-							    	<option value="결제" ${search=='결제' ? "selected" : ""}>결제</option>
-							    	<option value="리뷰" ${search=='리뷰' ? "selected" : ""}>리뷰</option>
+					  	  <div class="col form-inline ml-2">
+					  	    <select name="search" style="width:15%;" class="form-control mr-2">
+							    	<option value="title" ${search=='title' ? "selected" : ""}>제목</option>
+    						    <option value="nickName" ${search=='nickName' ? "selected" : ""}>닉네임</option>
+							    	<option value="part" ${search=='part' ? "selected" : ""}>문의유형</option>
+							    	<option value="qnaSw" ${search=='qnaSw' ? "selected" : ""}>상태</option>
 					        </select>
 					  	    <input type="text" name="searchString" class="form-control mr-1" value="${searchString}" autofocus />&nbsp;
 					  	    <input type="button" value="개별검색" onclick="midSearch();" class="btn btn-primary" />
 					  	  </div>
-					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/adminQnAList';" class="btn btn-success mr-2">전체검색</button></div>
+					  	  <div class="col text-right"><button type="button" onclick="location.href='${ctp}/admin/QnAList';" class="btn btn-success mr-2">전체검색</button></div>
 					  	</div>
 					  </form>
 					  
@@ -144,8 +136,9 @@
 							<thead>
 								<tr class="text-center">
 					        <th>번호</th>
-					        <th>답변상황</th>
+					        <th>문의유형</th>
 					        <th>제목</th>
+					        <th>답변상황</th>
 					        <th>작성자</th>
 					        <th>작성날짜</th>
 					        <th>비고</th>
@@ -156,18 +149,25 @@
 								<c:forEach var="vo" items="${vos}" varStatus="st">
 						   		<tr class="text-center">
 							    	<td>${curScrStartNo}</td>
+							    	<td><font color="orange">${vo.part}</font></td>
+							    	<td><font color="blue">${vo.title}</font></td>
 							    	<td>
 								    	<c:if test="${vo.qnaSw == 'q'}">
 								    		<font color="red">답변 대기중</font>
 								    	</c:if>
 								    	<c:if test="${vo.qnaSw != 'q'}">
-								    		<font color="blue">답변 완료</font>
+								    		<font color="green">답변 완료</font>
 								    	</c:if>
 							    	</td>
-							    	<td>${vo.title}</td>
 							    	<td>${vo.nickName}</td>
 							    	<td>${fn:substring(vo.WDate,0,16)}</td>
 							    	<td>
+							    	 <c:if test="${vo.qnaSw == 'q'}">
+							    	 	<input type="button" onclick="location.href='${ctp}/admin/QnAContent?idx=${vo.idx}';" class="btn btn-primary" value="문의 답변" />
+							    	 </c:if>
+							    	 <c:if test="${vo.qnaSw != 'q'}">
+							    	 	<input type="button" onclick="location.href='${ctp}/admin/QnAContent?idx=${vo.idx}';" class="btn btn-success" value="답변 확인" />
+							    	 </c:if>
 							    	 <input type="button" onclick="DelCheck('${vo.idx}')" class="btn btn-danger" value="문의 삭제" />
 							    	</td>
 							    </tr>
@@ -180,24 +180,24 @@
 	            <div class="btn-group mb-15" style="margin: 0 auto;">
 	              <ul>
 	              	<c:if test="${pageVo.pag > 1}">
-							      <li class="btn btn-light"><a href="${ctp}/admin/adminQnAList?pageSize=${pageVo.pageSize}&pag=1&search=${search}&searchString=${searchString}">&lt;&lt;</a></li>
+							      <li class="btn btn-light"><a href="${ctp}/admin/QnAList?pageSize=${pageVo.pageSize}&pag=1&search=${search}&searchString=${searchString}">&lt;&lt;</a></li>
 							    </c:if>
 	                <c:if test="${pageVo.curBlock > 0}">
-							      <li><a class="page-link text-secondary" href="${ctp}/admin/adminQnAList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString} ">&lt;</a></li>
+							      <li><a class="page-link text-secondary" href="${ctp}/admin/QnAList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString} ">&lt;</a></li>
 							    </c:if>
 	                <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
 							      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-							    		<li class="btn btn-primary"><a href="${ctp}/admin/adminQnAList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString} "><font color="white">${i}</font></a></li>
+							    		<li class="btn btn-primary"><a href="${ctp}/admin/QnAList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString} "><font color="white">${i}</font></a></li>
 							    	</c:if>
 							      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-							    		<li class="btn btn-light"><a href="${ctp}/admin/adminQnAList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString} ">${i}</a></li>
+							    		<li class="btn btn-light"><a href="${ctp}/admin/QnAList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString} ">${i}</a></li>
 							    	</c:if>
 							    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">	
-								      <li><a class="btn btn-light"href="${ctp}/admin/adminQnAList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString} ">&gt;</a></li>
+								      <li><a class="btn btn-light"href="${ctp}/admin/QnAList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString} ">&gt;</a></li>
 								    </c:if>
 							    </c:forEach>
 							     <c:if test="${pageVo.pag < pageVo.totPage}">
-							       <li class="btn btn-light"><a href="${ctp}/admin/adminQnAList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}&search=${search}&searchString=${searchString} ">&gt;&gt;</a></li>
+							       <li class="btn btn-light"><a href="${ctp}/admin/QnAList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}&search=${search}&searchString=${searchString} ">&gt;&gt;</a></li>
 							     </c:if>
 	              </ul>
 	            </div>

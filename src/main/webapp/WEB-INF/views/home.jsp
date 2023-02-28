@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
   <head>
-    <title>해찬들 연습장</title>
+    <title>저기요 홈페이지</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -76,7 +76,7 @@
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-md-12 ftco-animate text-center">
-	              <h2 class="mb-2"><font size="15pt" color="white">근처에 있는 맛집들을 확인해보세요!</font></h2>
+	              <h2 class="mb-2"><font size="15pt" color="white">집 근처에 있는 맛집들을 확인해보세요!</font></h2>
 	              <h2 class="subheading mb-4">신속하고 빠르게 음식을 &amp; 배달합니다</h2>
 	              <p><a href="${ctp}/store/shopNear" class="btn btn-primary">주위 찾아보기</a></p>
 	            </div>
@@ -91,9 +91,9 @@
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-sm-12 ftco-animate text-center">
-	              <h2 class="mb-2"><font size="15pt" color="white">근처에 있는 맛집들을 검색해보세요!</font></h2>
+	              <h2 class="mb-2"><font size="15pt" color="white">원하는 메뉴를 골라 주문하세요!</font></h2>
 	              <h2 class="subheading mb-4">신속하고 빠르게 음식을 &amp; 배달합니다</h2>
-	              <p><a href="#" class="btn btn-primary">주위 찾아보기</a></p>
+	              <p><a href="${ctp}/store/shopCategory" class="btn btn-primary">메뉴 찾기</a></p>
 	            </div>
 
 	          </div>
@@ -111,8 +111,8 @@
             		<span class="flaticon-shipped"></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">무료무료</h3>
-                <span>On order over $100</span>
+                <h3 class="heading">신속배달</h3>
+                <span>여러분의 음식을 안전하고 빠르게 배달합니다</span>
               </div>
             </div>      
           </div>
@@ -122,8 +122,8 @@
             		<span class="flaticon-diet"></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">Always Fresh</h3>
-                <span>Product well package</span>
+                <h3 class="heading">안심 거래</h3>
+                <span>저기요는 신뢰가능한 매장입니다</span>
               </div>
             </div>    
           </div>
@@ -133,8 +133,8 @@
             		<span class="flaticon-award"></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">Superior Quality</h3>
-                <span>Quality Products</span>
+                <h3 class="heading">간편한 주문</h3>
+                <span>언제/어디에서나 간편하게 메뉴를 주문하세요</span>
               </div>
             </div>      
           </div>
@@ -144,8 +144,8 @@
             		<span class="flaticon-customer-service"></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">Support</h3>
-                <span>24/7 Support</span>
+                <h3 class="heading">고객지원</h3>
+                <span>24시간 문의가 대기중입니다</span>
               </div>
             </div>      
           </div>
@@ -221,114 +221,6 @@
     			</c:forEach>
     		</div>
     	</div>
-    </section>
-		
-		<section class="ftco-section img" style="background-image: url(${ctp}/images/bg_3.jpg);">
-    	<div class="container">
-				<div class="row justify-content-end">
-          <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
-          	<span class="subheading">Best Price For You</span>
-            <h2 class="mb-4">Deal of the day</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-            <h3><a href="#">Spinach</a></h3>
-            <span class="price">$10 <a href="#">now $5 only</a></span>
-            <div id="timer" class="d-flex mt-5">
-						  <div class="time" id="days"></div>
-						  <div class="time pl-3" id="hours"></div>
-						  <div class="time pl-3" id="minutes"></div>
-						  <div class="time pl-3" id="seconds"></div>
-						</div>
-          </div>
-        </div>   		
-    	</div>
-    </section>
-
-    <section class="ftco-section testimony-section">
-      <div class="container">
-        <div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate text-center">
-          	<span class="subheading">Testimony</span>
-            <h2 class="mb-4">Our satisfied customer says</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
-          </div>
-        </div>
-        <div class="row ftco-animate">
-          <div class="col-md-12">
-            <div class="carousel-testimony owl-carousel">
-              <div class="item">
-                <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(${ctp}/images/person_1.jpg)">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text text-center">
-                    <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">Marketing Manager</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(${ctp}/images/person_2.jpg)">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text text-center">
-                    <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">Interface Designer</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(${ctp}/images/person_3.jpg)">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text text-center">
-                    <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">UI Designer</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(${ctp}/images/person_1.jpg)">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text text-center">
-                    <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">Web Developer</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(${ctp}/images/person_1.jpg)">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text text-center">
-                    <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">System Analyst</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <hr>

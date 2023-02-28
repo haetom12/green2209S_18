@@ -20,7 +20,8 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/green2209_18?allowMultiQueries=true" />
 		<property name="username" value="root" />
-		<property name="password" value="1234" />
+		<!-- <property name="password" value="1234" /> -->
+		<property name="password" value="cjgreen" />
 	</bean> 
 
 	<!-- MyBatis Spring 연동(모듈설정) - mapper정보설정 -->

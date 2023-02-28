@@ -57,10 +57,10 @@
     		success:function(res) {
     		  if(res == "1") {
     				alert("회원을 활동 정지 상태로 전환하였습니다!");
+    				location.reload();
     			}
     			else {
     				alert("회원 전환에 실패하였습니다! 다시 시도하세요.");
-    				location.reload();
     			}
     		},
     		error : function() {
@@ -97,8 +97,8 @@
 					        </select>
 					  	    <select name="search" style="width:15%;" class="form-control mr-1">
 					          <option value="mid" ${search=='mid' ? "selected" : ""}>아이디</option>
-					          <option value="nickName" ${search=='nickName' ? "selected" : ""}>별명</option>
-					          <option value="name" ${search=='name' ? "selected" : ""}>성명</option>
+					          <option value="memberNickName" ${search=='memberNickName' ? "selected" : ""}>별명</option>
+					          <option value="memberName" ${search=='memberName' ? "selected" : ""}>성명</option>
 					        </select>
 					  	    <input type="text" name="searchString" class="form-control mr-1" value="${searchString}" autofocus />&nbsp;
 					  	    <input type="button" value="아이디개별검색" onclick="midSearch();" class="btn btn-primary" />

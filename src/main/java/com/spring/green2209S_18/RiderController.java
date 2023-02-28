@@ -27,7 +27,6 @@ import com.spring.green2209S_18.service.RiderService;
 import com.spring.green2209S_18.service.StoreService;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.MailVO;
-import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 @Controller

@@ -59,7 +59,7 @@
 
 		<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="${ctp}/">해 찬 들</a>
+	      <a class="navbar-brand" href="${ctp}/">저 기 요</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
@@ -68,7 +68,6 @@
 		      <div class="collapse navbar-collapse" id="ftco-nav">
 		        <ul class="navbar-nav ml-auto">
 		          <li class="nav-item"><a href="${ctp}/store/shopCategory" class="nav-link">주문하기</a></li>
-		          <li class="nav-item"><a href="contact.html" class="nav-link">고객문의</a></li>
 		          <c:if test="${sMid==null}">
 			          <li class="nav-item"><a href="${ctp}/member/memberLogin" class="nav-link">로그인</a></li>
 			          <li class="nav-item"><a href="${ctp}/member/JoinSelect" class="nav-link">회원가입</a></li>
@@ -77,6 +76,15 @@
 			          <li class="nav-item"><a href="${ctp}/admin/adminMain" class="nav-link">관리자 페이지</a></li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>
+		        </ul>
+		      </div>
+	      </c:if>
+	      
+				<c:if test="${sPart=='admin'}">
+		      <div class="collapse navbar-collapse" id="ftco-nav">
+		        <ul class="navbar-nav ml-auto">
+		          <li class="nav-item"><a href="${ctp}/admin/adminMain" class="nav-link">관리자 페이지</a></li>
+							<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 		        </ul>
 		      </div>
 	      </c:if>
@@ -95,10 +103,28 @@
 		              	<a class="dropdown-item" href="${ctp}/member/myOrderList">주문내역</a>
 		              	<a class="dropdown-item" href="${ctp}/order/myWishList">찜목록</a>
 		                <a class="dropdown-item" href="${ctp}/order/myCouponList">쿠폰함</a>
-		                <a class="dropdown-item" href="checkout.html">리뷰관리</a>
+		                <a class="dropdown-item" href="${ctp}/QnA/QnAList">내 문의</a>
 		              </div>
 		            </li>
-			          <li class="nav-item cta cta-colored"><a href="${ctp}/order/myCart" class="nav-link"><span class="icon-shopping_cart"></span>&nbsp;장바구니[${myCartCnt}]</a></li>
+			          <li class="nav-item"><a href="${ctp}/order/myCart" class="nav-link"><span class="icon-shopping_cart"></span>&nbsp;장바구니[${myCartCnt}]</a></li>
+								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
+							</c:if>
+		        </ul>
+		      </div>
+	      </c:if>
+	      
+	      <c:if test="${sPart=='store'}">
+		      <div class="collapse navbar-collapse" id="ftco-nav">
+		        <ul class="navbar-nav ml-auto">
+		          <li class="nav-item"><a href="${ctp}/store/shopOrderList" class="nav-link">주문확인</a></li>
+		          <c:if test="${sMid!=null && sMid!='admin'}">
+			          <li class="nav-item active dropdown">
+		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">매장관리</a>
+		              <div class="dropdown-menu" aria-labelledby="dropdown04">
+		              	<a class="dropdown-item" href="${ctp}/store/myStorePage">내 가게 관리</a>
+		                <a class="dropdown-item" href="${ctp}/store/storeRatingList">리뷰 확인</a>
+		              </div>
+		            </li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>
 		        </ul>
@@ -113,33 +139,9 @@
 		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지</a>
 		              <div class="dropdown-menu" aria-labelledby="dropdown04">
 		              	<a class="dropdown-item" href="#">내 정보 수정</a>
-		              	<a class="dropdown-item" href="${ctp}/member/myOrderList">주문내역</a>
 		                <a class="dropdown-item" href="${ctp}/rider/orderChat">채팅</a>
-		                <a class="dropdown-item" href="cart.html">쿠폰함</a>
-		                <a class="dropdown-item" href="checkout.html">리뷰관리</a>
 		              </div>
 		            </li>
-			          <li class="nav-item cta cta-colored"><a href="${ctp}/order/myCart" class="nav-link"><span class="icon-shopping_cart"></span>&nbsp;장바구니[${myCartCnt}]</a></li>
-								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
-							</c:if>
-		        </ul>
-		      </div>
-	      </c:if>
-	      
-				<c:if test="${sPart=='store'}">
-		      <div class="collapse navbar-collapse" id="ftco-nav">
-		        <ul class="navbar-nav ml-auto">
-		          <li class="nav-item"><a href="${ctp}/store/shopCategory" class="nav-link">주문확인</a></li>
-		          <c:if test="${sMid!=null && sMid!='admin'}">
-			          <li class="nav-item active dropdown">
-		              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">매장관리</a>
-		              <div class="dropdown-menu" aria-labelledby="dropdown04">
-		              	<a class="dropdown-item" href="shop.html">주문 확인</a>
-		              	<a class="dropdown-item" href="${ctp}/store/myStorePage">내 가게 관리</a>
-		                <a class="dropdown-item" href="${ctp}/store/storeRatingList">리뷰 확인</a>
-		              </div>
-		            </li>
-		            <li class="nav-item"><a href="contact.html" class="nav-link">고객문의</a></li>
 								<li class="nav-item"><a href="${ctp}/member/memberLogout" class="nav-link">로그아웃</a></li>
 							</c:if>
 		        </ul>

@@ -65,7 +65,7 @@
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-            <h1 class="mb-0 bread">마이 페이지</h1>
+            <h1 class="mb-0 bread">고객 문의</h1>
 <!--           	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">나의</a></span></p>
             <h1 class="mb-0 bread">찜목록</h1> -->
           </div>
@@ -93,7 +93,7 @@
 				    <c:forEach var="vo" items="${vos}" varStatus="st">
 				    	<tr class="text-center">
 					    	<td class='image-prod'><b>${st.count}</b></td>
-					    	<td class='product-name'><b>${vo.title}</b></td>
+					    	<td class='product-name'><b><a href="${ctp}/QnA/myQnAContent?idx=${vo.idx}">${vo.title}</a></b></td>
 					    	<td class='image-prod'>${fn:substring(vo.WDate,0,10)}</td>
 					    	<td class='image-prod'>
 						    	<c:if test="${vo.qnaSw == 'q'}">
@@ -104,7 +104,9 @@
 						    	</c:if>
 					    	</td>
 					    	<td class='image-prod'>
-						    	<input type="button" value="수정" onclick="location.href='${ctp}/QnA/QnAUpdate?idx=${vo.idx}';" class="btn btn-warning mb-1" style="margin-left: 5px;"/>
+					    		<c:if test="${vo.qnaSw == 'q'}">
+							    	<input type="button" value="수정" onclick="location.href='${ctp}/QnA/QnAUpdate?idx=${vo.idx}';" class="btn btn-warning mb-1" style="margin-left: 5px;"/>
+					    		</c:if>
 						    	<input type="button" value="삭제" onclick="deleteCheck(${vo.idx})" class="btn btn-danger mb-1" style="margin-left: 5px;"/>
 					    	</td>
 				    	</tr>
@@ -166,7 +168,6 @@
 
   <script>
 		$(document).ready(function(){
-
 		var quantitiy=0;
 		   $('.quantity-right-plus').click(function(e){
 		        
@@ -178,12 +179,10 @@
 		        // If is not undefined
 		            
 		            $('#quantity').val(quantity + 1);
-
 		          
 		            // Increment
 		        
 		    });
-
 		     $('.quantity-left-minus').click(function(e){
 		        // Stop acting like a button
 		        e.preventDefault();

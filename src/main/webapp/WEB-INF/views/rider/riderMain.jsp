@@ -187,34 +187,11 @@
 						</ul>
 					</li>
 					<li>
-						<a href="${ctp}/member/memberLogout" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-lock"></span><span class="mtext">로그아웃</span>
-						</a>
-					</li>
-					
-					<!-- 경계선  -->
-					<li>
 						<div class="dropdown-divider"></div>
 					</li>
-					
 					<li>
-						<div class="sidebar-small-cap">Extra</div>
-					</li>
-					<li>
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit-2"></span><span class="mtext">Documentation</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="introduction.html">Introduction</a></li>
-							<li><a href="getting-started.html">Getting Started</a></li>
-							<li><a href="color-settings.html">Color Settings</a></li>
-							<li><a href="third-party-plugins.html">Third Party Plugins</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-paper-plane1"></span>
-							<span class="mtext">Landing Page <img src="${ctp}/vendors/images/coming-soon.png" alt="" width="25"></span>
+						<a href="${ctp}/member/memberLogout" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-lock"></span><span class="mtext">로그아웃</span>
 						</a>
 					</li>
 				</ul>
@@ -284,7 +261,7 @@
 					</div>
 				</div>
 				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
+					저기요 - made By <a href="#">Hae Chan Cheon</a>
 				</div>
 			</div>
 		</div>

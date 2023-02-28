@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -25,10 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.green2209S_18.pagenation.PageProcess;
 import com.spring.green2209S_18.pagenation.PageVO;
+import com.spring.green2209S_18.service.MemberService;
 import com.spring.green2209S_18.service.OrderService;
 import com.spring.green2209S_18.service.QnAService;
 import com.spring.green2209S_18.vo.QnaVO;
-import com.spring.green2209S_18.vo.RatingVO;
 
 @Controller
 @RequestMapping("/QnA")
@@ -39,6 +38,9 @@ public class QnAController {
 
 	@Autowired
 	OrderService orderService;
+
+	@Autowired
+	MemberService memberService;
 	
 	@Autowired
 	PageProcess pageProcess;
@@ -70,7 +72,7 @@ public class QnAController {
   	return "QnA/QnAInput";
   }
   
-//관리자 상품등록에서 상품 작성시, ckeditor에서 글올릴때 이미지와 함께 올린다면 이곳에서 서버 파일시스템에 저장시켜준다.
+// 문의 작성시 ck에디터 사용
 	@ResponseBody
 	@RequestMapping("/imageUpload")
 	public void imageUploadGet(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile upload) throws Exception {
@@ -174,6 +176,18 @@ public class QnAController {
 		
 	}
 	
+	// 회원이 자신이 쓴 qna확인
+	@RequestMapping(value = "/myQnAContent", method = RequestMethod.GET)
+	public String myQnAContentGet(int idx, Model model) {
+		
+		QnaVO vo = qnaService.getQnAInfo(idx);
+		List<QnaVO> vos = memberService.getQnAComment(idx);
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("vos", vos);
+		
+		return "QnA/myQnAContent";
+	}
 	
   
 }

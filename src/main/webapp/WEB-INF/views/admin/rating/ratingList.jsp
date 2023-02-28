@@ -164,50 +164,50 @@
 								<c:forEach var="vo" items="${vos}" varStatus="st">
 						   		<tr class="text-center">
 							    	<td>${curScrStartNo}</td>
-							    	<td>${vo.title}</td>
+							    	<td><a href="${ctp}/admin/ratingContent?idx=${vo.idx}"><font color="blue">${vo.title}</font></a></td>
 							    	<td>${vo.mid}</td>
 							    	<td>
-							    	<fieldset style="margin: 0 auto">
-			                <c:if test="${vo.reviewStar == 5}">
-												<input type="radio" name="reviewStar" value="5" id="rate1"><label
-													for="rate1">★</label>
-												<input type="radio" name="reviewStar" value="4" id="rate2"><label
-													for="rate2">★</label>
-												<input type="radio" name="reviewStar" value="3" id="rate3"><label
-													for="rate3">★</label>
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${vo.reviewStar == 4}">
-												<input type="radio" name="reviewStar" value="4" id="rate2"><label
-													for="rate2">★</label>
-												<input type="radio" name="reviewStar" value="3" id="rate3"><label
-													for="rate3">★</label>
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${vo.reviewStar == 3}">
-												<input type="radio" name="reviewStar" value="3" id="rate3"><label
-													for="rate3">★</label>
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${vo.reviewStar == 2}">
-												<input type="radio" name="reviewStar" value="2" id="rate4"><label
-													for="rate4">★</label>
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
-			                <c:if test="${vo.reviewStar == 1}">
-												<input type="radio" name="reviewStar" value="1" id="rate5"><label
-													for="rate5">★</label>
-											</c:if>
+							    		<fieldset style="margin: 0 auto">
+				                <c:if test="${vo.reviewStar == 5}">
+													<input type="radio" name="reviewStar" value="5" id="rate1"><label
+														for="rate1">★</label>
+													<input type="radio" name="reviewStar" value="4" id="rate2"><label
+														for="rate2">★</label>
+													<input type="radio" name="reviewStar" value="3" id="rate3"><label
+														for="rate3">★</label>
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${vo.reviewStar == 4}">
+													<input type="radio" name="reviewStar" value="4" id="rate2"><label
+														for="rate2">★</label>
+													<input type="radio" name="reviewStar" value="3" id="rate3"><label
+														for="rate3">★</label>
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${vo.reviewStar == 3}">
+													<input type="radio" name="reviewStar" value="3" id="rate3"><label
+														for="rate3">★</label>
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${vo.reviewStar == 2}">
+													<input type="radio" name="reviewStar" value="2" id="rate4"><label
+														for="rate4">★</label>
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
+				                <c:if test="${vo.reviewStar == 1}">
+													<input type="radio" name="reviewStar" value="1" id="rate5"><label
+														for="rate5">★</label>
+												</c:if>
 											</fieldset>
 							    	</td>
 							    	<td>${vo.storeName}</td>

@@ -55,8 +55,12 @@ public class MessageController {
 			model.addAttribute("msg", "관리자가 아닙니다!");
 			model.addAttribute("url", "member/memberLogin");
 		}
+		else if(msgFlag.equals("riderNo")) {
+			model.addAttribute("msg", "라이더 전용 기능입니다!");
+			model.addAttribute("url", "/h");
+		}
 		else if(msgFlag.equals("memberNo")) {
-			model.addAttribute("msg", "로그인후 사용하세요");
+			model.addAttribute("msg", "로그인후 사용가능합니다.");
 			model.addAttribute("url", "member/memberLogin");
 		}
 		else if(msgFlag.equals("levelCheckNo")) {
@@ -388,6 +392,10 @@ public class MessageController {
 			model.addAttribute("msg", "아이디를 이메일로 전송하였습니다! 이메일을 확인하세요.");
 			model.addAttribute("url", "/member/memberLogin");
 		}
+		else if(msgFlag.equals("pwdEmailSend")) {
+			model.addAttribute("msg", "임시비밀번호를 이메일로 전송하였습니다! 이메일을 확인하세요.");
+			model.addAttribute("url", "/member/memberLogin");
+		}
 		else if(msgFlag.equals("QnAInputOk")) {
 			model.addAttribute("msg", "문의를 등록하였습니다!");
 			model.addAttribute("url", "/QnA/QnAList");
@@ -399,6 +407,10 @@ public class MessageController {
 		else if(msgFlag.equals("QnAUpdateNo")) {
 			model.addAttribute("msg", "문의 수정에 실패하였습니다. 다시 시도해주세요.");
 			model.addAttribute("url", "/QnA/QnAList");
+		}
+		else if(msgFlag.equals("notAuthorize")) {
+			model.addAttribute("msg", "사용자 권한이 없습니다.");
+			model.addAttribute("url", "/member/memberLogin");
 		}
 		
 		return "include/message";

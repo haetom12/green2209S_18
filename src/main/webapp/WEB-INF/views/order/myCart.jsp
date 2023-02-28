@@ -115,7 +115,8 @@
 			
 			let orderTotalPrice = document.getElementById("orderTotalPrice").value;
 			
-			/* alert("총합 : " + orderTotalPrice); */
+			/* alert("총합 : " + orderTotalPrice); 
+			alert("최소 : " + minPrice);  */
 			
       for(let i=1; i<=maxIdx; i++){
         if($("#idx"+i).length != 0 && document.getElementById("idx"+i).checked){
@@ -151,7 +152,7 @@
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-            <h1 class="mb-0 bread">마이 페이지</h1>
+            <h1 class="mb-0 bread">장바구니</h1>
 <!--           	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">나의</a></span></p>
             <h1 class="mb-0 bread">찜목록</h1> -->
           </div>

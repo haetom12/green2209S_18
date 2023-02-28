@@ -211,7 +211,7 @@
 		    	let storeName = JoinForm.storeName.value;
 		    	let storeMid = JoinForm.storeMid.value;
 		    	let storePwd = JoinForm.storePwd.value;
-		    	let HostName = JoinForm.HostName.value;
+		    	let hostName = JoinForm.hostName.value;
 		    	let email1 = JoinForm.email1.value;
 		    	let email2 = JoinForm.email2.value;
 		    	let storeTime1 = JoinForm.storeTime1.value;
@@ -255,9 +255,9 @@
 		        JoinForm.storePwd.focus();
 		        return false;
 		      }
-		      else if(!regName.test(HostName)) {
+		      else if(!regName.test(hostName)) {
 		        alert("성명은 한글과 영문대소문자만 사용가능합니다.");
-		        JoinForm.HostName.focus();
+		        JoinForm.hostName.focus();
 		        return false;
 		      }
 		      else if(!regEmail.test(storeEmail)) {
@@ -514,7 +514,7 @@
 	            </div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">성명</div>
 	            <div class="loginbox-textbox">
-	                <input type="text" class="form-control" id="HostName" name="HostName" placeholder="성명을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
+	                <input type="text" class="form-control" id="hostName" name="hostName" placeholder="성명을 입력하세요"  style="width: 85%; margin: 0 auto;" required>
 	            </div>
 	            <div class="loginbox-textbox fw-bold text-danger fs-3 fs-lg-1 lh-sm" style="margin-left: 7%;">전화번호</div>
 	            <div class="loginbox-textbox">

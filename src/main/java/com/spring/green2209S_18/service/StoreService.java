@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RatingVO;
@@ -142,6 +143,9 @@ public interface StoreService {
 	public FoodMenuVO getFoodInfo(int menuIdx);
 
 	public int setReportReply(int idx, String mid);
+
+	public List<CartVO> getShopOrderListList(int startIndexNo, int pageSize, String storeName);
+
 
 
 }

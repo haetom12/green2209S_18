@@ -14,6 +14,7 @@ import com.spring.green2209S_18.dao.AdminDAO;
 import com.spring.green2209S_18.dao.StoreDAO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.QnaVO;
 import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
@@ -296,8 +297,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<FoodMenuVO> getstoreMenuList(String brandName) {
-		return adminDAO.getstoreMenuList(brandName);
+	public List<FoodMenuVO> getstoreMenuList(int startIndexNo, int pageSize, String search, String searchString, String brandName) {
+		return adminDAO.getstoreMenuList(startIndexNo, pageSize, search, searchString, brandName);
 	}
 
 	@Override
@@ -415,4 +416,33 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.getQnAList(startIndexNo, pageSize, search, searchString);
 	}
 
+	@Override
+	public int setAdminQnAInput(int idx, QnaVO vo) {
+		adminDAO.setQnASituation(idx);
+						
+		return adminDAO.setAdminQnAInput(idx, vo);
+	}
+
+	@Override
+	public int setQnAnwerDelete(int idx) {
+		return adminDAO.setQnAnwerDelete(idx);
+	}
+
+	@Override
+	public int setAdminDeleteQnA(int idx) {
+		return adminDAO.setAdminDeleteQnA(idx);
+	}
+
+	@Override
+	public List<StoreVO> getQnAListYet(int startIndexNo, int pageSize, String search, String searchString) {
+		return adminDAO.getQnAListYet(startIndexNo, pageSize, search, searchString);
+	}
+
+	@Override
+	public List<StoreVO> getQnAListDone(int startIndexNo, int pageSize, String search, String searchString) {
+		return adminDAO.getQnAListDone(startIndexNo, pageSize, search, searchString);
+	}
+	
+	
+	
 }

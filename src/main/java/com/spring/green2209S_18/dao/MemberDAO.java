@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.CouponVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.QnaVO;
+import com.spring.green2209S_18.vo.RatingVO;
 
 public interface MemberDAO {
 
@@ -41,6 +43,10 @@ public interface MemberDAO {
 	public MemberVO getMidFind(@Param("memberName") String name,@Param("email") String email);
 
 	public MemberVO getPwdFind(@Param("mid") String mid, @Param("email") String email);
+
+	public QnaVO getQnAContent(@Param("idx") int idx);
+
+	public List<QnaVO> getQnAComment(@Param("idx") int idx);
 
 
 }

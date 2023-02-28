@@ -52,7 +52,8 @@
 	</select>
 
 	<select id="getstoreMenuList" resultType="com.spring.green2209S_18.vo.FoodMenuVO">
-		select * from adminfoodmenu where brandName = #{brandName};
+		select * from adminfoodmenu where brandName = #{brandName} <if test="search != ''"> and foodTag = #{search} and foodName like concat('%',#{searchString},'%')</if> order by menuIdx desc limit #{startIndexNo}, #{pageSize};
+		<!-- select * from adminfoodmenu where brandName = #{brandName} <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by menuIdx desc limit #{startIndexNo}, #{pageSize}; -->
 	</select>
 
 	<select id="getMemberList" resultType="com.spring.green2209S_18.vo.MemberVO">
@@ -100,7 +101,15 @@
 	</select>
 	
 	<select id="getQnAList" resultType="com.spring.green2209S_18.vo.QnaVO">
-		select * from qna <if test="search != ''"> where ${search} like concat('%',#{searchString},'%') </if> limit #{startIndexNo}, #{pageSize};
+		select * from qna where qnaIdx is null <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by idx desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getQnAListYet" resultType="com.spring.green2209S_18.vo.QnaVO">
+		select * from qna where qnaIdx is null and qnaSw = 'q' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by idx desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getQnAListDone" resultType="com.spring.green2209S_18.vo.QnaVO">
+		select * from qna where qnaIdx is null and qnaSw = '답변완료' <if test="search != ''"> and ${search} like concat('%',#{searchString},'%') </if> order by idx desc limit #{startIndexNo}, #{pageSize};
 	</select>
 
 	<select id="totMemberListCnt" resultType="int">
@@ -145,6 +154,10 @@
 
 	<select id="totRatingReplyReportListCnt" resultType="int">
 		select count(*) from ratingreply where reportCnt != 0 <if test="search != ''"> and ${search} like concat('%',#{searchString},'%')</if>;
+	</select>
+
+	<select id="totAdminMenuListCnt" resultType="int">
+		select count(*) from adminfoodmenu where brandName = #{brandName} <if test="search != ''"> and foodTag = #{search} and foodName like concat('%',#{searchString},'%')</if>;
 	</select>
 
 	<select id="getToTMember" resultType="int">
@@ -202,6 +215,10 @@
 		insert into adminFoodMenu values (default, #{vo.brandName}, #{vo.foodName}, #{vo.foodTag}, #{vo.price}, default, default, default, default, #{vo.foodPhoto}, #{vo.subMenu}, #{vo.foodInfo});
 	</insert>
 
+	<insert id="setAdminQnAInput">
+		insert into qna values (default, #{vo.qnaIdx}, #{vo.mid}, #{vo.nickName}, #{vo.title}, #{vo.part}, default, #{vo.content}, #{vo.qnaSw});
+	</insert>
+
 	
 	
 	<update id="setCategoryUpdate">
@@ -251,6 +268,14 @@
 		update store set storeDel = 'NO' where storeMid = #{storeMid};
 	</update>
 	
+	<update id="setRatingRestore">
+		update rating set reportRating = 0, reportRatingMid = null where idx = #{idx};
+	</update>
+	
+	<update id="setQnASituation">
+		update qna set qnaSw = '답변완료' where idx = #{idx};
+	</update>
+	
 	
 	
 	<delete id="setCategoryDelete">
@@ -283,6 +308,15 @@
 
 	<delete id="setAdminStoreDeleteOk">
 		delete from store where storeMid = #{storeMid};
+	</delete>
+
+	<delete id="setQnAnwerDelete">
+		delete from qna where idx = #{idx};
+	</delete>
+
+	<delete id="setAdminDeleteQnA">
+		delete from qna where idx = #{idx};
+		delete from qna where qnaIdx = #{idx};
 	</delete>
 	
 </mapper>

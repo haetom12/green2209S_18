@@ -142,11 +142,12 @@ public class OrderController {
 		
 		List<CartVO> vos = memberService.getMyCartList(mid);
 		
-		StoreVO cVo = storeService.getstoreInfo(vos.get(0).getStoreName());
-		
 		if(vos.size() == 0) {
 			return "redirect:/msg/cartEmpty";
 		}
+		
+		StoreVO cVo = storeService.getstoreInfo(vos.get(0).getStoreName());
+		
 		
 		String storeName = vos.get(0).getStoreName();
 		

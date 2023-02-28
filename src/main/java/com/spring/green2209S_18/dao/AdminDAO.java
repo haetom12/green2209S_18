@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
+import com.spring.green2209S_18.vo.QnaVO;
 import com.spring.green2209S_18.vo.RiderVO;
 import com.spring.green2209S_18.vo.StoreVO;
 import com.spring.green2209S_18.vo.SubFoodMenuVO;
@@ -37,7 +38,8 @@ public interface AdminDAO {
 
 	public int StoreBrandUpdateOk(@Param("vo") StoreVO vo,@Param("oldBrandName") String oldBrandName);
 
-	public List<FoodMenuVO> getstoreMenuList(@Param("brandName") String brandName);
+	public List<FoodMenuVO> getstoreMenuList(@Param("startIndexNo") int startIndexNo, 
+			@Param("pageSize") int pageSize, @Param("search") String search, @Param("searchString") String searchString, @Param("brandName") String brandName);
 
 	public List<FoodMenuVO> getstoreTagList(@Param("brandName") String brandName);
 
@@ -157,6 +159,24 @@ public interface AdminDAO {
 
 	public List<StoreVO> getQnAList(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
 			@Param("searchString") String searchString);
+
+	public int setRatingRestore(@Param("idx") int idx);
+
+	public int setAdminQnAInput(@Param("idx") int idx,@Param("vo") QnaVO vo);
+
+	public void setQnASituation(@Param("idx") int idx);
+
+	public int setQnAnwerDelete(@Param("idx") int idx);
+
+	public int setAdminDeleteQnA(@Param("idx") int idx);
+
+	public List<StoreVO> getQnAListYet(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString);
+
+	public List<StoreVO> getQnAListDone(@Param("startIndexNo") int startIndexNo,@Param("pageSize")  int pageSize,@Param("search")  String search,
+			@Param("searchString") String searchString);
+
+	public int totAdminMenuListCnt(@Param("search") String search, @Param("searchString") String searchString,@Param("brandName") String brandName);
 
 
 }

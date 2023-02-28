@@ -73,6 +73,17 @@
     	});
     }
 	
+    function midSearch() {
+        let searchString = myform.searchString.value;
+        if(searchString.trim() == "") {
+      	  alert("검색어를 입력하세요!");
+      	  myform.searchString.focus();
+        }
+        else {
+      	  myform.submit();
+        }
+    }
+	
 </script>
 
 
@@ -90,7 +101,23 @@
 						<h3 class="h3 text-center">${brandName}의 메뉴 목록</h3>
 					</div>
 					<div class="pb-20">
-						<button type="button" onclick="fCheck('${brandName}')" class="btn btn-primary ml-3 mb-3">새 메뉴 등록</button>
+						<form name="myform">
+					  	<div class="row mb-2">
+					  	  <div class="col form-inline ml-2">
+					  	    <select name="search" style="width:15%;" class="form-control mr-2">
+					  	    	<c:forEach var="tVo" items="${tVos}">
+								    	<option value="${tVo.foodTag}" ${search==tVo.foodTag ? "selected" : ""}>${tVo.foodTag}</option>
+					  	    	</c:forEach>
+					        </select>
+					  	    <input type="text" name="searchString" class="form-control mr-1" value="${searchString}" autofocus />&nbsp;
+					  	    <input type="hidden" name="brandName"value="${brandName}" autofocus />&nbsp;
+					  	    <input type="button" value="메뉴검색" onclick="midSearch();" class="btn btn-primary mr-3" />
+					  	    <button type="button" onclick="location.href='${ctp}/admin/storeMenuList?brandName=${brandName}';" class="btn btn-success mr-2">전체검색</button>
+					  	  </div>
+					  	  <div class="col"><button type="button" onclick="fCheck('${brandName}')" style="float: right;" class="btn btn-primary mr-3">새 메뉴 등록</button></div>
+					  	</div>
+					  </form>
+					
 						<table class="table hover">
 							<thead>
 								<tr class="text-center">
@@ -109,9 +136,10 @@
 								</tr>
 							</thead>
 							<tbody>
+								<c:set var="curScrStartNo" value="${pageVo.curScrStartNo}"/>
 								<c:forEach var="vo" items="${vos}" varStatus="st">
 						   		<tr class="text-center">
-							    	<td>${st.count}</td>
+							    	<td>${curScrStartNo}</td>
 							    	<td>${vo.brandName}</td>
 							    	<td>${vo.foodName}</td>
 							    	<td>${vo.foodTag}</td>
@@ -131,6 +159,34 @@
 								</c:forEach>
 							</tbody>
 						</table>
+						
+						<div class="col-lg-2 col-md-4 col-sm-4" style="margin: 0 auto;">
+	            <div class="btn-group mb-15" style="margin: 0 auto;">
+	              <ul>
+	              	<c:if test="${pageVo.pag > 1}">
+							      <li class="btn btn-light"><a href="${ctp}/admin/storeMenuList?pageSize=${pageVo.pageSize}&pag=1&search=${search}&searchString=${searchString}&brandName=${brandName}">&lt;&lt;</a></li>
+							    </c:if>
+	                <c:if test="${pageVo.curBlock > 0}">
+							      <li><a class="page-link text-secondary" href="${ctp}/admin/storeMenuList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&brandName=${brandName} ">&lt;</a></li>
+							    </c:if>
+	                <c:forEach var="i" begin="${(pageVo.curBlock)*pageVo.blockSize + 1}" end="${(pageVo.curBlock)*pageVo.blockSize + pageVo.blockSize}" varStatus="st">
+							      <c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
+							    		<li class="btn btn-primary"><a href="${ctp}/admin/storeMenuList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&brandName=${brandName} "><font color="white">${i}</font></a></li>
+							    	</c:if>
+							      <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
+							    		<li class="btn btn-light"><a href="${ctp}/admin/storeMenuList?pageSize=${pageVo.pageSize}&pag=${i}&search=${search}&searchString=${searchString}&brandName=${brandName} ">${i}</a></li>
+							    	</c:if>
+							    	<c:if test="${pageVo.curBlock < pageVo.lastBlock}">	
+								      <li><a class="btn btn-light"href="${ctp}/admin/storeMenuList?pageSize=${pageVo.pageSize}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&search=${search}&searchString=${searchString}&brandName=${brandName} ">&gt;</a></li>
+								    </c:if>
+							    </c:forEach>
+							     <c:if test="${pageVo.pag < pageVo.totPage}">
+							       <li class="btn btn-light"><a href="${ctp}/admin/storeMenuList?pageSize=${pageVo.pageSize}&pag=${pageVo.totPage}&search=${search}&searchString=${searchString}&brandName=${brandName} ">&gt;&gt;</a></li>
+							     </c:if>
+	              </ul>
+	            </div>
+	          </div>
+						
 						<div>
 							<input type="button" value="뒤로가기" onclick="location.href='${ctp}/admin/storeBrandOptionList';" class="btn btn-secondary mt-2 ml-3" />
 						</div>

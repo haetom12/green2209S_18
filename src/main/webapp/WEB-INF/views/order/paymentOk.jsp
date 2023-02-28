@@ -15,8 +15,9 @@
 		
     // 소켓 열기 
     let ws;
-    let url = "ws://localhost:9090/green2209S_18/chatserverDb";
-    /* let url = "ws://192.168.50.23:9090/green2209S_18/chatserverDb"; */
+    /* let url = "ws://localhost:9090/green2209S_18/chatserverDb"; */
+    let url = "ws://49.142.157.251:9090/green2209S_18/chatserverDb";
+    
     
 		IMP.request_pay({
 		    pg : 'html5_inicis.INIpayTest', // version 1.1.0부터 지원.		// 변경된 방침에서는 pg : 'html5_inicis' 로 고쳐준다.

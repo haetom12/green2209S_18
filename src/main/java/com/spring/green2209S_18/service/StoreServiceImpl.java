@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.green2209S_18.common.DistanceCal;
 import com.spring.green2209S_18.common.JavaspringProvide;
 import com.spring.green2209S_18.dao.StoreDAO;
+import com.spring.green2209S_18.vo.CartVO;
 import com.spring.green2209S_18.vo.FoodMenuVO;
 import com.spring.green2209S_18.vo.MemberVO;
 import com.spring.green2209S_18.vo.RatingVO;
@@ -473,6 +474,11 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int setReportReply(int idx, String mid) {
 		return storeDAO.setReportReply(idx, mid);
+	}
+
+	@Override
+	public List<CartVO> getShopOrderListList(int startIndexNo, int pageSize, String storeName) {
+		return storeDAO.getShopOrderListList(startIndexNo, pageSize, storeName);
 	}
 
 

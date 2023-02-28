@@ -298,7 +298,7 @@
 					return false;
 				}
 				else if(options == "") {
-					alert("수정메뉴을 선택하세요.");
+					alert("찾고자하는 회원을 선택하세요.");
 					return false;
 				}
 				myform.submit();
@@ -337,6 +337,7 @@
 				<form name="LoginForm" method="post">
 	        <div class="loginbox bg-white">
 	            <div class="fw-bold text-danger fs-3 fs-lg-5 lh-sm my-2 mt-2 text-center">로그인</div>
+	            <%-- 
 	            <div class="loginbox-social">
 	                <div class="social-title ">
 	                	<a href="">
@@ -348,6 +349,7 @@
 	                <div class="or-line"></div>
 	                <div class="or">OR</div>
 	            </div>
+	             --%>
 	            <div class="loginbox-textbox">
 		            <div class="form-check-inline ml-4">
 						      <label class="form-check-label" for="radio1">
@@ -508,10 +510,8 @@
 					</div>
 				</div>
 			</div>
-		
-		
-		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
     </main>
+		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 	
     <script src="${ctp}/vendors/@popperjs/popper.min.js"></script>
     <script src="${ctp}/vendors/bootstrap/bootstrap.min.js"></script>

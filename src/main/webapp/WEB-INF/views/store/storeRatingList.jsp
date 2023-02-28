@@ -61,6 +61,13 @@
     	
     	// 댓글 달기
         function replyCheck(idx) {
+	    		let sPart = '${sPart}';
+	    		
+	    		if(sPart == "") {
+	    			alert("댓글은 로그인 후 가능합니다!");
+	    			return false;
+	    		}
+    	
         	let content = $("#content"+idx).val();
         	let storePart = '${vo.storePart}';
         	
@@ -286,7 +293,6 @@
 		                   else {
 			                   html += '<span style="float:right;" align="right" id="writeDate'+ vos[i].nickName +'"> ' + vos[i].writeDate  +  '  <a href="#"  onclick="modalView('+i+')" data-toggle="modal" data-target="#myModal"><font color="orange">(수정)</font></a> / <a href="javascript:replydelete('+vos[i].idx+')"><font color="red">(삭제)</font></a></span>';
 		                   }
-		                   
 		                   
 		                   html += "<div class='mb-1 comment_container' >"
 		                   html += "<h5 id='commentText_" + vos[i].nickName + "' style='display: inline'>" + vos[i].content +"</h5>";

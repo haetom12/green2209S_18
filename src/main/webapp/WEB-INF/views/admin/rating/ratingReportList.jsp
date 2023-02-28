@@ -106,6 +106,31 @@
     	});
     }
 	
+	function check(idx) {
+    	let ans = confirm("선택한 별점을 제외하겠습니까?");
+    	if(!ans) return false;
+    	   	
+    	$.ajax({
+    		type   : "post",
+    		url    : "${ctp}/admin/adminRatingRestore",
+    		data   : {
+    			idx : idx
+    			},
+    		success:function(res) {
+    		  if(res == "1") {
+    				alert("별점을 신고목록에서 제외하였습니다!");
+    				location.reload();
+    			}
+    			else {
+    				alert("별점 제외에 실패하였습니다! 다시 시도하세요.");
+    			}
+    		},
+    		error : function() {
+    			alert("전송 오류~~");
+    		}
+    	});
+    }
+	
 </script>
 
 
@@ -166,7 +191,7 @@
 						   		<tr class="text-center">
 							    	<td>${curScrStartNo}</td>
 							    	<td><font color="red">${vo.reportRating}</font></td>
-							    	<td>${vo.title}</td>
+							    	<td><a href="${ctp}/admin/ratingContent?idx=${vo.idx}"><font color="blue">${vo.title}</font></a></td>
 							    	<td>${vo.mid}</td>
 							    	<td>
 							    	<fieldset style="margin: 0 auto">
@@ -215,6 +240,7 @@
 							    	<td>${vo.storeName}</td>
 							    	<td>${fn:substring(vo.ratingDate,0,10)}</td>
 							    	<td>
+							    	 <input type="button" onclick="check('${vo.idx}')" class="btn btn-warning" value="신고목록에서 제외" />
 							    	 <input type="button" onclick="DelCheck('${vo.idx}')" class="btn btn-danger" value="평점 리뷰 삭제" />
 							    	</td>
 							    </tr>

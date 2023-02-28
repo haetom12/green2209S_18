@@ -97,10 +97,7 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">거래관리</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">최근 주문 내역</a></li>
-                <li><a href="#" class="py-2 d-block">주문 취소 내역</a></li>
-                <li><a href="#" class="py-2 d-block">Journal</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+                <li><a href="${ctp}/store/shopOrderList" class="py-2 d-block">최근 주문 내역</a></li>
               </ul>
             </div>
           </div>
@@ -108,8 +105,7 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">서비스 관리</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">가게리뷰 조회</a></li>
-                <li><a href="#" class="py-2 d-block">문의 등록 하기</a></li>
+                <li><a href="${ctp}/store/storeRatingList" class="py-2 d-block">가게리뷰 조회</a></li>
               </ul>
             </div>
           </div>

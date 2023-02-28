@@ -38,6 +38,14 @@
 	<select id="getPwdFind" resultType="com.spring.green2209S_18.vo.MemberVO">
 		select * from member where mid = #{mid} and email = #{email};
 	</select>
+	
+	<select id="getQnAContent" resultType="com.spring.green2209S_18.vo.QnaVO">
+		select * from qna where idx = #{idx};
+	</select>
+	
+	<select id="getQnAComment" resultType="com.spring.green2209S_18.vo.QnaVO">
+		select * from qna where qnaIdx = #{idx};
+	</select>
 
 
 

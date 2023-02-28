@@ -156,7 +156,7 @@
 						</div>
 						<input type="button" value="회원인증"  id="checkBtn" name="checkBtn" onclick="memberCheck()" style="float: right;" class="btn btn-success ml-2" />
 						<input type="button" value="탈퇴신청" id="deleteBtn" name="deleteBtn" onclick="codeCheck()" style="display: none; float: right;" class="btn btn-success ml-2" />
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/member/myPage';" style="float: right;" class="btn btn-secondary mr-2" />
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/store/myStorePage';" style="float: right;" class="btn btn-secondary mr-2" />
 					</form>
   	    </div>
       </div>

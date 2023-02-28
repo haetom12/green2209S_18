@@ -43,7 +43,7 @@ public class PageProcess {
 			totRecCnt = storeDAO.totRatingCnt(search);			
 		}
 		else if(section.equals("storeMenu")) {
-			totRecCnt = storeDAO.totStoreMenuCnt(search);			
+			totRecCnt = storeDAO.totStoreMenuCnt(search, searchString);			
 		}
 		else if(section.equals("qrCode")) {
 			totRecCnt = memberDAO.totCouponCnt(search);			
@@ -93,6 +93,15 @@ public class PageProcess {
 		else if(section.equals("adminQnAList")) {
 			totRecCnt = qnADAO.totAdminQnAListCnt(search,searchString);			
 		}
+		else if(section.equals("adminQnAListYet")) {
+			totRecCnt = qnADAO.totAdminQnAListYetCnt(search,searchString);			
+		}
+		else if(section.equals("QnAListDone")) {
+			totRecCnt = qnADAO.totAdminQnAListDoneCnt(search,searchString);			
+		}
+		else if(section.equals("storeOrderList")) {
+			totRecCnt = storeDAO.totStoreOrderListCnt(search,searchString);			
+		}
 		
 //		else if(section.equals("webMessage")) {
 //			String mid = search;
@@ -120,10 +129,61 @@ public class PageProcess {
 		
 		pageVO.setPart(search);
 		
+		System.out.println(curScrStartNo);
 		
 		return pageVO;
 	}
 
+	
+	
+	
+	public PageVO totRecCnt2(int pag, int pageSize, String section, String search, String searchString, String brandName) {
+		
+		PageVO pageVO = new PageVO();
+		int totRecCnt = 0;
+		
+		if(section.equals("adminMenuList")) {
+			totRecCnt = adminDAO.totAdminMenuListCnt(search,searchString,brandName);			
+		}
+	
+		
+//		else if(section.equals("webMessage")) {
+//			String mid = search;
+//			int mSw = Integer.parseInt(searchString);
+//			totRecCnt = webMessageDAO.totRecCnt(mid,mSw);
+//		}
+
+		int totPage = (totRecCnt % pageSize) ==0 ? totRecCnt / pageSize : (totRecCnt / pageSize) +1;	//4. 총 페이지 건수를 구한다.
+		int startIndexNo = (pag-1) * pageSize; //5. 현재페이지의 시작 인덱스번호를 구한다.
+		int curScrStartNo = totRecCnt - startIndexNo;		//6. 현재 화면에 보여주는 시작번호를 구한다.
+		
+		int blockSize = 3;  // 1. 블록의 크기를 결정한다.(여기선 3으로 지정)		
+		int curBlock = (pag - 1) / blockSize;
+		int lastBlock = (totPage - 1) / blockSize;	// 3. 마지막블록을 구한다.
+		
+		pageVO.setPag(pag);
+		pageVO.setPageSize(pageSize);
+		pageVO.setTotRecCnt(totRecCnt);
+		pageVO.setTotPage(totPage);
+		pageVO.setStartIndexNo(startIndexNo);
+		pageVO.setCurScrStartNo(curScrStartNo);
+		pageVO.setBlockSize(blockSize);
+		pageVO.setCurBlock(curBlock);
+		pageVO.setLastBlock(lastBlock);
+		
+		pageVO.setPart(search);
+		
+		System.out.println(curScrStartNo);
+		
+		return pageVO;
+	}
+	
+	
+	
+	
+	
+	
+	
 	// 댓글 페이징
 	
 //	public PageVO totReplyRecCnt(int replyPag, int replyPageSize, String section, String search, String searchString, int idx) {

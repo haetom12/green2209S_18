@@ -108,7 +108,6 @@
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
 							환영합니다! <div class="weight-600 font-30 text-blue">관리자님</div>
 						</h4>
-						<p class="font-18 max-width-600">쓸내용이 없음</p>
 					</div>
 				</div>
 			</div>
@@ -167,27 +166,25 @@
 				</div>
 			</div>
 			
-						<div class="row" >
+			<div class="row">
 				<div class="col-xl-4 mb-30 bg-white">
-					<h2 class="h4 pd-20">이번달 VIP 고객</h2>
+					<h2 class="h4 pd-20">이번달 <font color="blue">VIP 고객</font></h2>
 					<table class="data-table table nowrap">
 						<thead>
-							
-								<tr>
-									<th>순위</th>
-									<th class="table-plus datatable-nosort">닉네임</th>
-									<th>주문횟수</th>
-									<th>총 지출액</th>
-								</tr>
-							
+							<tr>
+								<th>순위</th>
+								<th class="table-plus datatable-nosort">닉네임</th>
+								<th>주문횟수</th>
+								<th>총 지출액</th>
+							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<c:forEach var="vo" items="${VIPMemberVos}" varStatus="st">
-									<td>${st.count}</td>
+									<td>${st.count}등</td>
 									<td>${vo.nickName}</td>
-									<td>${vo.orderCnt}</td>
-									<td>${vo.totalProfit}</td>
+									<td>${vo.orderCnt}건</td>
+									<td>${vo.totalProfit}원</td>
 									<!-- 
 									<td>
 										<div class="dropdown">
@@ -203,13 +200,13 @@
 									</td>
 									 -->
 								</tr>
-								</c:forEach>
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>
 				
 				<div class="col-xl-4 mb-30 bg-white">
-					<h2 class="h4 pd-20">이번달 최고 지점</h2>
+					<h2 class="h4 pd-20">이번달 <font color="blue">최고 지점</font></h2>
 					<table class="data-table table nowrap">
 						<thead>
 							<tr>
@@ -233,7 +230,7 @@
 				</div>
 				
 				<div class="col-xl-4 mb-30 bg-white">
-					<h2 class="h4 pd-20">이번달 베스트 드라이버</h2>
+					<h2 class="h4 pd-20">이번달 <font color="blue">베스트 드라이버</font></h2>
 					<table class="data-table table nowrap">
 						<thead>
 							<tr>
@@ -266,8 +263,8 @@
 				</div>
 				<div class="col-xl-6 mb-30">
 					<div class="bg-white pd-20 card-box mb-30" >
-						<h4 class="h4 text-blue">가게 순위</h4>
-						<div id="adminChart2" style="width: 700px; height: 500px;"></div>
+						<h4 class="h4 text-blue">메뉴별 카테고리 순위</h4>
+						<div id="piechart" style="width: 700px; height: 500px;"></div>
 					</div>
 				</div>
 			</div>
@@ -275,16 +272,11 @@
 			<div class="row" >
 				<div class="col-xl-6 mb-30">
 					<div class="bg-white pd-20 card-box mb-30" >
-						<h4 class="h4 text-blue">메뉴 순위</h4>
-						<div id="piechart" style="width: 700px; height: 500px;"></div>
-					</div>
-				</div>
-				<div class="col-xl-6 mb-30">
-					<div class="bg-white pd-20 card-box mb-30" >
 						<h4 class="h4 text-blue">가게 순위</h4>
-						<div id="adminChart4" style="width: 700px; height: 500px;"></div>
+						<div id="adminChart2" style="width: 700px; height: 500px;"></div>
 					</div>
 				</div>
+				
 			</div>
 			
 			<div class="footer-wrap pd-20 mb-20 card-box">

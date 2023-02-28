@@ -108,7 +108,7 @@
 			<div class="min-height-200px">
 				<div class="card-box mb-30">
 					<div class="pd-20">
-						<h3 class="h3 text-center">배달 가게 리스트</h3>
+						<h3 class="h3 text-center">탈퇴 신청 가게 리스트</h3>
 					</div>
 					<div class="pb-20">
 					

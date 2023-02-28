@@ -176,7 +176,8 @@ public class StoreController {
 
 		// 해당 가게의 평점 총 갯수 구하기
 		PageVO ratingPageVo = pageProcess.totRecCnt(pag, pageSize, "rating", vo.getStoreName(), "");
-		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "storeMenu", vo.getStoreName(), "");
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "storeMenu", vo.getStoreName(), foodTag);
 		
 		// 평점 가져오기
 		List<RatingVO> rVos = storeService.getRatingList(ratingPageVo.getStartIndexNo(), pageSize, vo.getStoreName());
@@ -457,13 +458,11 @@ public class StoreController {
 	@ResponseBody
 	@RequestMapping(value = "/storeMenuDeleteOk", method = RequestMethod.POST)
 	public String storeMenuDeleteOkPost(int menuIdx) {
-		int res = 0;
 		FoodMenuVO vo = storeService.getFoodInfo(menuIdx);
 		
-		res = storeService.setStoreMenuDeleteOk(menuIdx);
+		int res = storeService.setStoreMenuDeleteOk(menuIdx);
 		
-		
-		return res+"";
+		return "1";
 	}
 	
 // 음식 이름 중복 체크
@@ -830,7 +829,7 @@ public class StoreController {
 	}
 	
 	
-//내 주문내역 리스트로
+//가게 이메일 인증
 	@Async
 	@ResponseBody
 	@RequestMapping(value = "storeEmailCheck", method = RequestMethod.POST)
@@ -1049,10 +1048,10 @@ public class StoreController {
 					}
 				}
 			}
+			
 		
 		String rMid = vo.getMid();
 		res = storeService.setReportReply(idx, mid);
-		res = memberService.setReportRating(rMid);
 		
 		if(res == 1) return "1";
 		
@@ -1273,6 +1272,28 @@ public class StoreController {
 		
 		if(res==1) return "redirect:/msg/riderDeleteOk";
 		else return "redirect:/msg/storeDeleteNo";
+	}
+	
+	// 가게 주문 리스트 폼으로
+	@RequestMapping(value = "/shopOrderList", method = RequestMethod.GET)
+	public String shopOrderListGet(Model model, HttpSession sesstion,
+		@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+		@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+
+		String storeName = (String)sesstion.getAttribute("sbrandName");
+		StoreVO vo = storeService.getstoreInfo(storeName);
+		
+		// 해당 가게의 평점 총 갯수 구하기
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "storeOrderList", storeName, "");
+	
+		List<CartVO> vos = storeService.getShopOrderListList(pageVo.getStartIndexNo(), pageSize, storeName);
+		
+		model.addAttribute("pageVo", pageVo);
+		model.addAttribute("vos", vos);
+		model.addAttribute("vo", vo);
+			
+		
+		return "store/shopOrderList";
 	}
 	
 }

@@ -44,6 +44,74 @@
 		<beans:property name="defaultEncoding" value="utf-8"/>
 	</beans:bean>
 	
+<!-- 	
+	<beans:bean id="adminInterceptor" class="com.spring.green2209S_18.interceptor.AdminInterceptor" />
+	<beans:bean id="memberInterceptor" class="com.spring.green2209S_18.interceptor.MemberInterceptor" />
+	<beans:bean id="riderInterceptor" class="com.spring.green2209S_18.interceptor.RiderInterceptor" />
+	<beans:bean id="storeInterceptor" class="com.spring.green2209S_18.interceptor.StoreInterceptor" />
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<beans:ref bean="adminInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/member/**"/>
+			<mapping path="/order/**"/>
+			<mapping path="/QnA/**"/>
+			<mapping path="/store/shopNear"/>
+			<mapping path="/store/shopOrderList"/>
+			<mapping path="/store/storeReplyReport"/>
+			<mapping path="/store/storeReReplyInput"/>
+			<mapping path="/store/ratingDelete"/>
+			<mapping path="/store/storeReplyUpdate"/>
+			<mapping path="/store/reportRating"/>
+			<exclude-mapping path="/member/memberLogin"/>
+			<exclude-mapping path="/member/memberLogout"/>
+			<exclude-mapping path="/member/memberJoin"/>
+			<exclude-mapping path="/member/JoinSelect"/>
+			<exclude-mapping path="/member/memIdCheck"/>
+			<exclude-mapping path="/member/memNickCheck"/>
+			<exclude-mapping path="/member/memberEmailCheck"/>
+			<exclude-mapping path="/member/memberEmailCheckOk"/>
+			<exclude-mapping path="/member/midFind"/>
+			<exclude-mapping path="/member/pwdFind"/>
+			<exclude-mapping path="/order/orderChat"/>
+			<beans:ref bean="memberInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/rider/**"/>
+			<mapping path="/order/orderChat"/>
+			<exclude-mapping path="/rider/riderJoin"/>
+			<exclude-mapping path="/rider/riderIdCheck"/>
+			<exclude-mapping path="/rider/riderEmailCheck"/>
+			<exclude-mapping path="/rider/riderEmailCheckOk"/>
+			<beans:ref bean="riderInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/store/**"/>
+			<exclude-mapping path="/store/storeJoin"/>
+			<exclude-mapping path="/store/storeIdCheck"/>
+			<exclude-mapping path="/store/shopCategory"/>
+			<exclude-mapping path="/store/storeList"/>
+			<exclude-mapping path="/store/storeMenu"/>
+			<exclude-mapping path="/store/storeMenuInfo"/>
+			<exclude-mapping path="/store/storeRatingList"/>
+			<exclude-mapping path="/store/storeNameCheckOk"/>
+			<exclude-mapping path="/store/storeEmailCheck"/>
+			<exclude-mapping path="/store/storeEmailCheckOk"/>
+			<exclude-mapping path="/store/getCommentList"/>
+			<exclude-mapping path="/store/getCommentList2"/>
+			<exclude-mapping path="/store/shopNear"/>
+			<exclude-mapping path="/store/shopOrderList"/>
+			<exclude-mapping path="/store/storeReplyUpdate"/>
+			<exclude-mapping path="/store/reportRating"/>
+			<exclude-mapping path="/store/ratingDelete"/>
+			<beans:ref bean="storeInterceptor" />
+		</interceptor>
+	</interceptors>
+	 -->
+	
 	<!-- 트랜잭션을 어노테이션으로 처리하기위해 참조하는 클래스를 등록한다 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	

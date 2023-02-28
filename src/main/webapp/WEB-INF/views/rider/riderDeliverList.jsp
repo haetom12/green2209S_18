@@ -307,9 +307,13 @@
 						</ul>
 					</li>
 					
-					<!-- 경계선  -->
 					<li>
 						<div class="dropdown-divider"></div>
+					</li>
+					<li>
+						<a href="${ctp}/member/memberLogout" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext">로그아웃</span>
+						</a>
 					</li>
 					
 					<li>

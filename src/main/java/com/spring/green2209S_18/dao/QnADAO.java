@@ -22,4 +22,10 @@ public interface QnADAO {
 
 	public int totAdminQnAListCnt(@Param("search") String search, @Param("searchString") String searchString);
 
+	public int totAdminQnAListYetCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+	public int totAdminQnAListDoneCnt(@Param("search") String search, @Param("searchString") String searchString);
+
+
+
 }
